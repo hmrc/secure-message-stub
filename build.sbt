@@ -21,18 +21,14 @@ lazy val root = (project in file("."))
     name := appName,
     RoutesKeys.routesImport += "models._",
     TwirlKeys.templateImports ++= Seq(
-      "play.twirl.api.HtmlFormat",
-      "play.twirl.api.HtmlFormat._",
-      "uk.gov.hmrc.play.views.html.helpers._",
-      "uk.gov.hmrc.play.views.html.layouts._",
-      "views.ViewUtils._",
-      "models.Mode",
-      "controllers.routes._"
+      "uk.gov.hmrc.govukfrontend.views.html.components._",
+      "uk.gov.hmrc.govukfrontend.views.html.helpers._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.components._"
     ),
     PlayKeys.playDefaultPort := 9202,
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;.*repositories.*;" +
       ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;.*ControllerConfiguration;",
-    ScoverageKeys.coverageMinimum := 70,
+    ScoverageKeys.coverageMinimum := 60,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     scalacOptions ++= Seq("-feature"),
