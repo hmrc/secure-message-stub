@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package navigation
+@this()
 
-import javax.inject.{Inject, Singleton}
-
-import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models._
-
-@Singleton
-class Navigator @Inject()() {
-
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.ConversationController.onPageLoad()
-  }
-}
+@()
+<script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+<script>window.GOVUKFrontend.initAll();</script>

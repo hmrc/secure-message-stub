@@ -1,13 +1,13 @@
+->          /govuk-frontend                    govuk.Routes
+->          /hmrc-frontend                     hmrcfrontend.Routes
+
+
 # microservice specific routes
 
-GET        /                                            controllers.IndexController.onPageLoad
+GET        /                                            controllers.ConversationController.onPageLoad
+POST       /                                            controllers.ConversationController.submitQuery
+
 
 GET        /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
-GET        /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad
-
-GET        /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad
-
-GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
