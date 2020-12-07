@@ -67,7 +67,10 @@ lazy val root = (project in file("."))
   )
 
 lazy val testSettings: Seq[Def.Setting[_]] = Seq(
-  fork        := true
+  fork        := true,
+  javaOptions ++= Seq(
+    "-Dconfig.resource=test.application.conf"
+  )
 )
 
 dependencyOverrides ++= AppDependencies.overrides
