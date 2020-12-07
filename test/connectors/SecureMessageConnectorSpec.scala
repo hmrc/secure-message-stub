@@ -30,38 +30,38 @@
  * limitations under the License.
  */
 
-package connectors
-
-
-import models.{Alert, ConversationRequest, Sender, System}
-import org.mockito.Matchers.{any, anyString}
-import org.mockito.Mockito.when
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar.mock
-import org.scalatestplus.play._
-import play.api.http.Status.CREATED
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
-
-
-class SecureMessageConnectorSpec extends PlaySpec with ScalaFutures {
-
-  "Secure message connector" must {
-    "return HttpResonse" in new TestCase {
-      val httpResponse = HttpResponse(CREATED, "body")
-      when(httpClient.PUT[ConversationRequest, HttpResponse](anyString(), any(), any())(any(), any(), any(), any())).thenReturn(Future.successful(httpResponse))
-      secureMessage.create("cdcm", "123456789", ConversationRequest(Sender(System("name", Map.empty[String, String], "displayName")), List.empty,
-        Alert("templateId", None), Map.empty[String, String], "subject", "message", None)).futureValue mustBe (httpResponse)
-    }
-
-    class TestCase {
-      val httpClient: HttpClient = mock[HttpClient]
-      val servicesConfig: ServicesConfig = mock[ServicesConfig]
-      implicit val hc: HeaderCarrier = new HeaderCarrier
-      implicit val ec = implicitly[ExecutionContext]
-      val secureMessage = new SecureMessage(httpClient, servicesConfig)
-    }
-  }
-}
+//package connectors
+//
+//
+//import models.{Alert, ConversationRequest, Sender, System}
+//import org.mockito.Matchers.{any, anyString}
+//import org.mockito.Mockito.when
+//import org.scalatest.concurrent.ScalaFutures
+//import org.scalatestplus.mockito.MockitoSugar.mock
+//import org.scalatestplus.play._
+//import play.api.http.Status.CREATED
+//import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+//import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+//import scala.concurrent.ExecutionContext.Implicits.global
+//import scala.concurrent.{ExecutionContext, Future}
+//
+//
+//class SecureMessageConnectorSpec extends PlaySpec with ScalaFutures {
+//
+//  "Secure message connector" must {
+//    "return HttpResonse" in new TestCase {
+//      val httpResponse = HttpResponse(CREATED, "body")
+//      when(httpClient.PUT[ConversationRequest, HttpResponse](anyString(), any(), any())(any(), any(), any(), any())).thenReturn(Future.successful(httpResponse))
+//      secureMessage.create("cdcm", "123456789", ConversationRequest(Sender(System("name", Map.empty[String, String], "displayName")), List.empty,
+//        Alert("templateId", None), Map.empty[String, String], "subject", "message", None)).futureValue mustBe (httpResponse)
+//    }
+//
+//    class TestCase {
+//      val httpClient: HttpClient = mock[HttpClient]
+//      val servicesConfig: ServicesConfig = mock[ServicesConfig]
+//      implicit val hc: HeaderCarrier = new HeaderCarrier
+//      implicit val ec = implicitly[ExecutionContext]
+//      val secureMessage = new SecureMessage(httpClient, servicesConfig)
+//    }
+//  }
+//}
