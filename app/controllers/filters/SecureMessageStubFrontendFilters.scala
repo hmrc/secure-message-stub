@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package navigation
+package controllers.filters
 
 import javax.inject.{Inject, Singleton}
-
-import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models._
+import play.api.http.HttpFilters
+import play.api.mvc.EssentialFilter
+import uk.gov.hmrc.play.bootstrap.frontend.filters.FrontendFilters
 
 @Singleton
-class Navigator @Inject()() {
+class SecureMessageStubFrontendFilters @Inject()(
+  frontendFilters: FrontendFilters
+)
+    extends HttpFilters {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.ConversationController.onPageLoad()
-  }
+  override val filters: Seq[EssentialFilter] = frontendFilters.filters
 }

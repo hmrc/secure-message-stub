@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package navigation
+@import controllers._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import forms.mappings.ConversationForm._
 
-import javax.inject.{Inject, Singleton}
+@this(mainWithHeaders: views.html.main_with_headers, govukPanel: GovukPanel,govukBackLink : GovukBackLink)
 
-import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models._
+@(message: String)(implicit request: Request[_], messages: Messages)
 
-@Singleton
-class Navigator @Inject()() {
+@mainWithHeaders(title = "title") {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.ConversationController.onPageLoad()
-  }
+@govukBackLink(BackLink(
+href = "/secure-message-stub",
+content = Text("Back")
+))
+
+@govukPanel(Panel(
+title = Text(message)
+))
 }
