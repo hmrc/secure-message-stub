@@ -1,9 +1,6 @@
 # Add all the application routes to the app.routes file
 ->         /secure-message-stub                    app.Routes
 ->         /                          health.Routes
-->     	   /template                  template.Routes
+#->     	   /template                  template.Routes
 
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics
-
-# Swagger API endpoints
-GET       /secure-message/assets/:file            controllers.SwaggerController.getSwaggerAPISchema(file: String)
