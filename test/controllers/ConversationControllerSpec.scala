@@ -32,7 +32,7 @@
 //
 package controllers
 
-import connectors.SecureMessage
+import connectors.SecureMessageConnector
 import forms.mappings.ConversationForm.ConversationData
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -47,39 +47,53 @@ import views.html.{create, success_feedback}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ConversationControllerSpec extends PlaySpec with ScalaFutures{
+class ConversationControllerSpec extends PlaySpec with ScalaFutures {
 
   "Conversation Controller" must {
-   "submit query to secure message" in new TestCase{
-     when(secureMessageConnector.create(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(CREATED, "it works")))
-     val controller = new ConversationController(Helpers.stubMessagesControllerComponents(), secureMessageConnector, success_feedback, create )
+    "submit query to secure message" in new TestCase {
+      when(secureMessageConnector.create(any(), any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(CREATED, "it works")))
+      val controller = new ConversationController(
+        Helpers.stubMessagesControllerComponents(),
+        secureMessageConnector,
+        success_feedback,
+        create
+      )
 
-     val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-     controller.saveConversation(conversation)(request)
-     verify(secureMessageConnector, times(1)).create(any(), any(), any())(any(), any())
-   }
+      val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+      controller.saveConversation(conversation)(request)
+      verify(secureMessageConnector, times(1))
+        .create(any(), any(), any())(any(), any())
+    }
 
     class TestCase {
-      val secureMessageConnector =  mock[SecureMessage]
+      val secureMessageConnector = mock[SecureMessageConnector]
       val success_feedback = mock[success_feedback]
       val create = mock[create]
-      implicit val hc: HeaderCarrier  = HeaderCarrier()
-
+      implicit val hc: HeaderCarrier = HeaderCarrier()
 
       val conversation = ConversationData(
-        query =  (Some("subject"), Some("message"), Some("query.language-welsh")), sender =
+        query = (Some("subject"), Some("message"), Some("query.language-welsh")),
+        sender =
           (Some("senderName"), Some("conversationId"), Some("displayName")),
-        senderParameter1 =   (Some("senderkey1"),Some("sendervalue1")) ,
-        senderParameter2 =  (Some("senderkey1"),Some("sendervalue1")) ,
-        customer = (Some("name"), Some("test@test.com"), Some("enrolmentKey"),  Some("enrolmentName"), Some("enrolmentValue")),
+        senderParameter1 = (Some("senderkey1"), Some("sendervalue1")),
+        senderParameter2 = (Some("senderkey1"), Some("sendervalue1")),
+        customer = (
+          Some("name"),
+          Some("test@test.com"),
+          Some("enrolmentKey"),
+          Some("enrolmentName"),
+          Some("enrolmentValue")
+        ),
         alertTemplate = Some("alertTemplate"),
         alertParameter1 = (Some("key"), Some("value")),
         alertParameter2 = (Some("key"), Some("value")),
-        tagsParameter1  = (Some("key"), Some("value")),
-        tagsParameter2  = (Some("key"), Some("value")),
-        tagsParameter3  = (Some("key"), Some("value")),
-        tagsParameter4  = (Some("key"), Some("value")),
-        tagsParameter5  = (Some("key"), Some("value")))
+        tagsParameter1 = (Some("key"), Some("value")),
+        tagsParameter2 = (Some("key"), Some("value")),
+        tagsParameter3 = (Some("key"), Some("value")),
+        tagsParameter4 = (Some("key"), Some("value")),
+        tagsParameter5 = (Some("key"), Some("value"))
+      )
     }
   }
 }

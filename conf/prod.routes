@@ -4,3 +4,6 @@
 ->     	   /template                  template.Routes
 
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics
+
+# Swagger API endpoints
+GET       /secure-message/assets/:file            controllers.SwaggerController.getSwaggerAPISchema(file: String)

@@ -1,4 +1,7 @@
-resolvers += Resolver.url("HMRC Sbt Plugin Releases", url("https://dl.bintray.com/hmrc/sbt-plugin-releases"))(Resolver.ivyStylePatterns)
+resolvers += Resolver.url(
+  "HMRC Sbt Plugin Releases",
+  url("https://dl.bintray.com/hmrc/sbt-plugin-releases")
+)(Resolver.ivyStylePatterns)
 
 resolvers += "HMRC Releases" at "https://dl.bintray.com/hmrc/releases"
 
@@ -25,3 +28,5 @@ addSbtPlugin("net.ground5hark.sbt" % "sbt-concat" % "0.2.0")
 addSbtPlugin("com.typesafe.sbt" % "sbt-uglify" % "2.0.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
+
+addSbtPlugin("com.iheart" % "sbt-play-swagger" % "0.10.2")
