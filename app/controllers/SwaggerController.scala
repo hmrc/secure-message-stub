@@ -29,12 +29,12 @@ import scala.concurrent.ExecutionContext
 class SwaggerController @Inject()(
   httpClient: HttpClient,
   servicesConfig: ServicesConfig,
-  controllerComponents: MessagesControllerComponents,
+  controllerComponents: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
     extends FrontendController(controllerComponents)
     with I18nSupport {
 
-  val secureMessageBaseUrl = servicesConfig.baseUrl("secure-message")
+  private val secureMessageBaseUrl = servicesConfig.baseUrl("secure-message")
 
   def getSwaggerAPISchema(fileName: String): Action[AnyContent] =
     Action.async { implicit request =>
