@@ -8,7 +8,7 @@ GET         /secure-message-stub/docs/swagger-ui/*file                  controll
 GET         /assets/*file                                               controllers.Assets.versioned(path="/public", file: Asset)
 
 # Swagger API endpoints
-GET         /secure-message-stub/secure-message/assets/:file            controllers.SwaggerController.getSwaggerAPISchema(file: String)
+GET         /secure-message/assets/:file            controllers.SwaggerController.getSwaggerAPISchema(file: String)
 
 + nocsrf
 PUT         /secure-message/conversation/:client/:conversationId        controllers.SwaggerController.createConversation(client: String, conversationId: String)
