@@ -16,11 +16,20 @@
 
 package controllers
 
-import connectors.SecureMessage
+import connectors.SecureMessageConnector
 import forms.mappings.ConversationForm
 import forms.mappings.ConversationForm.ConversationData
 import models.QueryLanguage.{ENGLISH, WELSH}
-import models.{Alert, ConversationRequest, Customer, Enrolment, QueryLanguage, Recipient, Sender, System}
+import models.{
+  Alert,
+  ConversationRequest,
+  Customer,
+  Enrolment,
+  QueryLanguage,
+  Recipient,
+  Sender,
+  System
+}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -28,13 +37,14 @@ import views.html.{create, success_feedback}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-
 class ConversationController @Inject()(
-                                 controllerComponents: MessagesControllerComponents,
-                                 secureMessage: SecureMessage,
-                                 success: success_feedback,
-                                 view: create
-                               )(implicit ec: ExecutionContext) extends FrontendController(controllerComponents) with I18nSupport {
+  controllerComponents: MessagesControllerComponents,
+  secureMessage: SecureMessageConnector,
+  success: success_feedback,
+  view: create
+)(implicit ec: ExecutionContext)
+    extends FrontendController(controllerComponents)
+    with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = Action { implicit request =>
     val call = routes.ConversationController.submitQuery()
@@ -45,50 +55,96 @@ class ConversationController @Inject()(
     val call = routes.ConversationController.onPageLoad()
 
     ConversationForm().bindFromRequest.fold[Future[Result]](
-      hasErrors => Future.successful(BadRequest(view(ConversationForm(), call, hasErrors.errors.map(_.message)))),
+      hasErrors =>
+        Future.successful(
+          BadRequest(
+            view(ConversationForm(), call, hasErrors.errors.map(_.message))
+          )
+      ),
       form => saveConversation(form)(request)
-
     )
   }
 
+  private[controllers] def saveConversation(
+    form: ConversationData
+  )(implicit request: Request[_]) = form match {
+    case ConversationData(
+        (Some(subject), Some(message), language),
+        (Some(senderName), Some(conversationId), Some(displayName)),
+        (senderParameter1),
+        (senderParameter2),
+        (
+          name,
+          email,
+          Some(enrolmentKey),
+          Some(enrolmentName),
+          Some(enrolmentValue)
+        ),
+        Some(alertTemplate),
+        (alertParameter1),
+        alertParameter2,
+        tagsParameter1,
+        tagsParameter2,
+        tagsParameter3,
+        tagsParameter4,
+        tagsParameter5
+        ) => {
 
- private[controllers] def saveConversation(form: ConversationData)(implicit request: Request[_]) = form match {
-   case ConversationData((Some(subject), Some(message), language), (Some(senderName), Some(conversationId), Some(displayName)), (senderParameter1), (senderParameter2), (name, email, Some(enrolmentKey), Some(enrolmentName), Some(enrolmentValue)), Some(alertTemplate), (alertParameter1), alertParameter2, tagsParameter1, tagsParameter2, tagsParameter3, tagsParameter4, tagsParameter5) => {
+      val lang = languageSelection(language.getOrElse(QueryLanguage.ENGLISH))
 
-            val lang = languageSelection(language.getOrElse(QueryLanguage.ENGLISH))
+      val senderParameters = keyValuePair(senderParameter1) ++ keyValuePair(
+        senderParameter2
+      )
+      val alertParameters = Some(
+        keyValuePair(alertParameter1) ++ keyValuePair(alertParameter2)
+      )
+      val tagsParameters = keyValuePair(tagsParameter1) ++ keyValuePair(
+        tagsParameter2
+      ) ++ keyValuePair(tagsParameter3) ++ keyValuePair(tagsParameter4) ++ keyValuePair(
+        tagsParameter5
+      )
 
-             val senderParameters = keyValuePair(senderParameter1) ++ keyValuePair(senderParameter2)
-             val alertParameters = Some(keyValuePair(alertParameter1) ++ keyValuePair(alertParameter2))
-             val tagsParameters = keyValuePair(tagsParameter1) ++ keyValuePair(tagsParameter2) ++ keyValuePair(tagsParameter3) ++ keyValuePair(tagsParameter4) ++ keyValuePair(tagsParameter5)
+      val query = ConversationRequest(
+        Sender(System(senderName, senderParameters, displayName)),
+        List(
+          Recipient(
+            Customer(
+              Enrolment(enrolmentKey, enrolmentName, enrolmentValue),
+              name,
+              email
+            )
+          )
+        ),
+        Alert(alertTemplate, alertParameters),
+        tags = tagsParameters,
+        subject,
+        message,
+        lang
+      )
 
-             val query = ConversationRequest(
-               Sender(System(senderName, senderParameters, displayName)),
-               List(Recipient(Customer(Enrolment(enrolmentKey, enrolmentName, enrolmentValue), name, email))),
-               Alert(alertTemplate, alertParameters),
-               tags = tagsParameters,
-               subject,
-               message,
-               lang
-             )
-
-            secureMessage.create(senderName, conversationId, query).map(_.status match {
-                case CREATED => Ok(success("Query creation complete"))
-                case _ =>  BadRequest(success("Query creation unsuccessfull"))
-              }).recover{
-                case _ => NotFound(success("Something went wrong"))
-              }
-           }
-           case _ =>
-             Future.successful(BadRequest("Input invalid"))
-         }
-
-  private  def languageSelection(selection: String) = selection match {
-    case "query.language-welsh" => Some(WELSH)
-    case _ => Some(ENGLISH)
+      secureMessage
+        .create(senderName, conversationId, query)
+        .map(_.status match {
+          case CREATED => Ok(success("Query creation complete"))
+          case _       => BadRequest(success("Query creation unsuccessfull"))
+        })
+        .recover {
+          case _ => NotFound(success("Something went wrong"))
+        }
+    }
+    case _ =>
+      Future.successful(BadRequest("Input invalid"))
   }
 
-  private def keyValuePair(t: (Option[String], Option[String])): Map[String, String] = t match {
+  private def languageSelection(selection: String) = selection match {
+    case "query.language-welsh" => Some(WELSH)
+    case _                      => Some(ENGLISH)
+  }
+
+  private def keyValuePair(
+    t: (Option[String], Option[String])
+  ): Map[String, String] = t match {
     case (Some(k), Some(v)) => Map(k -> v)
-    case _ => Map.empty
+    case _                  => Map.empty
   }
 }

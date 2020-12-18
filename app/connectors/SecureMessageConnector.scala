@@ -24,10 +24,18 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import scala.concurrent.{ExecutionContext, Future}
 
-class SecureMessage @Inject()(httpClient: HttpClient, servicesConfig: ServicesConfig) {
+class SecureMessageConnector @Inject()(httpClient: HttpClient,
+                                       servicesConfig: ServicesConfig) {
   val secureMessageBaseUrl = servicesConfig.baseUrl("secure-message")
 
-  def create(client: String, conversationId: String, conversation: ConversationRequest)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] = {
-      httpClient.PUT[ConversationRequest, HttpResponse](s"$secureMessageBaseUrl/secure-message/conversation/$client/$conversationId", conversation)
+  def create(
+    client: String,
+    conversationId: String,
+    conversation: ConversationRequest
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] = {
+    httpClient.PUT[ConversationRequest, HttpResponse](
+      s"$secureMessageBaseUrl/secure-message/conversation/$client/$conversationId",
+      conversation
+    )
   }
 }
