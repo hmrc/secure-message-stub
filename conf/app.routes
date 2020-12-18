@@ -2,7 +2,7 @@
 ->          /hmrc-frontend                                              hmrcfrontend.Routes
 
 ### NoDocs ###
-GET         /secure-message-stub/docs/swagger-ui/*file                  controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
+GET         /docs/swagger-ui/*file                  controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
 
 ### NoDocs ###
 GET         /assets/*file                                               controllers.Assets.versioned(path="/public", file: Asset)
