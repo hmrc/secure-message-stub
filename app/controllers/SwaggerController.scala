@@ -18,8 +18,9 @@ package controllers
 
 import javax.inject.Inject
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.http.HttpClient
+import play.api.libs.json.JsValue
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import uk.gov.hmrc.http.{HttpClient, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -28,7 +29,7 @@ import scala.concurrent.ExecutionContext
 class SwaggerController @Inject()(
   httpClient: HttpClient,
   servicesConfig: ServicesConfig,
-  controllerComponents: MessagesControllerComponents
+  controllerComponents: MessagesControllerComponents,
 )(implicit ec: ExecutionContext)
     extends FrontendController(controllerComponents)
     with I18nSupport {
@@ -37,9 +38,24 @@ class SwaggerController @Inject()(
 
   def getSwaggerAPISchema(fileName: String): Action[AnyContent] =
     Action.async { implicit request =>
-      httpClient.GET(s"$secureMessageBaseUrl/assets/$fileName").map {
-        response =>
-          Ok(response.body)
-      }
+      httpClient.GET(s"$secureMessageBaseUrl/assets/$fileName")
     }
+
+  def createConversation(client: String,
+                         conversationId: String): Action[AnyContent] =
+    Action.async { implicit request =>
+      httpClient.PUT[Option[JsValue], Result](
+        s"$secureMessageBaseUrl/secure-message/conversation/$client/$conversationId",
+        request.body.asJson,
+        Seq.empty
+      )
+    }
+
+  def resultHttpReads: HttpReads[Result] = new HttpReads[Result] {
+    override def read(method: String,
+                      url: String,
+                      response: HttpResponse): Result =
+      Status(response.status)(response.body)
+  }
+  implicit val resultReader: HttpReads[Result] = resultHttpReads
 }
