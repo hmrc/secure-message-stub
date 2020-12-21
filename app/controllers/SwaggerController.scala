@@ -16,25 +16,24 @@
 
 package controllers
 
-import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.http.{HttpClient, HttpReads, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
+import utils.EnvironmentConfig
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class SwaggerController @Inject()(
   httpClient: HttpClient,
-  servicesConfig: ServicesConfig,
+  environmentConfig: EnvironmentConfig,
   controllerComponents: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
     extends FrontendController(controllerComponents)
     with I18nSupport {
 
-  private val secureMessageBaseUrl = servicesConfig.baseUrl("secure-message")
+  private val secureMessageBaseUrl = environmentConfig.baseUrl("secure-message")
 
   def getSwaggerAPISchema(fileName: String): Action[AnyContent] =
     Action.async { implicit request =>

@@ -18,15 +18,15 @@ package connectors
 
 import com.google.inject.Inject
 import models.ConversationRequest
-import uk.gov.hmrc.http.HttpResponse
 import models.ConversationRequest.conversionRResultWrites
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import utils.EnvironmentConfig
 import scala.concurrent.{ExecutionContext, Future}
 
 class SecureMessageConnector @Inject()(httpClient: HttpClient,
-                                       servicesConfig: ServicesConfig) {
-  val secureMessageBaseUrl = servicesConfig.baseUrl("secure-message")
+                                       envConfig: EnvironmentConfig
+                                       ) {
+  val secureMessageBaseUrl = envConfig.baseUrl("secure-message")
 
   def create(
     client: String,

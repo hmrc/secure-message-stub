@@ -40,7 +40,7 @@ import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play._
 import play.api.http.Status.CREATED
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import utils.EnvironmentConfig
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -75,10 +75,10 @@ class SecureMessageConnectorConnectorSpec extends PlaySpec with ScalaFutures {
 
     class TestCase {
       val httpClient: HttpClient = mock[HttpClient]
-      val servicesConfig: ServicesConfig = mock[ServicesConfig]
+      val envConf: EnvironmentConfig = mock[EnvironmentConfig]
       implicit val hc: HeaderCarrier = new HeaderCarrier
       implicit val ec = implicitly[ExecutionContext]
-      val secureMessage = new SecureMessageConnector(httpClient, servicesConfig)
+      val secureMessage = new SecureMessageConnector(httpClient, envConf)
     }
   }
 }
