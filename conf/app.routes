@@ -1,23 +1,22 @@
-->          /govuk-frontend                              govuk.Routes
-->          /hmrc-frontend                               hmrcfrontend.Routes
+->          /govuk-frontend                                             govuk.Routes
+->          /hmrc-frontend                                              hmrcfrontend.Routes
 
 ### NoDocs ###
-GET         /docs/swagger-ui/*file                       controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
+GET         /secure-message-stub/docs/swagger-ui/*file                  controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
 
 ### NoDocs ###
-GET         /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
+GET         /secure-message-stub/assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)
 
 # Swagger API endpoints
-GET         /assets/:file                                controllers.SwaggerController.getSwaggerAPISchema(file: String)
+GET         /secure-message/assets/:file                                controllers.SwaggerController.getSwaggerAPISchema(file: String)
 
 + nocsrf
-PUT         /conversation/:client/:conversationId        controllers.SwaggerController.createConversation(client: String, conversationId: String)
-
+PUT         /secure-message/conversation/:client/:conversationId        controllers.SwaggerController.createConversation(client: String, conversationId: String)
 
 # microservice specific routes
 
-GET         /secure-message-stub                         controllers.ConversationController.onPageLoad
-POST        /secure-message-stub                         controllers.ConversationController.submitQuery
+GET         /secure-message-stub                                        controllers.ConversationController.onPageLoad
+POST        /secure-message-stub                                        controllers.ConversationController.submitQuery
 
 
 
