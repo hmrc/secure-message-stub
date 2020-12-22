@@ -5,21 +5,21 @@
 GET         /secure-message/docs/swagger-ui/*file                                      controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
 
 ### NoDocs ###
-GET         /secure-message-stub/assets/*file                                               controllers.Assets.versioned(path="/public", file: Asset)
+GET         /secure-message/assets/*file                                               controllers.Assets.versioned(path="/public", file: Asset)
 
 # Swagger API endpoints
-GET         /secure-message-stub/secure-message/assets/:file                                controllers.SwaggerController.getSwaggerAPISchema(file: String)
+#GET         /secure-message-stub/secure-message/assets/:file                                controllers.SwaggerController.getSwaggerAPISchema(file: String)
 
-+ nocsrf
-PUT         /secure-message-stub/secure-message/conversation/:client/:conversationId        controllers.SwaggerController.createConversation(client: String, conversationId: String)
+#+ nocsrf
+#PUT         /secure-message-stub/secure-message/conversation/:client/:conversationId        controllers.SwaggerController.createConversation(client: String, conversationId: String)
 
-+ nocsrf
-PUT         /secure-message/conversation/:client/:conversationId                            controllers.SwaggerController.createConversation(client: String, conversationId: String)
+#+ nocsrf
+#PUT         /secure-message/conversation/:client/:conversationId                            controllers.SwaggerController.createConversation(client: String, conversationId: String)
 
 # microservice specific routes
 
-GET         /secure-message-stub                                                            controllers.ConversationController.onPageLoad
-POST        /secure-message-stub                                                            controllers.ConversationController.submitQuery
+GET         /secure-message                                                            controllers.ConversationController.onPageLoad
+POST        /secure-message                                                            controllers.ConversationController.submitQuery
 
 
 
