@@ -45,7 +45,7 @@ class SwaggerController @Inject()(
                          conversationId: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.PUT[Option[JsValue], Result](
-        s"$secureMessageBaseUrl/secure-message/conversation/$client/$conversationId",
+        s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
         request.body.asJson,
         Seq.empty
       )
