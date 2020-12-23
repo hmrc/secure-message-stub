@@ -24,8 +24,7 @@ import utils.EnvironmentConfig
 import scala.concurrent.{ExecutionContext, Future}
 
 class SecureMessageConnector @Inject()(httpClient: HttpClient,
-                                       envConfig: EnvironmentConfig
-                                       ) {
+                                       envConfig: EnvironmentConfig) {
   val secureMessageBaseUrl = envConfig.baseUrl("secure-message")
 
   def create(
@@ -34,7 +33,7 @@ class SecureMessageConnector @Inject()(httpClient: HttpClient,
     conversation: ConversationRequest
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] = {
     httpClient.PUT[ConversationRequest, HttpResponse](
-      s"$secureMessageBaseUrl/secure-message/conversation/$client/$conversationId",
+      s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
       conversation
     )
   }
