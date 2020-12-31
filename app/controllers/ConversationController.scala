@@ -34,7 +34,7 @@ class ConversationController @Inject()(
   controllerComponents: MessagesControllerComponents,
   secureMessage: SecureMessageConnector,
   success: success_feedback,
-  envConfig: EnvironmentConfig,
+ // envConfig: EnvironmentConfig,
   view: create
 )(implicit ec: ExecutionContext)
     extends FrontendController(controllerComponents)
