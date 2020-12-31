@@ -59,7 +59,7 @@ class ConversationControllerSpec extends PlaySpec with ScalaFutures {
         Helpers.stubMessagesControllerComponents(),
         secureMessageConnector,
         success_feedback,
-      //  envConfig,
+        envConfig,
         create
       )
 

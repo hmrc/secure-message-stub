@@ -34,7 +34,7 @@ class ConversationController @Inject()(
   controllerComponents: MessagesControllerComponents,
   secureMessage: SecureMessageConnector,
   success: success_feedback,
- // envConfig: EnvironmentConfig,
+  envConfig: EnvironmentConfig,
   view: create
 )(implicit ec: ExecutionContext)
     extends FrontendController(controllerComponents)
@@ -123,7 +123,7 @@ class ConversationController @Inject()(
           case _       => BadRequest(success("Query creation unsuccessfull"))
         })
         .recover {
-          case _ => NotFound(success("Something went wrong"))
+          case _ => NotFound(success("Something went wrong" + "!!" + envConfig.rootServices + "!!" + envConfig.baseUrl("secure-message")))
         }
     }
     case _ =>
