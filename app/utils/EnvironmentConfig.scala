@@ -21,11 +21,7 @@ import play.api.{Configuration, Environment, Logger, Mode}
 
 class EnvironmentConfig @Inject()(configuration: Configuration, environment: Environment) {
 
-  def rootServices =   s"${environment.mode}.microservice.services"
-
-
-  Logger.logger.debug("------------env:" + environment.mode)
-  Logger.logger.debug("------------root:" + rootServices)
+  val rootServices =   s"${environment.mode}.microservice.services"
 
   protected lazy val defaultProtocol: String =
     configuration
@@ -36,9 +32,6 @@ class EnvironmentConfig @Inject()(configuration: Configuration, environment: Env
     val protocol = getConfString(s"$serviceName.protocol", defaultProtocol)
     val host     = getConfString(s"$serviceName.host", throwConfigNotFoundError(s"$serviceName.host"))
     val port     = getConfInt(s"$serviceName.port", throwConfigNotFoundError(s"$serviceName.port"))
-
-    Logger.logger.debug("------------host:" + environment.mode)
-    Logger.logger.debug("------------port:" + rootServices)
 
     s"$protocol://$host:$port"
   }

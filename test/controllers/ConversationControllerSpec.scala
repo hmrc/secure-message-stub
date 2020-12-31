@@ -59,7 +59,7 @@ class ConversationControllerSpec extends PlaySpec with ScalaFutures {
         Helpers.stubMessagesControllerComponents(),
         secureMessageConnector,
         success_feedback,
-        env,
+        envConfig,
         create
       )
 
@@ -72,7 +72,7 @@ class ConversationControllerSpec extends PlaySpec with ScalaFutures {
     class TestCase {
       val secureMessageConnector = mock[SecureMessageConnector]
       val success_feedback = mock[success_feedback]
-      val env = mock[EnvironmentConfig]
+      val envConfig = mock[EnvironmentConfig]
       val create = mock[create]
       implicit val hc: HeaderCarrier = HeaderCarrier()
 
