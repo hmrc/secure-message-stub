@@ -19,9 +19,9 @@ package utils
 import com.google.inject.Inject
 import play.api.{Configuration, Environment, Logger, Mode}
 
-class EnvironmentConfig @Inject()(configuration: Configuration, mode: Mode) {
+class EnvironmentConfig @Inject()(configuration: Configuration) {
 
-  lazy val rootServices =   s"${mode}.microservice.services"
+  lazy val rootServices =   "microservice.services"
 
   protected lazy val defaultProtocol: String =
     configuration

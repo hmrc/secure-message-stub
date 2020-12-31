@@ -24,9 +24,7 @@ import models.{Alert, ConversationRequest, Customer, Enrolment, QueryLanguage, R
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.EnvironmentConfig
 import views.html.{create, success_feedback}
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,7 +32,6 @@ class ConversationController @Inject()(
   controllerComponents: MessagesControllerComponents,
   secureMessage: SecureMessageConnector,
   success: success_feedback,
-  envConfig: EnvironmentConfig,
   view: create
 )(implicit ec: ExecutionContext)
     extends FrontendController(controllerComponents)
@@ -123,7 +120,7 @@ class ConversationController @Inject()(
           case _       => BadRequest(success("Query creation unsuccessfull"))
         })
         .recover {
-          case _ => NotFound(success("Something went wrong" + "!!" + envConfig.rootServices + "!!" + envConfig.baseUrl("secure-message")))
+          case _ => NotFound(success("Something went wrong"))
         }
     }
     case _ =>
