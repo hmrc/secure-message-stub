@@ -21,7 +21,7 @@ import play.api.{Configuration, Environment, Mode}
 
 class EnvironmentConfig @Inject()(configuration: Configuration, environment: Environment) {
 
-  protected lazy val rootServices =   s"${environment.mode}.microservice.services"
+   val rootServices =   s"${environment.mode}.microservice.services"
 
   protected lazy val defaultProtocol: String =
     configuration

@@ -43,7 +43,9 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import utils.EnvironmentConfig
 import views.html.{create, success_feedback}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -57,6 +59,7 @@ class ConversationControllerSpec extends PlaySpec with ScalaFutures {
         Helpers.stubMessagesControllerComponents(),
         secureMessageConnector,
         success_feedback,
+        env,
         create
       )
 
@@ -70,6 +73,7 @@ class ConversationControllerSpec extends PlaySpec with ScalaFutures {
       val secureMessageConnector = mock[SecureMessageConnector]
       val success_feedback = mock[success_feedback]
       val create = mock[create]
+      val env = mock[EnvironmentConfig]
       implicit val hc: HeaderCarrier = HeaderCarrier()
 
       val conversation = ConversationData(
