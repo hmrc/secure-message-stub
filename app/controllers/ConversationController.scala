@@ -129,7 +129,7 @@ class ConversationController @Inject()(
           case _       => BadRequest(success("Query creation unsuccessfull"))
         })
         .recover {
-          case x: Exception => NotFound(success("Something went wrong" + x.fillInStackTrace()))
+          case _ => NotFound(success("Something went wrong"))
         }
     }
     case _ =>
