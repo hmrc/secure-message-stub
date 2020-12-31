@@ -20,20 +20,13 @@ import connectors.SecureMessageConnector
 import forms.mappings.ConversationForm
 import forms.mappings.ConversationForm.ConversationData
 import models.QueryLanguage.{ENGLISH, WELSH}
-import models.{
-  Alert,
-  ConversationRequest,
-  Customer,
-  Enrolment,
-  QueryLanguage,
-  Recipient,
-  Sender,
-  System
-}
+import models.{Alert, ConversationRequest, Customer, Enrolment, QueryLanguage, Recipient, Sender, System}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.EnvironmentConfig
 import views.html.{create, success_feedback}
+
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,6 +34,7 @@ class ConversationController @Inject()(
   controllerComponents: MessagesControllerComponents,
   secureMessage: SecureMessageConnector,
   success: success_feedback,
+  envConfig: EnvironmentConfig,
   view: create
 )(implicit ec: ExecutionContext)
     extends FrontendController(controllerComponents)
@@ -129,7 +123,7 @@ class ConversationController @Inject()(
           case _       => BadRequest(success("Query creation unsuccessfull"))
         })
         .recover {
-          case x: Exception => NotFound(success("Something went wrong" + x.fillInStackTrace()))
+          case x: Exception => NotFound(success("Something went wrong" + x.fillInStackTrace() + " " + envConfig.baseUrl("secure-message")  + " " + envConfig.rootServices))
         }
     }
     case _ =>
