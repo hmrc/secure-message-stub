@@ -32,17 +32,17 @@
 //
 package views
 
-import controllers.{routes}
+import controllers.{ routes }
 import forms.mappings.ConversationForm
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
-import play.api.i18n.{Lang, MessagesApi, MessagesImpl}
+import play.api.i18n.{ Lang, MessagesApi, MessagesImpl }
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import views.html.create
 
-class CreateViewSpec extends PlaySpec with GuiceOneAppPerSuite{
+class CreateViewSpec extends PlaySpec with GuiceOneAppPerSuite {
   val messagesApi = app.injector.instanceOf[MessagesApi]
   implicit val messages = MessagesImpl(Lang("en"), messagesApi)
   implicit val request = FakeRequest("GET", "/")
@@ -87,6 +87,4 @@ class CreateViewSpec extends PlaySpec with GuiceOneAppPerSuite{
       document.body must include("tags-parameter5.value")
     }
   }
- }
-
-
+}

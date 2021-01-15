@@ -3,6 +3,7 @@ import sbt.Def
 import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
+import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 
 lazy val appName: String = "secure-message-stub"
 val silencerVersion = "1.6.0"
@@ -13,9 +14,23 @@ lazy val root = (project in file("."))
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
+  .configs(IntegrationTest)
   .settings(inConfig(Test)(testSettings): _*)
   .settings(majorVersion := 0)
   .settings(useSuperShell in ThisBuild := false)
+  .settings(
+    testOptions in IntegrationTest := Seq(Tests.Filter(_ endsWith "ItTestSuite")),
+    inConfig(IntegrationTest)(
+      scalafmtCoreSettings ++
+        Seq(
+          compileInputs in compile := Def.taskDyn {
+            val task = test in (resolvedScoped.value.scope in scalafmt.key)
+            val previousInputs = (compileInputs in compile).value
+            task.map(_ => previousInputs)
+          }.value
+        )
+    )
+  )
   .settings(
     scalaVersion := "2.12.10",
     name := appName,

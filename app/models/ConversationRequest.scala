@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat, Reads, Writes}
+import play.api.libs.json.{ Json, OFormat, Reads, Writes }
 
 final case class Alert(templateId: String, parameters: Option[Map[String, String]])
 object Alert {
@@ -55,13 +55,13 @@ object Recipient {
 }
 
 final case class ConversationRequest(
-                                      sender: Sender,
-                                      recipients: List[Recipient],
-                                      alert: Alert,
-                                      tags: Map[String, String],
-                                      subject: String,
-                                      message: String,
-                                      language: Option[String])
+  sender: Sender,
+  recipients: List[Recipient],
+  alert: Alert,
+  tags: Map[String, String],
+  subject: String,
+  message: String,
+  language: Option[String])
 object ConversationRequest {
   implicit val conversionRResultReads: Reads[ConversationRequest] = Json.reads[ConversationRequest]
   implicit val conversionRResultWrites: Writes[ConversationRequest] = Json.writes[ConversationRequest]

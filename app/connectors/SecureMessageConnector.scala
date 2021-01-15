@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,20 @@ package connectors
 import com.google.inject.Inject
 import models.ConversationRequest
 import models.ConversationRequest.conversionRResultWrites
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
 import utils.EnvironmentConfig
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
-class SecureMessageConnector @Inject()(httpClient: HttpClient,
-                                       envConfig: EnvironmentConfig) {
+class SecureMessageConnector @Inject()(httpClient: HttpClient, envConfig: EnvironmentConfig) {
   val secureMessageBaseUrl = envConfig.baseUrl("secure-message")
 
   def create(
     client: String,
     conversationId: String,
     conversation: ConversationRequest
-  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] = {
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] =
     httpClient.PUT[ConversationRequest, HttpResponse](
       s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
       conversation
     )
-  }
 }

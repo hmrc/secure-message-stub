@@ -33,3 +33,9 @@ bin
 /*.ipr
 /.classpath
 *.iws
+.*
+
+
+!.gitignore
+!.sbtrc
+!.scalafmt.conf

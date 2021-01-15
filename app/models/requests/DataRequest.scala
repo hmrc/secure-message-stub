@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
 
 package models.requests
 
-import play.api.mvc.{Request, WrappedRequest}
+import play.api.mvc.{ Request, WrappedRequest }
 import models.UserAnswers
 
-case class OptionalDataRequest[A] (request: Request[A], internalId: String, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
+case class OptionalDataRequest[A](request: Request[A], internalId: String, userAnswers: Option[UserAnswers])
+    extends WrappedRequest[A](request)
 
-case class DataRequest[A] (request: Request[A], internalId: String, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+case class DataRequest[A](request: Request[A], internalId: String, userAnswers: UserAnswers)
+    extends WrappedRequest[A](request)

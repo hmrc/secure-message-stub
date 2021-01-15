@@ -35,15 +35,15 @@ package controllers
 import connectors.SecureMessageConnector
 import forms.mappings.ConversationForm.ConversationData
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.{ times, verify, when }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
 import play.api.mvc._
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import views.html.{create, success_feedback}
+import play.api.test.{ FakeRequest, Helpers }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpResponse }
+import views.html.{ create, success_feedback }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -74,8 +74,7 @@ class ConversationControllerSpec extends PlaySpec with ScalaFutures {
 
       val conversation = ConversationData(
         query = (Some("subject"), Some("message"), Some("query.language-welsh")),
-        sender =
-          (Some("senderName"), Some("conversationId"), Some("displayName")),
+        sender = (Some("senderName"), Some("conversationId"), Some("displayName")),
         senderParameter1 = (Some("senderkey1"), Some("sendervalue1")),
         senderParameter2 = (Some("senderkey1"), Some("sendervalue1")),
         customer = (
