@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,13 +32,13 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat, Reads, Writes}
+import play.api.libs.json.{ Json, OFormat, Reads, Writes }
 
 case class Conversation(conversationId: String)
 
 object Conversation {
-implicit val conversionResultReads: Reads[Conversation] = Json.reads[Conversation]
-implicit val conversionResultWrites: Writes[Conversation] = Json.writes[Conversation]
+  implicit val conversionResultReads: Reads[Conversation] = Json.reads[Conversation]
+  implicit val conversionResultWrites: Writes[Conversation] = Json.writes[Conversation]
 
 }
 

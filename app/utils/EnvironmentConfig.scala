@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 package utils
 
 import com.google.inject.Inject
-import play.api.{Configuration, Environment, Mode}
+import play.api.{ Configuration, Environment, Mode }
 
 class EnvironmentConfig @Inject()(configuration: Configuration) {
 
-  protected lazy val rootServices =   "microservice.services"
+  protected lazy val rootServices = "microservice.services"
 
   protected lazy val defaultProtocol: String =
     configuration
@@ -30,8 +30,8 @@ class EnvironmentConfig @Inject()(configuration: Configuration) {
 
   def baseUrl(serviceName: String) = {
     val protocol = getConfString(s"$serviceName.protocol", defaultProtocol)
-    val host     = getConfString(s"$serviceName.host", throwConfigNotFoundError(s"$serviceName.host"))
-    val port     = getConfInt(s"$serviceName.port", throwConfigNotFoundError(s"$serviceName.port"))
+    val host = getConfString(s"$serviceName.host", throwConfigNotFoundError(s"$serviceName.host"))
+    val port = getConfInt(s"$serviceName.port", throwConfigNotFoundError(s"$serviceName.port"))
     s"$protocol://$host:$port"
   }
 

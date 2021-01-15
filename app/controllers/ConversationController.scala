@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +19,14 @@ package controllers
 import connectors.SecureMessageConnector
 import forms.mappings.ConversationForm
 import forms.mappings.ConversationForm.ConversationData
-import models.QueryLanguage.{ENGLISH, WELSH}
-import models.{
-  Alert,
-  ConversationRequest,
-  Customer,
-  Enrolment,
-  QueryLanguage,
-  Recipient,
-  Sender,
-  System
-}
+import models.QueryLanguage.{ ENGLISH, WELSH }
+import models.{ Alert, ConversationRequest, Customer, Enrolment, QueryLanguage, Recipient, Sender, System }
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.{create, success_feedback}
+import views.html.{ create, success_feedback }
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class ConversationController @Inject()(
   controllerComponents: MessagesControllerComponents,
@@ -43,8 +34,7 @@ class ConversationController @Inject()(
   success: success_feedback,
   view: create
 )(implicit ec: ExecutionContext)
-    extends FrontendController(controllerComponents)
-    with I18nSupport {
+    extends FrontendController(controllerComponents) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = Action { implicit request =>
     val call = routes.ConversationController.submitQuery()

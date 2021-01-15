@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package controllers
 
 import play.api.i18n.I18nSupport
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import uk.gov.hmrc.http.{HttpClient, HttpReads, HttpResponse}
+import play.api.libs.json.{ JsValue, Json }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Result }
+import uk.gov.hmrc.http.{ HttpClient, HttpReads, HttpResponse }
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.EnvironmentConfig
 import javax.inject.Inject
@@ -31,8 +31,7 @@ class SwaggerController @Inject()(
   environmentConfig: EnvironmentConfig,
   controllerComponents: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
-    extends FrontendController(controllerComponents)
-    with I18nSupport {
+    extends FrontendController(controllerComponents) with I18nSupport {
 
   private val secureMessageBaseUrl = environmentConfig.baseUrl("secure-message")
 
@@ -41,8 +40,7 @@ class SwaggerController @Inject()(
       httpClient.GET(s"$secureMessageBaseUrl/assets/$fileName")
     }
 
-  def createConversation(client: String,
-                         conversationId: String): Action[AnyContent] =
+  def createConversation(client: String, conversationId: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.PUT[Option[JsValue], Result](
         s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
@@ -52,9 +50,7 @@ class SwaggerController @Inject()(
     }
 
   def resultHttpReads: HttpReads[Result] = new HttpReads[Result] {
-    override def read(method: String,
-                      url: String,
-                      response: HttpResponse): Result =
+    override def read(method: String, url: String, response: HttpResponse): Result =
       Status(response.status)(response.body)
   }
   implicit val resultReader: HttpReads[Result] = resultHttpReads

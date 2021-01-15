@@ -32,17 +32,17 @@
 
 package connectors
 
-import models.{Alert, ConversationRequest, Sender, System}
-import org.mockito.Matchers.{any, anyString}
+import models.{ Alert, ConversationRequest, Sender, System }
+import org.mockito.Matchers.{ any, anyString }
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play._
 import play.api.http.Status.CREATED
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
 import utils.EnvironmentConfig
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class SecureMessageConnectorConnectorSpec extends PlaySpec with ScalaFutures {
 
