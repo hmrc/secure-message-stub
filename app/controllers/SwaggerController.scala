@@ -16,13 +16,13 @@
 
 package controllers
 
+import javax.inject.Inject
 import play.api.i18n.I18nSupport
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.JsValue
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Result }
 import uk.gov.hmrc.http.{ HttpClient, HttpReads, HttpResponse }
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.EnvironmentConfig
-import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
@@ -43,8 +43,7 @@ class SwaggerController @Inject()(
   def createConversation(client: String, conversationId: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.PUT[Option[JsValue], Result](
-        url =
-          s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
+        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
         request.body.asJson,
         Seq.empty
       )
