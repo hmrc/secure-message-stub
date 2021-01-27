@@ -37,15 +37,23 @@ class SwaggerController @Inject()(
 
   def getSwaggerAPISchema(fileName: String): Action[AnyContent] =
     Action.async { implicit request =>
-      httpClient.GET(s"$secureMessageBaseUrl/assets/$fileName")
+      httpClient.GET(url = s"$secureMessageBaseUrl/assets/$fileName")
     }
 
   def createConversation(client: String, conversationId: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.PUT[Option[JsValue], Result](
-        s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
+        url =
+          s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
         request.body.asJson,
         Seq.empty
+      )
+    }
+
+  def getConversations(): Action[AnyContent] =
+    Action.async { implicit request =>
+      httpClient.GET(
+        url = s"$secureMessageBaseUrl/secure-messaging/conversations"
       )
     }
 
