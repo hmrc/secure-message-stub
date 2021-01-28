@@ -13,6 +13,9 @@ GET         /api/:file                                   controllers.SwaggerCont
 + nocsrf
 PUT         /conversation/:client/:conversationId        controllers.SwaggerController.createConversation(client: String, conversationId: String)
 
++ nocsrf
+GET         /conversations                               controllers.SwaggerController.getConversations()
+
 # microservice specific routes
 
 GET         /                                            controllers.ConversationController.onPageLoad
