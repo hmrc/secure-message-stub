@@ -18,5 +18,6 @@ PUT         /conversation/:client/:conversationId        controllers.SwaggerCont
 GET         /                                            controllers.ConversationController.onPageLoad
 POST        /                                            controllers.ConversationController.submitQuery
 
-
+GET        /conversations                                controllers.ViewConversations.conversations
+GET        /conversation-message/:id                    controllers.ViewConversations.message(id)
 
