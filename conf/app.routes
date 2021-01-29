@@ -10,12 +10,6 @@ GET         /assets/*file                                controllers.Assets.vers
 # Swagger API endpoints
 GET         /api/:file                                   controllers.SwaggerController.getSwaggerAPISchema(file: String)
 
-+ nocsrf
-PUT         /conversation/:client/:conversationId        controllers.SwaggerController.createConversation(client: String, conversationId: String)
-
-+ nocsrf
-GET         /conversations                               controllers.SwaggerController.getConversations()
-
 # microservice specific routes
 
 GET         /                                            controllers.ConversationController.onPageLoad
