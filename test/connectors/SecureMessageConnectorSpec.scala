@@ -32,7 +32,7 @@
 
 package connectors
 
-import models.{ Alert, ConversationRequest, Sender, System }
+import models.{ Alert, ConversationRequest, Identifier, Sender, System }
 import org.mockito.Matchers.{ any, anyString }
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -44,7 +44,7 @@ import utils.EnvironmentConfig
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ ExecutionContext, Future }
 
-class SecureMessageConnectorConnectorSpec extends PlaySpec with ScalaFutures {
+class SecureMessageConnectorSpec extends PlaySpec with ScalaFutures {
 
   "Secure message connector" must {
     "return HttpResonse" in new TestCase {
@@ -61,7 +61,7 @@ class SecureMessageConnectorConnectorSpec extends PlaySpec with ScalaFutures {
           "cdcm",
           "123456789",
           ConversationRequest(
-            Sender(System("name", Map.empty[String, String], "displayName")),
+            Sender(System("name", Identifier("name", "value", None), Map.empty[String, String], "displayName")),
             List.empty,
             Alert("templateId", None),
             Map.empty[String, String],

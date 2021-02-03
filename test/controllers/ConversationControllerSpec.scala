@@ -74,7 +74,12 @@ class ConversationControllerSpec extends PlaySpec with ScalaFutures {
 
       val conversation = ConversationData(
         query = (Some("subject"), Some("message"), Some("query.language-welsh")),
-        sender = (Some("senderName"), Some("conversationId"), Some("displayName")),
+        sender = (
+          Some("senderName"),
+          Some("conversationId"),
+          Some("identificationKey"),
+          Some("identificationValue"),
+          Some("displayName")),
         senderParameter1 = (Some("senderkey1"), Some("sendervalue1")),
         senderParameter2 = (Some("senderkey1"), Some("sendervalue1")),
         customer = (

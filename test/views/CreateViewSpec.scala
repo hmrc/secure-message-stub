@@ -61,6 +61,8 @@ class CreateViewSpec extends PlaySpec with GuiceOneAppPerSuite {
       document.body must include("sender.name")
       document.body must include("sender.conversation-id")
       document.body must include("sender.display-name")
+      document.body must include("sender.identifier-name")
+      document.body must include("sender.identifier-value")
       document.body must include("sender-parameter1.key")
       document.body must include("sender-parameter1.value")
       document.body must include("sender-parameter2.key")

@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{ Json, OFormat, Reads, Writes }
+import play.api.libs.json.{ Format, Json, OFormat, Reads, Writes }
 
 final case class Alert(templateId: String, parameters: Option[Map[String, String]])
 object Alert {
@@ -30,7 +30,12 @@ object Enrolment {
     Json.format[Enrolment]
 }
 
-final case class System(name: String, parameters: Map[String, String], display: String)
+final case class Identifier(name: String, value: String, enrolment: Option[String])
+object Identifier {
+  implicit val identifierFormat: Format[Identifier] = Json.format[Identifier]
+}
+
+final case class System(name: String, identifier: Identifier, parameters: Map[String, String], display: String)
 object System {
   implicit val systemFormat: OFormat[System] =
     Json.format[System]

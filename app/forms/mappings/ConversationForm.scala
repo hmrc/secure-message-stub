@@ -29,9 +29,11 @@ object ConversationForm {
           "language" -> optional(text)
         ),
         "sender" -> tuple(
-          "name"            -> optional(text).verifying("Sender name is required", _.isDefined),
-          "conversation-id" -> optional(text).verifying("Sender conversation Id is required", _.isDefined),
-          "display-name"    -> optional(text).verifying("Sender display name is required", _.isDefined)
+          "name"             -> optional(text).verifying("Sender name is required", _.isDefined),
+          "conversation-id"  -> optional(text).verifying("Sender conversation Id is required", _.isDefined),
+          "identifier-name"  -> optional(text).verifying("Identifier name is required", _.isDefined),
+          "identifier-value" -> optional(text).verifying("Identifier value is required", _.isDefined),
+          "display-name"     -> optional(text).verifying("Sender display name is required", _.isDefined)
         ),
         "sender-parameter1" -> tuple("key" -> optional(text), "value" -> optional(text)),
         "sender-parameter2" -> tuple("key" -> optional(text), "value" -> optional(text)),
@@ -54,7 +56,7 @@ object ConversationForm {
 
   case class ConversationData(
     query: (Option[String], Option[String], Option[String]),
-    sender: (Option[String], Option[String], Option[String]),
+    sender: (Option[String], Option[String], Option[String], Option[String], Option[String]),
     senderParameter1: (Option[String], Option[String]),
     senderParameter2: (Option[String], Option[String]),
     customer: (Option[String], Option[String], Option[String], Option[String], Option[String]),
