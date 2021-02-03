@@ -20,7 +20,7 @@ import connectors.SecureMessageConnector
 import forms.mappings.ConversationForm
 import forms.mappings.ConversationForm.ConversationData
 import models.QueryLanguage.{ ENGLISH, WELSH }
-import models.{ Alert, ConversationRequest, Customer, Enrolment, QueryLanguage, Recipient, Sender, System }
+import models.{ Alert, ConversationRequest, Customer, Enrolment, Identifier, QueryLanguage, Recipient, Sender, System }
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -60,7 +60,7 @@ class ConversationController @Inject()(
   )(implicit request: Request[_]) = form match {
     case ConversationData(
         (Some(subject), Some(message), language),
-        (Some(senderName), Some(conversationId), Some(displayName)),
+        (Some(senderName), Some(conversationId), Some(identifierName), Some(identifierValue), Some(displayName)),
         (senderParameter1),
         (senderParameter2),
         (
@@ -95,7 +95,7 @@ class ConversationController @Inject()(
       )
 
       val query = ConversationRequest(
-        Sender(System(senderName, senderParameters, displayName)),
+        Sender(System(senderName, Identifier(identifierName, identifierValue, None), senderParameters, displayName)),
         List(
           Recipient(
             Customer(
