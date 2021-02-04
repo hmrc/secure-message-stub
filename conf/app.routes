@@ -26,3 +26,6 @@ PUT         /secure-messaging/conversation/:client/:conversationId        contro
 
 + nocsrf
 GET         /secure-messaging/conversations                               controllers.SwaggerController.getConversations()
+
++ nocsrf
+GET         /secure-messaging/conversation/:client/:conversationId/adviser-message                               controllers.SwaggerController.createAdviserMessage(client: String, conversationId: String)
