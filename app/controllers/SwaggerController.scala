@@ -58,10 +58,22 @@ class SwaggerController @Inject()(
       )
     }
 
-  def getConversations(): Action[AnyContent] =
+  def getConversations(enrolmentKey: String, enrolmentName: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.GET(
-        url = s"$secureMessageBaseUrl/secure-messaging/conversations"
+        url = s"$secureMessageBaseUrl/secure-messaging/conversations/$enrolmentKey/$enrolmentName"
+      )
+    }
+
+  def getConversation(
+    client: String,
+    conversationId: String,
+    enrolmentKey: String,
+    enrolmentName: String): Action[AnyContent] =
+    Action.async { implicit request =>
+      httpClient.GET(
+        url =
+          s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId/$enrolmentKey/$enrolmentName"
       )
     }
 
