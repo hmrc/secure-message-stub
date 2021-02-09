@@ -28,7 +28,7 @@ PUT         /secure-messaging/conversation/:client/:conversationId              
 GET         /secure-messaging/conversations/:enrolmentKey/:enrolmentName                               controllers.SwaggerController.getConversations(enrolmentKey: String, enrolmentName: String)
 
 + nocsrf
-GET         /secure-messaging/conversation/:client/:conversationId/adviser-message                     controllers.SwaggerController.createAdviserMessage(client: String, conversationId: String)
+POST         /secure-messaging/conversation/:client/:conversationId/adviser-message                     controllers.SwaggerController.createAdviserMessage(client: String, conversationId: String)
 
 + nocsrf
 GET         /secure-messaging/conversation/:client/:conversationId/:enrolmentKey/:enrolmentName        controllers.SwaggerController.getConversation(client: String, conversationId: String, enrolmentKey: String, enrolmentName: String)
