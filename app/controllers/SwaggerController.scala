@@ -52,7 +52,7 @@ class SwaggerController @Inject()(
   def createAdviserMessage(client: String, conversationId: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.POST[Option[JsValue], Result](
-        url = s"$secureMessageBaseUrl/conversation/$client/$conversationId/adviser-message",
+        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId/adviser-message",
         request.body.asJson,
         Seq.empty
       )
