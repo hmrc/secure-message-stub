@@ -46,9 +46,9 @@ class ViewConversations @Inject()(
       }
   }
 
-  def message(id: String) = Action.async { implicit request =>
+  def message(conversationId: String) = Action.async { implicit request =>
     secureMessageFrontendConnector
-      .messagePartial(id)
+      .messagePartial("some-client-id", conversationId)
       .map { response =>
         (response.status, response.body) match {
           case (200, body) => Ok(viewConversationMessages(HtmlFormat.raw(body)))

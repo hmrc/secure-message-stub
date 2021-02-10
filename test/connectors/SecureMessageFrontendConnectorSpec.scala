@@ -54,7 +54,7 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
         )(any(), any(), any())
       ).thenReturn(Future.successful(httpResponse))
 
-      val response = secureMessageFrontend.messagePartial("111").futureValue
+      val response = secureMessageFrontend.messagePartial("some-client-id", "111").futureValue
 
       response.status mustBe (200)
       response.body mustBe ("messagebody")
