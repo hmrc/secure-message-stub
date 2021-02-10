@@ -28,11 +28,13 @@ class SecureMessageFrontendConnector @Inject()(httpClient: HttpClient, envConfig
   def conversationsPartial(
     )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] =
     httpClient.GET[HttpResponse](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/conversations"
+      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversations"
     )
 
-  def messagePartial(id: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] =
+  def messagePartial(clientId: String, conversationId: String)(
+    implicit ec: ExecutionContext,
+    hc: HeaderCarrier): Future[HttpResponse] =
     httpClient.GET[HttpResponse](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/conversation-message/$id"
+      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$clientId/$conversationId"
     )
 }

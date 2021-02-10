@@ -18,6 +18,7 @@ package controllers
 
 import akka.util.Timeout
 import connectors.SecureMessageFrontendConnector
+import org.mockito.Matchers
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{ times, verify, when }
 import org.scalatest.concurrent.ScalaFutures
@@ -86,7 +87,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
   }
   "message function" must {
     "call secure message frontend connector" in new TestCase {
-      when(secureMessageFrontendConnector.messagePartial(any())(any(), any()))
+      when(
+        secureMessageFrontendConnector.messagePartial(Matchers.eq("some-client-id"), Matchers.eq("111"))(any(), any()))
         .thenReturn(Future.successful(HttpResponse(200, "html content")))
 
       val controller = new ViewConversations(
@@ -98,11 +100,12 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
       val result = controller.message("111")(FakeRequest())
 
       verify(secureMessageFrontendConnector, times(1))
-        .messagePartial(any())(any(), any())
+        .messagePartial(Matchers.eq("some-client-id"), Matchers.eq("111"))(any(), any())
     }
 
     "return 404 if reponse from secureMessageFrontendConnector is 404" in new TestCase {
-      when(secureMessageFrontendConnector.messagePartial(any())(any(), any()))
+      when(
+        secureMessageFrontendConnector.messagePartial(Matchers.eq("some-client-id"), Matchers.eq("111"))(any(), any()))
         .thenReturn(Future.successful(HttpResponse(404, "no content")))
 
       val controller = new ViewConversations(
@@ -117,7 +120,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
     }
 
     "return SERVICE_UNAVAILABLE if reponse from secureMessageFrontendConnector is 503" in new TestCase {
-      when(secureMessageFrontendConnector.messagePartial(any())(any(), any()))
+      when(
+        secureMessageFrontendConnector.messagePartial(Matchers.eq("some-client-id"), Matchers.eq("111"))(any(), any()))
         .thenReturn(Future.successful(HttpResponse(500, "no content")))
 
       val controller = new ViewConversations(

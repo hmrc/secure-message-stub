@@ -40,19 +40,19 @@ class SwaggerController @Inject()(
       httpClient.GET(url = s"$secureMessageBaseUrl/assets/$fileName")
     }
 
-  def createConversation(client: String, conversationId: String): Action[AnyContent] =
+  def createConversation(clientId: String, conversationId: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.PUT[Option[JsValue], Result](
-        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
+        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$clientId/$conversationId",
         request.body.asJson,
         Seq.empty
       )
     }
 
-  def createAdviserMessage(client: String, conversationId: String): Action[AnyContent] =
+  def createAdviserMessage(clientId: String, conversationId: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.POST[Option[JsValue], Result](
-        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId/adviser-message",
+        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$clientId/$conversationId/adviser-message",
         request.body.asJson,
         Seq.empty
       )
@@ -66,14 +66,14 @@ class SwaggerController @Inject()(
     }
 
   def getConversation(
-    client: String,
+    clientId: String,
     conversationId: String,
     enrolmentKey: String,
     enrolmentName: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.GET(
         url =
-          s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId/$enrolmentKey/$enrolmentName"
+          s"$secureMessageBaseUrl/secure-messaging/conversation/$clientId/$conversationId/$enrolmentKey/$enrolmentName"
       )
     }
 
