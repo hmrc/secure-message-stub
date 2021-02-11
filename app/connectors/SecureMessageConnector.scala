@@ -27,12 +27,12 @@ class SecureMessageConnector @Inject()(httpClient: HttpClient, envConfig: Enviro
   val secureMessageBaseUrl = envConfig.baseUrl("secure-message")
 
   def create(
-    clientId: String,
+    client: String,
     conversationId: String,
     conversation: ConversationRequest
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] =
     httpClient.PUT[ConversationRequest, HttpResponse](
-      s"$secureMessageBaseUrl/secure-messaging/conversation/$clientId/$conversationId",
+      s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
       conversation
     )
 }
