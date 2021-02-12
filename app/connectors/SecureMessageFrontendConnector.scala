@@ -17,6 +17,7 @@
 package connectors
 
 import com.google.inject.Inject
+import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
 import utils.EnvironmentConfig
 

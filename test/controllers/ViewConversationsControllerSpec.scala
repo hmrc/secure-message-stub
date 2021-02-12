@@ -26,14 +26,14 @@ import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
 import play.api.http.Status
 import play.api.test.FakeRequest
-import play.api.test.Helpers.stubMessagesControllerComponents
+import play.api.test.Helpers.{ status, stubMessagesControllerComponents }
 import uk.gov.hmrc.http.HttpResponse
 import views.html.{ view_conversation_messages, view_conversations }
-import play.api.test.Helpers.status
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
 class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
 
@@ -97,7 +97,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversationMessages,
         secureMessageFrontendConnector)
 
-      val result = controller.message("111")(FakeRequest())
+      val _ = controller.message("111")(FakeRequest())
 
       verify(secureMessageFrontendConnector, times(1))
         .messagePartial(Matchers.eq("some-client-id"), Matchers.eq("111"))(any(), any())
@@ -139,7 +139,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
 
   class TestCase {
     implicit val duration: Timeout = 5 seconds
-    val secureMessageFrontendConnector = mock[SecureMessageFrontendConnector]
+    val secureMessageFrontendConnector: SecureMessageFrontendConnector = mock[SecureMessageFrontendConnector]
     val viewConversations: view_conversations = mock[view_conversations]
     val viewConversationMessages: view_conversation_messages = mock[view_conversation_messages]
 

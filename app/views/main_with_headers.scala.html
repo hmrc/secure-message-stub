@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.html.layouts.govukLayout
+@import uk.gov.hmrc.govukfrontend.views.html.layouts.govukTemplate
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.{Header, HmrcHeader}
 @import play.twirl.api.HtmlFormat
@@ -24,7 +24,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
 @this(
-govukLayout: govukLayout,
+govukTemplate: govukTemplate,
 govukBackLink: GovukBackLink,
 hmrcHeader: HmrcHeader,
 hmrcFooter: HmrcFooter,
@@ -53,10 +53,21 @@ if (messages.lang.code == "cy") Cy else En,
 
 }
 
-@govukLayout(
+
+@mainContentDefault = {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      @mainContent
+    </div>
+  </div>
+}
+
+@govukTemplate(
+htmlLang = Some(messages.lang.code),
 pageTitle = Some(title),
 headBlock = Some(head()),
-headerBlock = Some(headerBlock),
+headerBlock = headerBlock,
 beforeContentBlock = Some(beforeContentBlock),
-footerBlock = Some(hmrcFooter()),
-bodyEndBlock = Some(scripts()))(mainContent)
+footerBlock = hmrcFooter(),
+mainClasses = Some("govuk-main-wrapper--auto-spacing"),
+bodyEndBlock = Some(scripts()))(mainContentDefault)
