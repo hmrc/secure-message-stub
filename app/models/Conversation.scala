@@ -32,7 +32,7 @@
 
 package models
 
-import play.api.libs.json.{ Json, OFormat, Reads, Writes }
+import play.api.libs.json.{ Json, Reads, Writes }
 
 case class Conversation(conversationId: String)
 

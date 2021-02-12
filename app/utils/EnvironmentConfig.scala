@@ -17,7 +17,7 @@
 package utils
 
 import com.google.inject.Inject
-import play.api.{ Configuration, Environment, Mode }
+import play.api.Configuration
 
 class EnvironmentConfig @Inject()(configuration: Configuration) {
 

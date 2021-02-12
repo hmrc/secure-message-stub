@@ -19,8 +19,10 @@ package connectors
 import com.google.inject.Inject
 import models.ConversationRequest
 import models.ConversationRequest.conversionRResultWrites
+import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
 import utils.EnvironmentConfig
+
 import scala.concurrent.{ ExecutionContext, Future }
 
 class SecureMessageConnector @Inject()(httpClient: HttpClient, envConfig: EnvironmentConfig) {
