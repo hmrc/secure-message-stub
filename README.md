@@ -17,7 +17,9 @@ These can either be running locally (please see the respective project README fi
 
 `source ../servicemanager/bin/activate`
 
-`sm --start DC_ACCEPTANCE`
+`sm --start DC_TWSM_ALL`
+
+`sm --stop SECURE_MESSAGE_STUB`
 
 To run the stub simply run the following command:
 
