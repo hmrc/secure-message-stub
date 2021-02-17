@@ -17,7 +17,7 @@ These can either be running locally (please see the respective project README fi
 
 `source ../servicemanager/bin/activate`
 
-`sm --start DC_ACCEPTANCE`
+`sm --start DC_TWSM_ALL`
 
 To run the stub simply run the following command:
 
