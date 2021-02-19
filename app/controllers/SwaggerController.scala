@@ -49,10 +49,19 @@ class SwaggerController @Inject()(
       )
     }
 
-  def createAdviserMessage(client: String, conversationId: String): Action[AnyContent] =
+  def createCaseworkerMessage(client: String, conversationId: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.POST[Option[JsValue], Result](
-        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId/adviser-message",
+        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId/caseworker-message",
+        request.body.asJson,
+        Seq.empty
+      )
+    }
+
+  def createCustomerMessage(client: String, conversationId: String): Action[AnyContent] =
+    Action.async { implicit request =>
+      httpClient.POST[Option[JsValue], Result](
+        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId/customer-message",
         request.body.asJson,
         Seq.empty
       )
