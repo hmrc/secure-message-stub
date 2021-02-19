@@ -7,29 +7,32 @@ GET         /secure-message-stub/assets/*file                                   
 
 # microservice specific routes
 
-GET         /secure-message-stub                                                                       controllers.ConversationController.onPageLoad
-POST        /secure-message-stub                                                                       controllers.ConversationController.submitQuery
+GET         /secure-message-stub                                                                    controllers.ConversationController.onPageLoad
+POST        /secure-message-stub                                                                    controllers.ConversationController.submitQuery
 
-GET         /secure-message-stub/conversations                                                         controllers.ViewConversations.conversations
-GET         /secure-message-stub/conversation-message/:conversationId                                  controllers.ViewConversations.message(conversationId)
+GET         /secure-message-stub/conversations                                                      controllers.ViewConversations.conversations
+GET         /secure-message-stub/conversation-message/:conversationId                               controllers.ViewConversations.message(conversationId)
 
 
 
 ### NoDocs ###
-GET         /secure-messaging/docs/swagger-ui/*file                                                    controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
+GET         /secure-messaging/docs/swagger-ui/*file                                                 controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
 
 # Swagger API endpoints
-GET         /secure-messaging/api/:file                                                                controllers.SwaggerController.getSwaggerAPISchema(file: String)
+GET         /secure-messaging/api/:file                                                             controllers.SwaggerController.getSwaggerAPISchema(file: String)
 
 + nocsrf
-PUT         /secure-messaging/conversation/:client/:conversationId                                   controllers.SwaggerController.createConversation(client: String, conversationId: String)
+PUT         /secure-messaging/conversation/:client/:conversationId                                  controllers.SwaggerController.createConversation(client: String, conversationId: String)
 
 + nocsrf
-GET         /secure-messaging/conversations/:enrolmentKey/:enrolmentName                               controllers.SwaggerController.getConversations(enrolmentKey: String, enrolmentName: String)
+GET         /secure-messaging/conversations/:enrolmentKey/:enrolmentName                            controllers.SwaggerController.getConversations(enrolmentKey: String, enrolmentName: String)
 
 + nocsrf
-POST         /secure-messaging/conversation/:client/:conversationId/adviser-message                  controllers.SwaggerController.createAdviserMessage(client: String, conversationId: String)
+POST        /secure-messaging/conversation/:client/:conversationId/caseworker-message               controllers.SwaggerController.createCaseworkerMessage(client: String, conversationId: String)
 
 + nocsrf
-GET         /secure-messaging/conversation/:client/:conversationId/:enrolmentKey/:enrolmentName      controllers.SwaggerController.getConversation(client: String, conversationId: String, enrolmentKey: String, enrolmentName: String)
+POST        /secure-messaging/conversation/:client/:conversationId/customer-message                 controllers.SwaggerController.createCustomerMessage(client: String, conversationId: String)
+
++ nocsrf
+GET         /secure-messaging/conversation/:client/:conversationId/:enrolmentKey/:enrolmentName     controllers.SwaggerController.getConversation(client: String, conversationId: String, enrolmentKey: String, enrolmentName: String)
 
