@@ -67,6 +67,15 @@ class SwaggerController @Inject()(
       )
     }
 
+  def addCustomerReadTime(client: String, conversationId: String): Action[AnyContent] =
+    Action.async { implicit request =>
+      httpClient.POST[Option[JsValue], Result](
+        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId/read-time",
+        request.body.asJson,
+        Seq.empty
+      )
+    }
+
   def getConversations(enrolmentKey: String, enrolmentName: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.GET(
