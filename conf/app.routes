@@ -34,5 +34,8 @@ POST        /secure-messaging/conversation/:client/:conversationId/caseworker-me
 POST        /secure-messaging/conversation/:client/:conversationId/customer-message                 controllers.SwaggerController.createCustomerMessage(client: String, conversationId: String)
 
 + nocsrf
+POST        /secure-messaging/conversation/:client/:conversationId/read-time                        controllers.SwaggerController.addCustomerReadTime(client: String, conversationId: String)
+
++ nocsrf
 GET         /secure-messaging/conversation/:client/:conversationId/:enrolmentKey/:enrolmentName     controllers.SwaggerController.getConversation(client: String, conversationId: String, enrolmentKey: String, enrolmentName: String)
 
