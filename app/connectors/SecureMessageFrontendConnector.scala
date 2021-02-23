@@ -29,7 +29,7 @@ class SecureMessageFrontendConnector @Inject()(httpClient: HttpClient, envConfig
   def conversationsPartial(
     )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] =
     httpClient.GET[HttpResponse](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversations"
+      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages"
     )
 
   def messagePartial(client: String, conversationId: String)(
