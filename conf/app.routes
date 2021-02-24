@@ -10,8 +10,8 @@ GET         /secure-message-stub/assets/*file                                   
 GET         /secure-message-stub                                                                    controllers.ConversationController.onPageLoad
 POST        /secure-message-stub                                                                    controllers.ConversationController.submitQuery
 
-GET         /secure-message-stub/conversations                                                      controllers.ViewConversations.conversations
-GET         /secure-message-stub/conversation-message/:conversationId                               controllers.ViewConversations.message(conversationId)
+GET         /secure-message-stub/messages                                                           controllers.ViewConversations.conversations
+GET         /secure-message-stub/conversation/:client/:conversationId                               controllers.ViewConversations.message(client, conversationId)
 
 
 

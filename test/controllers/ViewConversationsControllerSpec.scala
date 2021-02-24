@@ -97,7 +97,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversationMessages,
         secureMessageFrontendConnector)
 
-      val _ = controller.message("111")(FakeRequest())
+      val _ = controller.message("some-client-id", "111")(FakeRequest())
 
       verify(secureMessageFrontendConnector, times(1))
         .messagePartial(Matchers.eq("some-client-id"), Matchers.eq("111"))(any(), any())
@@ -114,7 +114,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversationMessages,
         secureMessageFrontendConnector)
 
-      val result = controller.message("111")(FakeRequest())
+      val result = controller.message("some-client-id", "111")(FakeRequest())
 
       status(result) mustBe Status.NOT_FOUND
     }
@@ -130,7 +130,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversationMessages,
         secureMessageFrontendConnector)
 
-      val result = controller.message("111")(FakeRequest())
+      val result = controller.message("some-client-id", "111")(FakeRequest())
 
       status(result) mustBe Status.SERVICE_UNAVAILABLE
     }
