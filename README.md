@@ -51,6 +51,21 @@ You can then find the swagger-UI interface here:
 
 http://localhost:9202/secure-messaging/docs/swagger-ui/index.html?url=http://localhost:9051/assets/schema.json
 
+## EIS endpoint for conversation reply to pega
+To test sending a QueryResponse to EIS:
+    PUT /prsup/PRRestService/DMS/Service/QueryResponse
+    With example QueryResponse:
+```json
+{"queryResponse": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6","conversationId":  "D-80542-20201120","message": "QmxhaCBibGFoIGJsYWg=" }}
+```
+Set the Authentication header to `Bearer AbCdEf123456`
+###Responses
+- 204 The QueryResponse was sucessfully processed by EIS
+- 400 The QueryResponse was invalid
+- 401 The Bearer token was invalid
+- 500 EIS could not process the QueryResponse to simulate this prepend `err` to the conversationId
+
+
 ### License
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").

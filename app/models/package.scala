@@ -17,6 +17,7 @@
 import play.api.libs.json._
 
 package object models {
+  type Base64String = String
 
   implicit class RichJsObject(jsObject: JsObject) {
 

@@ -13,6 +13,8 @@ POST        /secure-message-stub                                                
 GET         /secure-message-stub/messages                                                           controllers.ViewConversations.conversations
 GET         /secure-message-stub/conversation/:client/:conversationId                               controllers.ViewConversations.message(client, conversationId)
 
++ nocsrf
+PUT         /prsup/PRRestService/DMS/Service/QueryResponse                                          controllers.EISController.queryResponse
 
 
 ### NoDocs ###
