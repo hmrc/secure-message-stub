@@ -19,7 +19,7 @@ package controllers
 import akka.util.Timeout
 import connectors.SecureMessageFrontendConnector
 import org.mockito.{ Matchers }
-import org.mockito.Matchers.any
+import org.mockito.Matchers.{ any, eq => eqTo }
 import org.mockito.Mockito.{ times, verify, when }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
@@ -115,7 +115,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
   "message function" must {
     "call secure message frontend connector" in new TestCase {
       when(
-        secureMessageFrontendConnector.messagePartial(Matchers.eq("some-client-id"), Matchers.eq("111"))(any(), any()))
+        secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any()))
         .thenReturn(Future.successful(HttpResponse(200, "html content")))
 
       val controller = new ViewConversations(
@@ -124,15 +124,15 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversationMessages,
         secureMessageFrontendConnector)
 
-      val _ = controller.message("some-client-id", "111")(FakeRequest())
+      val _ = controller.message("some-client-id", "111", false)(FakeRequest())
 
       verify(secureMessageFrontendConnector, times(1))
-        .messagePartial(Matchers.eq("some-client-id"), Matchers.eq("111"))(any(), any())
+        .messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any())
     }
 
     "return 404 if reponse from secureMessageFrontendConnector is 404" in new TestCase {
       when(
-        secureMessageFrontendConnector.messagePartial(Matchers.eq("some-client-id"), Matchers.eq("111"))(any(), any()))
+        secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any()))
         .thenReturn(Future.successful(HttpResponse(404, "no content")))
 
       val controller = new ViewConversations(
@@ -141,14 +141,14 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversationMessages,
         secureMessageFrontendConnector)
 
-      val result = controller.message("some-client-id", "111")(FakeRequest())
+      val result = controller.message("some-client-id", "111", false)(FakeRequest())
 
       status(result) mustBe Status.NOT_FOUND
     }
 
     "return SERVICE_UNAVAILABLE if reponse from secureMessageFrontendConnector is 503" in new TestCase {
       when(
-        secureMessageFrontendConnector.messagePartial(Matchers.eq("some-client-id"), Matchers.eq("111"))(any(), any()))
+        secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any()))
         .thenReturn(Future.successful(HttpResponse(500, "no content")))
 
       val controller = new ViewConversations(
@@ -157,7 +157,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversationMessages,
         secureMessageFrontendConnector)
 
-      val result = controller.message("some-client-id", "111")(FakeRequest())
+      val result = controller.message("some-client-id", "111", false)(FakeRequest())
 
       status(result) mustBe Status.SERVICE_UNAVAILABLE
     }
