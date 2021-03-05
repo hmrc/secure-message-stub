@@ -23,6 +23,7 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{ view_conversation_messages, view_conversations }
 import javax.inject.Inject
+
 import scala.concurrent.ExecutionContext
 
 class ViewConversations @Inject()(
@@ -33,17 +34,21 @@ class ViewConversations @Inject()(
     extends FrontendController(controllerComponents) with I18nSupport {
 
   def conversations: Action[AnyContent] = Action.async { implicit request =>
-    secureMessageFrontendConnector.conversationsPartial
-      .map { response =>
-        (response.status, response.body) match {
-          case (200, body) => Ok(viewConversations(HtmlFormat.raw(body)))
-          case (404, _)    => NotFound
-          case (_, _)      => ServiceUnavailable
+    {
+      val queryParams = queryStringToParams(request.queryString)
+      secureMessageFrontendConnector
+        .conversationsPartial(queryParams)
+        .map { response =>
+          (response.status, response.body) match {
+            case (200, body) => Ok(viewConversations(HtmlFormat.raw(body)))
+            case (404, _)    => NotFound
+            case (_, _)      => ServiceUnavailable
+          }
         }
-      }
-      .recover {
-        case _ => InternalServerError
-      }
+        .recover {
+          case _ => InternalServerError
+        }
+    }
   }
 
   def message(client: String, conversationId: String) = Action.async { implicit request =>
@@ -60,4 +65,7 @@ class ViewConversations @Inject()(
         case _ => InternalServerError
       }
   }
+
+  private def queryStringToParams(queryString: Map[String, Seq[String]]): Seq[(String, String)] =
+    (for (qs <- queryString.toSeq; k = qs._1; v <- qs._2) yield (k, v))
 }
