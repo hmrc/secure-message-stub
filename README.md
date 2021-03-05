@@ -33,13 +33,21 @@ Visit http://localhost:9202/secure-message-stub
 
 First authenticate via `auth-login-stub` (i.e. Auhtority Wizard) with the following:
 
-Redirect URL should be set to http://localhost:9202/secure-message-stub/conversations
+Redirect URL should be set to http://localhost:9202/secure-message-stub/messages to view your user's inbox or http://localhost:9202/secure-message-stub to create a message
 
-Enrolments should be set as follow:
+Example of an enrolment:
 
 Enrolment Key: `HMRC-CUS-ORG`
 Identifier Name: `EORINumber`
 Identifier Value: `GB1234567890`
+
+Examples of filters on the messages inbox:
+
+http://localhost:9202/secure-message-stub/messages?enrolment=HMRC-CUS-ORG~EORINumber~GB1234567890
+
+http://localhost:9202/secure-message-stub/messages?enrolmentKey=HMRC-CUS-ORG&enrolment=HMRC-CUS-ORG~EORINumber~GB1234567890
+
+http://localhost:9202/secure-message-stub/messages?enrolment=HMRC-CUS-ORG~EORINumber~GB1234567890&tag=notificationType~CDS%20Exports&tag=sourceId~ccdm
 
 Click on submit and you should be presented with your inbox. If it's empty, load your local mongo `secure-message` database with some records as described [here](https://github.com/hmrc/secure-message/blob/master/README.md). Alternatively you can use the `Create a CDS message/query` endpoint as previously mentioned.
 

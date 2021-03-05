@@ -21,6 +21,7 @@ import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
+import play.api.mvc.MessagesRequest
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
 import utils.EnvironmentConfig
 
@@ -34,16 +35,31 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
       val httpResponse = HttpResponse(200, "body")
       when(
         httpClient.GET[HttpResponse](
-          anyString()
+          anyString(),
+          any[Seq[(String, String)]]()
         )(any(), any(), any())
       ).thenReturn(Future.successful(httpResponse))
-      secureMessageFrontend.conversationsPartial()
 
       val response = secureMessageFrontend.conversationsPartial().futureValue
 
       response.status mustBe (200)
       response.body mustBe ("body")
+    }
 
+    "return conversationPartial with query paramters passed" in new TestCase {
+      val httpResponse = HttpResponse(200, "body")
+      when(
+        httpClient.GET[HttpResponse](
+          anyString(),
+          any[Seq[(String, String)]]()
+        )(any(), any(), any())
+      ).thenReturn(Future.successful(httpResponse))
+
+      val queryParams: Seq[(String, String)] = List(("key1", "value1"), ("key1", "value2"))
+      val response = secureMessageFrontend.conversationsPartial(queryParams).futureValue
+
+      response.status mustBe (200)
+      response.body mustBe ("body")
     }
 
     "return messagePartial" in new TestCase {

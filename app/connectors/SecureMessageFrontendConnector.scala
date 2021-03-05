@@ -26,10 +26,12 @@ import scala.concurrent.{ ExecutionContext, Future }
 class SecureMessageFrontendConnector @Inject()(httpClient: HttpClient, envConfig: EnvironmentConfig) {
   val secureMessageFrontendBaseUrl = envConfig.baseUrl("secure-message-frontend")
 
-  def conversationsPartial(
-    )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] =
+  def conversationsPartial(queryParams: Seq[(String, String)] = Seq.empty)(
+    implicit ec: ExecutionContext,
+    hc: HeaderCarrier): Future[HttpResponse] =
     httpClient.GET[HttpResponse](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages"
+      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages",
+      queryParams
     )
 
   def messagePartial(client: String, conversationId: String)(
