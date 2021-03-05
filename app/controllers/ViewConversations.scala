@@ -33,7 +33,6 @@ class ViewConversations @Inject()(
   secureMessageFrontendConnector: SecureMessageFrontendConnector)(implicit ec: ExecutionContext)
     extends FrontendController(controllerComponents) with I18nSupport {
 
-
   def conversations: Action[AnyContent] = Action.async { implicit request =>
     {
       val queryParams = queryStringToParams(request.queryString)
