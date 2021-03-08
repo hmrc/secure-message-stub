@@ -11,7 +11,11 @@ GET         /secure-message-stub                                                
 POST        /secure-message-stub                                                                    controllers.ConversationController.submitQuery
 
 GET         /secure-message-stub/messages                                                           controllers.ViewConversations.conversations
-GET         /secure-message-stub/conversation/:client/:conversationId                               controllers.ViewConversations.message(client, conversationId)
+GET         /secure-message-stub/conversation/:client/:conversationId                               controllers.ViewConversations.message(client, conversationId, showReplyForm: Boolean ?= false)
+
++ nocsrf
+POST        /secure-message-stub/conversation/:client/:conversationId                               controllers.ViewConversations.reply(client, conversationId)
+GET         /secure-message-stub/conversation/:client/:conversationId/result                        controllers.ViewConversations.result(client, conversationId)
 
 + nocsrf
 PUT         /prsup/PRRestService/DMS/Service/QueryResponse                                          controllers.EISController.queryResponse

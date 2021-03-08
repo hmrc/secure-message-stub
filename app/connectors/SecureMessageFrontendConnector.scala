@@ -17,6 +17,7 @@
 package connectors
 
 import com.google.inject.Inject
+import play.api.mvc.{ AnyContent, MessagesRequest }
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
 import utils.EnvironmentConfig
@@ -34,10 +35,26 @@ class SecureMessageFrontendConnector @Inject()(httpClient: HttpClient, envConfig
       queryParams
     )
 
-  def messagePartial(client: String, conversationId: String)(
+  def messagePartial(client: String, conversationId: String, showReplyForm: Boolean)(
     implicit ec: ExecutionContext,
     hc: HeaderCarrier): Future[HttpResponse] =
     httpClient.GET[HttpResponse](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId"
+      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId?showReplyForm=$showReplyForm"
+    )
+
+  def messageReply(client: String, conversationId: String, request: MessagesRequest[AnyContent])(
+    implicit ec: ExecutionContext,
+    hc: HeaderCarrier): Future[HttpResponse] =
+    httpClient.POSTForm(
+      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId",
+      request.body.asFormUrlEncoded.getOrElse(Map.empty),
+      Seq.empty
+    )
+
+  def resultPartial(client: String, conversationId: String)(
+    implicit ec: ExecutionContext,
+    hc: HeaderCarrier): Future[HttpResponse] =
+    httpClient.GET[HttpResponse](
+      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId/result"
     )
 }

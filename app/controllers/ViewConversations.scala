@@ -17,12 +17,12 @@
 package controllers
 
 import connectors.SecureMessageFrontendConnector
+import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{ view_conversation_messages, view_conversations }
-import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
@@ -40,9 +40,9 @@ class ViewConversations @Inject()(
         .conversationsPartial(queryParams)
         .map { response =>
           (response.status, response.body) match {
-            case (200, body) => Ok(viewConversations(HtmlFormat.raw(body)))
-            case (404, _)    => NotFound
-            case (_, _)      => ServiceUnavailable
+            case (OK, body)     => Ok(viewConversations(HtmlFormat.raw(body)))
+            case (NOT_FOUND, _) => NotFound
+            case (_, _)         => ServiceUnavailable
           }
         }
         .recover {
@@ -51,14 +51,39 @@ class ViewConversations @Inject()(
     }
   }
 
-  def message(client: String, conversationId: String) = Action.async { implicit request =>
+  def message(client: String, conversationId: String, showReplyForm: Boolean) = Action.async { implicit request =>
     secureMessageFrontendConnector
-      .messagePartial(client, conversationId)
+      .messagePartial(client, conversationId, showReplyForm)
       .map { response =>
         (response.status, response.body) match {
-          case (200, body) => Ok(viewConversationMessages(HtmlFormat.raw(body)))
-          case (404, _)    => NotFound
-          case (_, _)      => ServiceUnavailable
+          case (OK, body)     => Ok(viewConversationMessages(HtmlFormat.raw(body)))
+          case (NOT_FOUND, _) => NotFound
+          case (_, _)         => ServiceUnavailable
+        }
+      }
+      .recover {
+        case _ => InternalServerError
+      }
+  }
+
+  def reply(client: String, conversationId: String) = Action.async { implicit request =>
+    secureMessageFrontendConnector.messageReply(client, conversationId, request).map { response =>
+      (response.status, response.body) match {
+        case (OK, body)     => Redirect(body)
+        case (NOT_FOUND, _) => NotFound
+        case (_, _)         => ServiceUnavailable
+      }
+    }
+  }
+
+  def result(client: String, conversationId: String) = Action.async { implicit request =>
+    secureMessageFrontendConnector
+      .resultPartial(client, conversationId)
+      .map { response =>
+        (response.status, response.body) match {
+          case (OK, body)     => Ok(viewConversationMessages(HtmlFormat.raw(body)))
+          case (NOT_FOUND, _) => NotFound
+          case (_, _)         => ServiceUnavailable
         }
       }
       .recover {
