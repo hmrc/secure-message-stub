@@ -57,7 +57,7 @@ Ensure that `secure-message` is running locally on port `9051` (as mentioned abo
 
 You can then find the swagger-UI interface here:
 
-http://localhost:9202/secure-messaging/docs/swagger-ui/index.html?url=http://localhost:9051/assets/schema.json
+http://localhost:9202/secure-messaging/docs/swagger-ui/index.html?url=/secure-messaging/api/schema.json
 
 ## EIS endpoint for conversation reply to pega
 To test sending a QueryResponse to EIS:
