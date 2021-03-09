@@ -90,7 +90,4 @@ class ViewConversations @Inject()(
         case _ => InternalServerError
       }
   }
-
-  private def queryStringToParams(queryString: Map[String, Seq[String]]): Seq[(String, String)] =
-    (for (qs <- queryString.toSeq; k = qs._1; v <- qs._2) yield (k, v))
 }

@@ -17,10 +17,11 @@
 package controllers
 
 import javax.inject.Inject
+import models.{CustomerEnrolment, Tag}
 import play.api.i18n.I18nSupport
 import play.api.libs.json.JsValue
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Result }
-import uk.gov.hmrc.http.{ HttpClient, HttpReads, HttpResponse }
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import uk.gov.hmrc.http.{HttpClient, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.EnvironmentConfig
 
@@ -76,10 +77,14 @@ class SwaggerController @Inject()(
       )
     }
 
-  def getConversations(enrolmentKey: String, enrolmentName: String): Action[AnyContent] =
+  def getMetadataForConversationsFiltered(enrolmentKeys: Option[List[String]],
+                       customerEnrolments: Option[List[CustomerEnrolment]],
+                       tags: Option[List[Tag]]): Action[AnyContent] =
     Action.async { implicit request =>
+      val queryParams = queryStringToParams(request.queryString)
       httpClient.GET(
-        url = s"$secureMessageBaseUrl/secure-messaging/conversations/$enrolmentKey/$enrolmentName"
+        url = s"$secureMessageBaseUrl/secure-messaging/conversations",
+        queryParams
       )
     }
 

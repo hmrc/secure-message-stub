@@ -34,7 +34,7 @@ lazy val root = (project in file("."))
   .settings(
     scalaVersion := "2.12.10",
     name := appName,
-    RoutesKeys.routesImport += "models._",
+    RoutesKeys.routesImport ++= Seq("models._", "controllers.binders._"),
     TwirlKeys.templateImports ++= Seq(
       "uk.gov.hmrc.govukfrontend.views.html.components._",
       "uk.gov.hmrc.govukfrontend.views.html.helpers._",
