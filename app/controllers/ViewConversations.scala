@@ -56,9 +56,10 @@ class ViewConversations @Inject()(
       .messagePartial(client, conversationId, showReplyForm)
       .map { response =>
         (response.status, response.body) match {
-          case (OK, body)     => Ok(viewConversationMessages(HtmlFormat.raw(body)))
-          case (NOT_FOUND, _) => NotFound
-          case (_, _)         => ServiceUnavailable
+          case (OK, body)          => Ok(viewConversationMessages(HtmlFormat.raw(body)))
+          case (BAD_REQUEST, body) => BadRequest(viewConversationMessages(HtmlFormat.raw(body)))
+          case (NOT_FOUND, _)      => NotFound
+          case (_, _)              => ServiceUnavailable
         }
       }
       .recover {
