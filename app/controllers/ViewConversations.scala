@@ -70,6 +70,7 @@ class ViewConversations @Inject()(
     secureMessageFrontendConnector.messageReply(client, conversationId, request).map { response =>
       (response.status, response.body) match {
         case (OK, body)     => Redirect(body)
+        case (BAD_REQUEST, body)     => BadRequest(viewConversationMessages(HtmlFormat.raw(body)))
         case (NOT_FOUND, _) => NotFound
         case (_, _)         => ServiceUnavailable
       }
