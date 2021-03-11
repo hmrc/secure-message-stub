@@ -69,10 +69,10 @@ class ViewConversations @Inject()(
   def reply(client: String, conversationId: String) = Action.async { implicit request =>
     secureMessageFrontendConnector.messageReply(client, conversationId, request).map { response =>
       (response.status, response.body) match {
-        case (OK, body)     => Redirect(body)
-        case (BAD_REQUEST, body)     => BadRequest(viewConversationMessages(HtmlFormat.raw(body)))
-        case (NOT_FOUND, _) => NotFound
-        case (_, _)         => ServiceUnavailable
+        case (OK, body)          => Redirect(body)
+        case (BAD_REQUEST, body) => BadRequest(viewConversationMessages(HtmlFormat.raw(body)))
+        case (NOT_FOUND, _)      => NotFound
+        case (_, _)              => ServiceUnavailable
       }
     }
   }
