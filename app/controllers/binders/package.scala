@@ -16,7 +16,7 @@
 
 package controllers
 
-import models.{CustomerEnrolment, Tag}
+import models.{ CustomerEnrolment, Tag }
 import play.api.mvc.QueryStringBindable
 
 package object binders {
