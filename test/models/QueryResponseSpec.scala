@@ -16,49 +16,42 @@
 
 package models
 
-import java.util.UUID
-import play.api.libs.json._
 import org.scalatestplus.play.PlaySpec
+import play.api.libs.json._
 
 class QueryResponseSpec extends PlaySpec {
   "QueryResponse Reads" must {
     "create QueryResponse if json valid" in {
-      Json.parse("""{"queryResponse": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+      Json.parse("""{"queryResponse": { "id": "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
                    |"conversationId":  "D-80542-20201120",
                    |"message": "QmxhaCBibGFoIGJsYWg=" }}""".stripMargin).as[QueryResponse] mustBe queryResponse
     }
 
-    "fail to create QueryResponse if id is not a UUID" in {
-      Json.parse("""{"queryResponse": { "id": "cdc3f605-cb77-4025-a48db733cd88",
-                   |"conversationId":  "D-80542-20201120",
-                   |"message": "QmxhaCBibGFoIGJsYWg=" }}""".stripMargin).validate[QueryResponse] mustBe a[JsError]
-    }
-
     "fail to create QueryResponse if message is not Base64 encoded" in {
-      Json.parse("""{"queryResponse": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+      Json.parse("""{"queryResponse": { "id": "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
                    |"conversationId":  "D-80542-20201120",
                    |"message": "QmxhaCBibGFoIGJsYWg=Ő" }}""".stripMargin).validate[QueryResponse] mustBe a[JsError]
     }
 
     "fail to create QueryResponse if conversationId length greater than 22" in {
-      Json.parse("""{"queryResponse": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+      Json.parse("""{"queryResponse": { "id": "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
                    |"conversationId":  "D-80542-20201120123456789",
                    |"message": "QmxhaCBibGFoIGJsYWg=" }}""".stripMargin).validate[QueryResponse] mustBe a[JsError]
     }
 
     "fail to create QueryResponse if conversationId length is 0" in {
-      Json.parse("""{"queryResponse": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+      Json.parse("""{"queryResponse": { "id": "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
                    |"conversationId":  "",
                    |"message": "QmxhaCBibGFoIGJsYWg=" }}""".stripMargin).validate[QueryResponse] mustBe a[JsError]
     }
 
     "fail to create QueryResponse if message length is 0" in {
-      Json.parse("""{"queryResponse": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+      Json.parse("""{"queryResponse": { "id": "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
                    |"conversationId":  "D-80542-20201120",
                    |"message": "" }}""".stripMargin).validate[QueryResponse] mustBe a[JsError]
     }
   }
 
   val queryResponse =
-    QueryResponse(UUID.fromString("cdc3f605-cb77-4025-a48d-b733cd88c3e6"), "D-80542-20201120", "QmxhaCBibGFoIGJsYWg=")
+    QueryResponse("govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6", "D-80542-20201120", "QmxhaCBibGFoIGJsYWg=")
 }

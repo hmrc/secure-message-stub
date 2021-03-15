@@ -23,7 +23,7 @@ import play.api.libs.functional.syntax._
 import org.apache.commons.codec.binary.Base64._
 import java.util.UUID
 
-case class QueryResponse(id: UUID, conversationId: String, message: Base64String) {
+case class QueryResponse(id: String, conversationId: String, message: Base64String) {
   assert(
     !conversationId.isEmpty && conversationId.length <= MaxConversationIdLength,
     s"conversationId size: ${conversationId.size} is invalid")
@@ -50,7 +50,7 @@ object QueryResponse {
   implicit val uuidFormat = UUIDFormatter
 
   implicit val queryResponseReads: Reads[QueryResponse] = (
-    (JsPath \ "queryResponse" \ "id").read[UUID] and
+    (JsPath \ "queryResponse" \ "id").read[String] and
       (JsPath \ "queryResponse" \ "conversationId").read[String](verifying[String](a =>
         !a.isEmpty && a.length <= MaxConversationIdLength)) and
       (JsPath \ "queryResponse" \ "message").read[String](verifying[String](a => {
