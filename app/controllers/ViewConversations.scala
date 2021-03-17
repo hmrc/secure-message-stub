@@ -22,7 +22,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.{ view_conversation_messages, view_conversations }
+import views.html.{ error_page, view_conversation_messages, view_conversations }
 
 import scala.concurrent.ExecutionContext
 
@@ -30,6 +30,7 @@ class ViewConversations @Inject()(
   controllerComponents: MessagesControllerComponents,
   viewConversations: view_conversations,
   viewConversationMessages: view_conversation_messages,
+  errorPage: error_page,
   secureMessageFrontendConnector: SecureMessageFrontendConnector)(implicit ec: ExecutionContext)
     extends FrontendController(controllerComponents) with I18nSupport {
 
@@ -67,12 +68,13 @@ class ViewConversations @Inject()(
       }
   }
 
-  def reply(client: String, conversationId: String) = Action.async { implicit request =>
+  def reply(client: String, conversationId: String) = Action.async { implicit request: MessagesRequest[AnyContent] =>
     secureMessageFrontendConnector.messageReply(client, conversationId, request).map { response =>
       (response.status, response.body) match {
         case (OK, body)          => Redirect(body)
         case (BAD_REQUEST, body) => BadRequest(viewConversationMessages(HtmlFormat.raw(body)))
         case (NOT_FOUND, _)      => NotFound
+        case (BAD_GATEWAY, _)    => BadRequest(errorPage("Sorry, there is a problem with the service"))
         case (_, _)              => ServiceUnavailable
       }
     }

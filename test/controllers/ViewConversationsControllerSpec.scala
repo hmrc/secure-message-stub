@@ -18,7 +18,7 @@ package controllers
 
 import akka.util.Timeout
 import connectors.SecureMessageFrontendConnector
-import org.mockito.{ Matchers }
+import org.mockito.Matchers
 import org.mockito.Matchers.{ any, eq => eqTo }
 import org.mockito.Mockito.{ times, verify, when }
 import org.scalatest.concurrent.ScalaFutures
@@ -26,9 +26,10 @@ import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
 import play.api.http.Status
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ status, stubMessagesControllerComponents }
-import uk.gov.hmrc.http.HttpResponse
-import views.html.{ view_conversation_messages, view_conversations }
+import play.api.test.Helpers.{ contentAsString, status, stubMessagesControllerComponents }
+import play.twirl.api.Html
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpResponse }
+import views.html.{ error_page, view_conversation_messages, view_conversations }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -46,6 +47,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         stubMessagesControllerComponents(),
         viewConversations,
         viewConversationMessages,
+        error_page,
         secureMessageFrontendConnector)
 
       controller.conversations()(FakeRequest())
@@ -69,6 +71,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         stubMessagesControllerComponents(),
         viewConversations,
         viewConversationMessages,
+        error_page,
         secureMessageFrontendConnector)
 
       controller.conversations()(
@@ -89,6 +92,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         stubMessagesControllerComponents(),
         viewConversations,
         viewConversationMessages,
+        error_page,
         secureMessageFrontendConnector)
 
       val result = controller.conversations()(FakeRequest())
@@ -104,6 +108,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         stubMessagesControllerComponents(),
         viewConversations,
         viewConversationMessages,
+        error_page,
         secureMessageFrontendConnector)
 
       val result = controller.conversations(FakeRequest())
@@ -122,6 +127,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         stubMessagesControllerComponents(),
         viewConversations,
         viewConversationMessages,
+        error_page,
         secureMessageFrontendConnector)
 
       val _ = controller.message("some-client-id", "111", false)(FakeRequest())
@@ -139,6 +145,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         stubMessagesControllerComponents(),
         viewConversations,
         viewConversationMessages,
+        error_page,
         secureMessageFrontendConnector)
 
       val result = controller.message("some-client-id", "111", false)(FakeRequest())
@@ -155,11 +162,45 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         stubMessagesControllerComponents(),
         viewConversations,
         viewConversationMessages,
+        error_page,
         secureMessageFrontendConnector)
 
       val result = controller.message("some-client-id", "111", false)(FakeRequest())
 
       status(result) mustBe Status.SERVICE_UNAVAILABLE
+    }
+  }
+
+  "reply function" must {
+
+    "return redirect if response from secureMessageFrontend is 200" in new TestCase {
+      when(secureMessageFrontendConnector.messageReply(any(), any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(200, "")))
+      val controller = new ViewConversations(
+        stubMessagesControllerComponents(),
+        viewConversations,
+        viewConversationMessages,
+        error_page,
+        secureMessageFrontendConnector)
+
+      val result = controller.reply("client", "conversationId")(FakeRequest())
+      status(result) mustBe 303
+    }
+
+    "return BadRequest if response from secureMessageFrontend is BAD_GATEWAY" in new TestCase {
+      when(secureMessageFrontendConnector.messageReply(any(), any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(502, "")))
+      when(error_page.apply(any())(any(), any())).thenReturn(Html("error content"))
+      val controller = new ViewConversations(
+        stubMessagesControllerComponents(),
+        viewConversations,
+        viewConversationMessages,
+        error_page,
+        secureMessageFrontendConnector)
+
+      val result = controller.reply("client", "conversationId")(FakeRequest())
+      status(result) mustBe Status.BAD_REQUEST
+      contentAsString(result) mustBe "error content"
     }
 
   }
@@ -168,6 +209,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
     implicit val duration: Timeout = 5 seconds
     val secureMessageFrontendConnector: SecureMessageFrontendConnector = mock[SecureMessageFrontendConnector]
     val viewConversations: view_conversations = mock[view_conversations]
+    val error_page: error_page = mock[error_page]
     val viewConversationMessages: view_conversation_messages = mock[view_conversation_messages]
   }
 
