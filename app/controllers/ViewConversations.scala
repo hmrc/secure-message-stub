@@ -74,7 +74,7 @@ class ViewConversations @Inject()(
         case (OK, body)          => Redirect(body)
         case (BAD_REQUEST, body) => BadRequest(viewConversationMessages(HtmlFormat.raw(body)))
         case (NOT_FOUND, _)      => NotFound
-        case (BAD_GATEWAY, _)    => BadRequest(errorPage("Sorry, there is a problem with the service"))
+        case (BAD_GATEWAY, _)    => BadGateway(errorPage("Sorry, there is a problem with the service"))
         case (_, _)              => ServiceUnavailable
       }
     }
