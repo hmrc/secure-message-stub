@@ -199,7 +199,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         secureMessageFrontendConnector)
 
       val result = controller.reply("client", "conversationId")(FakeRequest())
-      status(result) mustBe Status.BAD_REQUEST
+      status(result) mustBe Status.BAD_GATEWAY
       contentAsString(result) mustBe "error content"
     }
 
