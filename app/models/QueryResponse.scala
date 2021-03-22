@@ -27,7 +27,9 @@ case class QueryResponse(id: String, conversationId: String, message: Base64Stri
   assert(
     !conversationId.isEmpty && conversationId.length <= MaxConversationIdLength,
     s"conversationId size: ${conversationId.size} is invalid")
-  assert(!message.isEmpty && message.length <= MaxMessageLength, s"message size: ${message.size} is invalid")
+  assert(
+    !message.isEmpty && (decodeBase64(message).toString.length <= MaxMessageLength),
+    s"message size: ${message.size} is invalid")
 }
 
 object QueryResponse {
@@ -54,7 +56,7 @@ object QueryResponse {
       (JsPath \ "queryResponse" \ "conversationId").read[String](verifying[String](a =>
         !a.isEmpty && a.length <= MaxConversationIdLength)) and
       (JsPath \ "queryResponse" \ "message").read[String](verifying[String](a => {
-        !a.isEmpty && a.length <= MaxMessageLength && isBase64(a)
+        !a.isEmpty && isBase64(a) && (decodeBase64(a).toString.length <= MaxMessageLength)
       }))
   )(QueryResponse.apply _)
 }
