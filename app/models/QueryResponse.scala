@@ -27,7 +27,9 @@ case class QueryResponse(id: String, conversationId: String, message: Base64Stri
   assert(
     !conversationId.isEmpty && conversationId.length <= MaxConversationIdLength,
     s"conversationId size: ${conversationId.size} is invalid")
-  assert(!message.isEmpty && (decodeBase64(message).toString.length <= MaxMessageLength), s"message size: ${message.size} is invalid")
+  assert(
+    !message.isEmpty && (decodeBase64(message).toString.length <= MaxMessageLength),
+    s"message size: ${message.size} is invalid")
 }
 
 object QueryResponse {
