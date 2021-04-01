@@ -13,6 +13,8 @@ object AppDependencies {
     "uk.gov.hmrc" %% "bootstrap-frontend-play-27" % "3.2.0",
     "uk.gov.hmrc" %% "http-verbs-play-27" % "12.2.0",
     "com.beachape" %% "enumeratum" % "1.6.0",
+    "uk.gov.hmrc" %% "time" % "3.19.0",
+    "com.typesafe.play" %% "play-json-joda" % "2.9.2",
     "org.webjars" % "swagger-ui" % "3.38.0",
     "commons-codec" % "commons-codec" % "1.15"
   )

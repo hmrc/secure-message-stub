@@ -27,44 +27,66 @@ import play.api.test.Helpers.{ AUTHORIZATION, CONTENT_TYPE, JSON, PUT, defaultAw
 class EISControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
   implicit val mat: Materializer = NoMaterializer
 
-  "EISController QueryResponse" must {
+  "EISController QueryMessageWrapper" must {
     "return NO_CONTENT if the call is valid and accepted" in {
       val eisController = app.injector.instanceOf[EISController]
-      status(eisController.queryResponse(requestBuilder(Seq(auth, contentType), validQueryResponse))) mustBe NO_CONTENT
+      status(eisController.queryResponse(requestBuilder(Seq(auth, contentType), validQueryMessageWrapper))) mustBe NO_CONTENT
     }
     "return UNAUTHORIZED if there is not a not a AUTHORIZATION header" in {
       val eisController = app.injector.instanceOf[EISController]
-      status(eisController.queryResponse(requestBuilder(Seq(contentType), validQueryResponse))) mustBe UNAUTHORIZED
+      status(eisController.queryResponse(requestBuilder(Seq(contentType), validQueryMessageWrapper))) mustBe UNAUTHORIZED
     }
     "return UNAUTHORIZED if the Bearer token is invalid" in {
       val eisController = app.injector.instanceOf[EISController]
-      status(eisController.queryResponse(requestBuilder(Seq(badAuth, contentType), validQueryResponse))) mustBe UNAUTHORIZED
+      status(eisController.queryResponse(requestBuilder(Seq(badAuth, contentType), validQueryMessageWrapper))) mustBe UNAUTHORIZED
     }
-    "return BAD_REQUEST if the QueryResponse is not valid" in {
+    "return BAD_REQUEST if the QueryMessageWrapper is not valid" in {
       val eisController = app.injector.instanceOf[EISController]
-      status(eisController.queryResponse(requestBuilder(Seq(auth, contentType), inValidQueryResponse))) mustBe BAD_REQUEST
+      status(eisController.queryResponse(requestBuilder(Seq(auth, contentType), inValidQueryMessageWrapper))) mustBe BAD_REQUEST
     }
-    "return INTERNAL_SERVER_ERROR if the QueryResponse is not valid" in {
+    "return INTERNAL_SERVER_ERROR if the QueryMessageWrapper is not valid" in {
       val eisController = app.injector.instanceOf[EISController]
-      status(eisController.queryResponse(requestBuilder(Seq(auth, contentType), errCausingQueryResponse))) mustBe INTERNAL_SERVER_ERROR
+      status(eisController.queryResponse(requestBuilder(Seq(auth, contentType), errCausingQueryMessageWrapper))) mustBe INTERNAL_SERVER_ERROR
     }
   }
 
   def requestBuilder(hdrs: Seq[(String, String)], body: JsValue): FakeRequest[JsValue] =
-    FakeRequest(PUT, "/prsup/PRRestService/DMS/Service/QueryResponse")
+    FakeRequest(PUT, "/prsup/PRRestService/DMS/Service/QueryMessageRequest")
       .withHeaders(hdrs: _*)
       .withBody(body)
 
-  private val validQueryResponse =
-    Json.parse("""{"queryResponse": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
-                 |"conversationId":  "D-80542-20201120","message": "QmxhaCBibGFoIGJsYWg=" }}""".stripMargin)
+  private val validQueryMessageWrapper = Json.parse(s"""|{
+                                                        |  "queryMessageRequest" : {
+                                                        |    "requestCommon" : {
+                                                        |      "originatingSystem" : "dc-secure-message",
+                                                        |      "receiptDate" : "2021-04-01T14:32:48+01:00",
+                                                        |      "acknowledgementReference" : "acknowledgementReference"
+                                                        |    },
+                                                        |    "requestDetail" : {
+                                                        |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+                                                        |      "conversationId" : "D-80542-20201120",
+                                                        |      "message" : "QmxhaCBibGFoIGJsYWg="
+                                                        |    }
+                                                        |  }
+                                                        |}""".stripMargin)
 
-  private val inValidQueryResponse = Json.parse("""{"queryResponse": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+  private val inValidQueryMessageWrapper = Json.parse("""{"requestDetail": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
                                                   |"conversationId":  "D-80542-20201120"}}""".stripMargin)
 
-  private val errCausingQueryResponse =
-    Json.parse("""{"queryResponse": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
-                 |"conversationId":  "D-80542-20201120err","message": "QmxhaCBibGFoIGJsYWg=" }}""".stripMargin)
+  private val errCausingQueryMessageWrapper = Json.parse(s"""|{
+                                                             |  "queryMessageRequest" : {
+                                                             |    "requestCommon" : {
+                                                             |      "originatingSystem" : "dc-secure-message",
+                                                             |      "receiptDate" : "2021-04-01T14:32:48+01:00",
+                                                             |      "acknowledgementReference" : "acknowledgementReference"
+                                                             |    },
+                                                             |    "requestDetail" : {
+                                                             |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+                                                             |      "conversationId" : "D-80542-20201120err",
+                                                             |      "message" : "QmxhaCBibGFoIGJsYWg="
+                                                             |    }
+                                                             |  }
+                                                             |}""".stripMargin)
 
   val contentType: (String, String) = (CONTENT_TYPE, JSON)
   val auth = (AUTHORIZATION, "Bearer AbCdEf123456")
