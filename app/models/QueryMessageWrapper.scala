@@ -23,8 +23,10 @@ import java.util.UUID
 
 import play.api.libs.json._
 
-
-final case class RequestCommon(originatingSystem: String, receiptDate: org.joda.time.DateTime, acknowledgementReference: String)
+final case class RequestCommon(
+  originatingSystem: String,
+  receiptDate: org.joda.time.DateTime,
+  acknowledgementReference: String)
 object RequestCommon {
 
   val dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZ"
@@ -63,7 +65,7 @@ object RequestDetail {
   implicit val uuidFormat = UUIDFormatter
 
   implicit val requestDetailReads: Reads[RequestDetail] = (
-    (JsPath  \ "id").read[String] and
+    (JsPath \ "id").read[String] and
       (JsPath \ "conversationId").read[String](verifying[String](a =>
         !a.isEmpty && a.length <= MaxConversationIdLength)) and
       (JsPath \ "message").read[String](verifying[String](a => {

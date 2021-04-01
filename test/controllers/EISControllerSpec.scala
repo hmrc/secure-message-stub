@@ -70,8 +70,9 @@ class EISControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
                                                         |  }
                                                         |}""".stripMargin)
 
-  private val inValidQueryMessageWrapper = Json.parse("""{"requestDetail": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
-                                                  |"conversationId":  "D-80542-20201120"}}""".stripMargin)
+  private val inValidQueryMessageWrapper =
+    Json.parse("""{"requestDetail": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+                 |"conversationId":  "D-80542-20201120"}}""".stripMargin)
 
   private val errCausingQueryMessageWrapper = Json.parse(s"""|{
                                                              |  "queryMessageRequest" : {
