@@ -73,7 +73,6 @@ class QueryMessageWrapperSpec extends PlaySpec {
                      |}""".stripMargin).validate[QueryMessageWrapper] mustBe a[JsError]
     }
 
-
     "fail to create QueryMessageWrapper if conversationId length is 0" in {
       Json.parse(s"""|{
                      |  "querymessageRequest" : {
@@ -118,5 +117,6 @@ class QueryMessageWrapperSpec extends PlaySpec {
           originatingSystem = "dc-secure-message",
           receiptDate = dt,
           acknowledgementReference = "acknowledgementReference"),
-        RequestDetail("govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6", "D-80542-20201120", "QmxhaCBibGFoIGJsYWg=")))
+        RequestDetail("govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6", "D-80542-20201120", "QmxhaCBibGFoIGJsYWg=")
+      ))
 }
