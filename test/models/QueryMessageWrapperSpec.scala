@@ -24,7 +24,7 @@ class QueryMessageWrapperSpec extends PlaySpec {
   "QueryMessageWrapper Reads" must {
     "create QueryMessageWrapper if json valid" in {
       Json.parse(s"""|{
-                     |  "queryMessageRequest" : {
+                     |  "querymessageRequest" : {
                      |    "requestCommon" : {
                      |      "originatingSystem" : "dc-secure-message",
                      |      "receiptDate" : "2021-04-01T14:32:48+01:00",
