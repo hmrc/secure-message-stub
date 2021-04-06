@@ -56,7 +56,7 @@ class EISControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
       .withBody(body)
 
   private val validQueryMessageWrapper = Json.parse(s"""|{
-                                                        |  "queryMessageRequest" : {
+                                                        |  "querymessageRequest" : {
                                                         |    "requestCommon" : {
                                                         |      "originatingSystem" : "dc-secure-message",
                                                         |      "receiptDate" : "2021-04-01T14:32:48+01:00",
@@ -75,7 +75,7 @@ class EISControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
                  |"conversationId":  "D-80542-20201120"}}""".stripMargin)
 
   private val errCausingQueryMessageWrapper = Json.parse(s"""|{
-                                                             |  "queryMessageRequest" : {
+                                                             |  "querymessageRequest" : {
                                                              |    "requestCommon" : {
                                                              |      "originatingSystem" : "dc-secure-message",
                                                              |      "receiptDate" : "2021-04-01T14:32:48+01:00",
