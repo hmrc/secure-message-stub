@@ -23,12 +23,11 @@ import java.util.UUID
 
 import play.api.libs.json._
 
-
 final case class QueryMessageWrapper(queryMessageRequest: QueryMessageRequest)
 object QueryMessageWrapper {
   implicit val queryMessageWrapperReads: Reads[QueryMessageWrapper] = (
     (JsPath \ "querymessageRequest").read[QueryMessageRequest]
-    ).map(QueryMessageWrapper(_))
+  ).map(QueryMessageWrapper(_))
 }
 
 final case class QueryMessageRequest(requestCommon: RequestCommon, requestDetail: RequestDetail)
@@ -86,5 +85,3 @@ object RequestDetail {
       }))
   )(RequestDetail.apply _)
 }
-
-
