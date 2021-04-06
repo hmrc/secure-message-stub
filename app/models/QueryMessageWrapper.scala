@@ -41,7 +41,7 @@ final case class RequestCommon(
   acknowledgementReference: String)
 object RequestCommon {
 
-  val dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZ"
+  val dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
   implicit val JodaDateReads: Reads[org.joda.time.DateTime] = JodaReads.jodaDateReads(dateFormat)
   implicit val JodaDateWrites: Writes[org.joda.time.DateTime] = JodaWrites.jodaDateWrites(dateFormat)
   implicit val JodaDateTimeFormat: Format[org.joda.time.DateTime] = Format(JodaDateReads, JodaDateWrites)
