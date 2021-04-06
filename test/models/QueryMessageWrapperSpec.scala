@@ -27,7 +27,7 @@ class QueryMessageWrapperSpec extends PlaySpec {
                      |  "querymessageRequest" : {
                      |    "requestCommon" : {
                      |      "originatingSystem" : "dc-secure-message",
-                     |      "receiptDate" : "2021-04-01T14:32:48+01:00",
+                     |      "receiptDate" : "2021-04-01T14:32:48Z",
                      |      "acknowledgementReference" : "acknowledgementReference"
                      |    },
                      |    "requestDetail" : {
@@ -44,7 +44,7 @@ class QueryMessageWrapperSpec extends PlaySpec {
                      |  "querymessageRequest" : {
                      |    "requestCommon" : {
                      |      "originatingSystem" : "dc-secure-message",
-                     |      "receiptDate" : "2021-04-01T14:32:48+01:00",
+                     |      "receiptDate" : "2021-04-01T14:32:48Z",
                      |      "acknowledgementReference" : "acknowledgementReference"
                      |    },
                      |    "requestDetail" : {
@@ -61,7 +61,7 @@ class QueryMessageWrapperSpec extends PlaySpec {
                      |  "querymessageRequest" : {
                      |    "requestCommon" : {
                      |      "originatingSystem" : "dc-secure-message",
-                     |      "receiptDate" : "2021-04-01T14:32:48+01:00",
+                     |      "receiptDate" : "2021-04-01T14:32:48Z",
                      |      "acknowledgementReference" : "acknowledgementReference"
                      |    },
                      |    "requestDetail" : {
@@ -78,7 +78,7 @@ class QueryMessageWrapperSpec extends PlaySpec {
                      |  "querymessageRequest" : {
                      |    "requestCommon" : {
                      |      "originatingSystem" : "dc-secure-message",
-                     |      "receiptDate" : "2021-04-01T14:32:48+01:00",
+                     |      "receiptDate" : "2021-04-01T14:32:48Z",
                      |      "acknowledgementReference" : "acknowledgementReference"
                      |    },
                      |    "requestDetail" : {
@@ -95,7 +95,7 @@ class QueryMessageWrapperSpec extends PlaySpec {
                      |  "querymessageRequest" : {
                      |    "requestCommon" : {
                      |      "originatingSystem" : "dc-secure-message",
-                     |      "receiptDate" : "2021-04-01T14:32:48+01:00",
+                     |      "receiptDate" : "2021-04-01T14:32:48Z",
                      |      "acknowledgementReference" : "acknowledgementReference"
                      |    },
                      |    "requestDetail" : {
@@ -108,8 +108,8 @@ class QueryMessageWrapperSpec extends PlaySpec {
     }
   }
 
-  val dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZZ")
-  val dt = dtf.parseDateTime("2021-04-01T14:32:48+01:00")
+  val dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+  val dt = dtf.parseDateTime("2021-04-01T14:32:48Z")
   val queryMessageWrapper =
     QueryMessageWrapper(
       QueryMessageRequest(
