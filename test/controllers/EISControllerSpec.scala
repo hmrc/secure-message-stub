@@ -59,7 +59,7 @@ class EISControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
                                                         |  "querymessageRequest" : {
                                                         |    "requestCommon" : {
                                                         |      "originatingSystem" : "dc-secure-message",
-                                                        |      "receiptDate" : "2021-04-01T14:32:48+01:00",
+                                                        |      "receiptDate" : "2021-04-01T14:32:48Z",
                                                         |      "acknowledgementReference" : "acknowledgementReference"
                                                         |    },
                                                         |    "requestDetail" : {
@@ -78,7 +78,7 @@ class EISControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
                                                              |  "querymessageRequest" : {
                                                              |    "requestCommon" : {
                                                              |      "originatingSystem" : "dc-secure-message",
-                                                             |      "receiptDate" : "2021-04-01T14:32:48+01:00",
+                                                             |      "receiptDate" : "2021-04-01T14:32:48Z",
                                                              |      "acknowledgementReference" : "acknowledgementReference"
                                                              |    },
                                                              |    "requestDetail" : {
