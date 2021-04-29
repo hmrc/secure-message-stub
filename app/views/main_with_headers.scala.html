@@ -42,6 +42,7 @@ serviceName = Some("secure message stub"),
 containerClasses = "govuk-width-container",
 signOutHref = Some("externalUrls.survey")
 ))
+<input type="hidden" id="realtime" name="realtime" value='@org.joda.time.DateTime.now(org.joda.time.DateTimeZone.forID("Europe/London"))'>
 }
 
 @beforeContentBlock = {
