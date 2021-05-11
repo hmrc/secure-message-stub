@@ -9,6 +9,8 @@
 
 3. */secure-message-stub/conversation-message/:id* to view a specific message
 
+4. */secure-message-stub/messages/:id* to view a specific letter
+
 ## Running locally:
 
 Ensure that you have `secure-message` and `secure-message-frontend` running, along side `auth-login-stub`.

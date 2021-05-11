@@ -75,6 +75,21 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
       response.body mustBe ("messagebody")
     }
 
+    "return letterPartial when the message type for a message is conversation" in new TestCase {
+      val httpResponse = HttpResponse(200, "body")
+      when(
+        httpClient.GET[HttpResponse](
+          anyString()
+        )(any(), any(), any())
+      ).thenReturn(Future.successful(httpResponse))
+
+      val response = secureMessageFrontend.letterPartial("some-client-id").futureValue
+
+      response.status mustBe (200)
+      response.body mustBe ("body")
+
+    }
+
     class TestCase {
       val httpClient: HttpClient = mock[HttpClient]
       val envConf: EnvironmentConfig = mock[EnvironmentConfig]
