@@ -95,9 +95,9 @@ class ViewConversations @Inject()(
       }
   }
 
-  def letter(id: String) = Action.async { implicit request =>
+  def viewLetterOrConversation(id: String) = Action.async { implicit request =>
     secureMessageFrontendConnector
-      .letterPartial(id)
+      .letterOrConversationPartial(id)
       .map { response =>
         (response.status, response.body) match {
           case (200, body) => Ok(viewConversationMessages(HtmlFormat.raw(body)))

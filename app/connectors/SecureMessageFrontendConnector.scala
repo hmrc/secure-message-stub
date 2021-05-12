@@ -42,7 +42,7 @@ class SecureMessageFrontendConnector @Inject()(httpClient: HttpClient, envConfig
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId?showReplyForm=$showReplyForm"
     )
 
-  def letterPartial(id: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] =
+  def letterOrConversationPartial(id: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] =
     httpClient.GET[HttpResponse](
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages/$id"
     )

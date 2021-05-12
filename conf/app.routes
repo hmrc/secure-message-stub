@@ -17,7 +17,7 @@ GET         /secure-message-stub/conversation/:client/:conversationId           
 POST        /secure-message-stub/conversation/:client/:conversationId                               controllers.ViewConversations.reply(client, conversationId)
 GET         /secure-message-stub/conversation/:client/:conversationId/result                        controllers.ViewConversations.result(client, conversationId)
 
-GET         /secure-message-stub/messages/:id                                                       controllers.ViewConversations.letter(id)
+GET         /secure-message-stub/messages/:id                                                       controllers.ViewConversations.viewLetterOrConversation(id)
 
 + nocsrf
 PUT         /prsup/PRRestService/DMS/Service/QueryResponse                                          controllers.EISController.queryResponse
