@@ -94,4 +94,19 @@ class ViewConversations @Inject()(
         case _ => InternalServerError
       }
   }
+
+  def viewLetterOrConversation(id: String) = Action.async { implicit request =>
+    secureMessageFrontendConnector
+      .letterOrConversationPartial(id)
+      .map { response =>
+        (response.status, response.body) match {
+          case (200, body) => Ok(viewConversationMessages(HtmlFormat.raw(body)))
+          case (404, _)    => NotFound
+          case (_, _)      => ServiceUnavailable
+        }
+      }
+      .recover {
+        case _ => InternalServerError
+      }
+  }
 }
