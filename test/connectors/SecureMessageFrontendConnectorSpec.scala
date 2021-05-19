@@ -16,12 +16,13 @@
 
 package connectors
 
-import org.mockito.Matchers.{ any, anyString }
+import models.Count
+import org.mockito.Matchers.{any, anyString}
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import utils.EnvironmentConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -30,7 +31,7 @@ import scala.concurrent.Future
 class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
 
   "Secure message frontend connector" must {
-    "return conversationPartial" in new TestCase {
+    "return conversationsPartial" in new TestCase {
       val httpResponse = HttpResponse(200, "body")
       when(
         httpClient.GET[HttpResponse](
@@ -45,7 +46,7 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
       response.body mustBe ("body")
     }
 
-    "return conversationPartial with query paramters passed" in new TestCase {
+    "return conversationsPartial with query parameters passed" in new TestCase {
       val httpResponse = HttpResponse(200, "body")
       when(
         httpClient.GET[HttpResponse](
@@ -87,7 +88,35 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
 
       response.status mustBe (200)
       response.body mustBe ("body")
+    }
 
+    "return messageCount" in new TestCase {
+      val count = Count(5, 2)
+      when(
+        httpClient.GET[Count](
+          anyString(),
+          any[Seq[(String, String)]]()
+        )(any(), any(), any())
+      ).thenReturn(Future.successful(count))
+
+      val response = secureMessageFrontend.messageCount().futureValue
+
+      response mustBe Count(5, 2)
+    }
+
+    "return messageCount with query parameters passed" in new TestCase {
+      val count = Count(2, 1)
+      when(
+        httpClient.GET[Count](
+          anyString(),
+          any[Seq[(String, String)]]()
+        )(any(), any(), any())
+      ).thenReturn(Future.successful(count))
+
+      val queryParams: Seq[(String, String)] = List(("key1", "value1"), ("key1", "value2"))
+      val response = secureMessageFrontend.messageCount(queryParams).futureValue
+
+      response mustBe Count(2, 1)
     }
 
     class TestCase {

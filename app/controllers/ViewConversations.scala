@@ -25,6 +25,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{ error_page, view_conversation_messages, view_conversations }
 
 import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 class ViewConversations @Inject()(
   controllerComponents: MessagesControllerComponents,
@@ -37,18 +38,15 @@ class ViewConversations @Inject()(
   def conversations: Action[AnyContent] = Action.async { implicit request =>
     {
       val queryParams = queryStringToParams(request.queryString)
-      secureMessageFrontendConnector
-        .conversationsPartial(queryParams)
-        .map { response =>
-          (response.status, response.body) match {
-            case (OK, body)     => Ok(viewConversations(HtmlFormat.raw(body)))
-            case (NOT_FOUND, _) => NotFound
-            case (_, _)         => ServiceUnavailable
-          }
-        }
-        .recover {
-          case _ => InternalServerError
-        }
+
+      for {
+        response <- secureMessageFrontendConnector.conversationsPartial(queryParams)
+        messageCount <- secureMessageFrontendConnector.messageCount(queryParams)
+      } yield (response.status, response.body) match {
+        case (OK, body)     => Ok(viewConversations(messageCount, HtmlFormat.raw(body)))
+        case (NOT_FOUND, _) => NotFound
+        case (_, _)         => ServiceUnavailable
+      }
     }
   }
 
