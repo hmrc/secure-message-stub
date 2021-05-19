@@ -17,12 +17,12 @@
 package connectors
 
 import models.Count
-import org.mockito.Matchers.{any, anyString}
+import org.mockito.Matchers.{ any, anyString }
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
 import utils.EnvironmentConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global

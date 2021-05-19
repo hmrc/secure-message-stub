@@ -40,13 +40,14 @@ class ViewConversations @Inject()(
       val queryParams = queryStringToParams(request.queryString)
 
       for {
-        response <- secureMessageFrontendConnector.conversationsPartial(queryParams)
+        response     <- secureMessageFrontendConnector.conversationsPartial(queryParams)
         messageCount <- secureMessageFrontendConnector.messageCount(queryParams)
-      } yield (response.status, response.body) match {
-        case (OK, body)     => Ok(viewConversations(messageCount, HtmlFormat.raw(body)))
-        case (NOT_FOUND, _) => NotFound
-        case (_, _)         => ServiceUnavailable
-      }
+      } yield
+        (response.status, response.body) match {
+          case (OK, body)     => Ok(viewConversations(messageCount, HtmlFormat.raw(body)))
+          case (NOT_FOUND, _) => NotFound
+          case (_, _)         => ServiceUnavailable
+        }
     }
   }
 

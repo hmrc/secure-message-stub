@@ -19,12 +19,12 @@ package connectors
 import com.google.inject.Inject
 import models.Count
 import play.api.Logger.logger
-import play.api.mvc.{AnyContent, MessagesRequest}
+import play.api.mvc.{ AnyContent, MessagesRequest }
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse }
 import utils.EnvironmentConfig
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class SecureMessageFrontendConnector @Inject()(httpClient: HttpClient, envConfig: EnvironmentConfig) {
   val secureMessageFrontendBaseUrl = envConfig.baseUrl("secure-message-frontend")
@@ -65,15 +65,17 @@ class SecureMessageFrontendConnector @Inject()(httpClient: HttpClient, envConfig
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId/result"
     )
 
-  def messageCount(queryParams: Seq[(String, String)] = Seq.empty)(
-    implicit ec: ExecutionContext,
-    hc: HeaderCarrier): Future[Count] =
-    httpClient.GET[Count](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/messages/count",
-      queryParams
-    ).recoverWith {
-      case exc: UpstreamErrorResponse =>
-        logger.error(s"Received a ${exc.statusCode} response secure-messaging-frontend whilst retrieving message count: ${exc.message}")
-        Future.failed(exc)
-    }
+  def messageCount(
+    queryParams: Seq[(String, String)] = Seq.empty)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Count] =
+    httpClient
+      .GET[Count](
+        s"$secureMessageFrontendBaseUrl/secure-message-frontend/messages/count",
+        queryParams
+      )
+      .recoverWith {
+        case exc: UpstreamErrorResponse =>
+          logger.error(
+            s"Received a ${exc.statusCode} response secure-messaging-frontend whilst retrieving message count: ${exc.message}")
+          Future.failed(exc)
+      }
 }

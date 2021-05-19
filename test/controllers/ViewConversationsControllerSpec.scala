@@ -20,17 +20,17 @@ import akka.util.Timeout
 import connectors.SecureMessageFrontendConnector
 import models.Count
 import org.mockito.Matchers
-import org.mockito.Matchers.{any, eq => eqTo}
-import org.mockito.Mockito.{reset, times, verify, when}
+import org.mockito.Matchers.{ any, eq => eqTo }
+import org.mockito.Mockito.{ reset, times, verify, when }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
 import play.api.http.Status
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, status, stubMessagesControllerComponents}
+import play.api.test.Helpers.{ contentAsString, status, stubMessagesControllerComponents }
 import play.twirl.api.Html
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import views.html.{error_page, view_conversation_messages, view_conversations}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpResponse }
+import views.html.{ error_page, view_conversation_messages, view_conversations }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -88,7 +88,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
           "GET",
           "/secure-message-stub/messages?enrolmentKey=HMRC-CUS-ORG&enrolmentKey=IR-SA&enrolment=HMRC-CUS-ORG~EORINumber~GB1234567890&tag=notificationType~cds-export"
         ))
-      
+
       verify(secureMessageFrontendConnector, times(1))
         .conversationsPartial(any())(any(), any())
     }
