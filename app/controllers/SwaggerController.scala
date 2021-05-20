@@ -96,6 +96,13 @@ class SwaggerController @Inject()(
       )
     }
 
+  def getMessageCount(client: String, conversationId: String): Action[AnyContent] =
+    Action.async { implicit request =>
+      httpClient.GET(
+        url = s"$secureMessageBaseUrl/secure-messaging/count"
+      )
+    }
+
   def resultHttpReads: HttpReads[Result] = new HttpReads[Result] {
     override def read(method: String, url: String, response: HttpResponse): Result =
       Status(response.status)(response.body)

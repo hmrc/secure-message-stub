@@ -18,9 +18,10 @@ package controllers
 
 import akka.util.Timeout
 import connectors.SecureMessageFrontendConnector
+import models.Count
 import org.mockito.Matchers
 import org.mockito.Matchers.{ any, eq => eqTo }
-import org.mockito.Mockito.{ times, verify, when }
+import org.mockito.Mockito.{ reset, times, verify, when }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
@@ -40,6 +41,9 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
 
   "conversations function" must {
     "call SecureMessageFrontendConnector" in new TestCase {
+      when(secureMessageFrontendConnector.messageCount(any())(any(), any()))
+        .thenReturn(Future.successful(Count(total = 1, unread = 1)))
+
       when(secureMessageFrontendConnector.conversationsPartial(any())(any(), any()))
         .thenReturn(Future.successful(HttpResponse(200, "html content")))
 
@@ -53,10 +57,13 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
       controller.conversations()(FakeRequest())
 
       verify(secureMessageFrontendConnector, times(1))
+        .messageCount(any())(any(), any())
+      verify(secureMessageFrontendConnector, times(1))
         .conversationsPartial(any())(any(), any())
     }
 
     "call SecureMessageFrontendConnector with filters" in new TestCase {
+      reset(secureMessageFrontendConnector)
       val queryParams: Seq[(String, String)] = Seq(
         ("enrolmentKey", "HMRC-CUS-ORG"),
         ("enrolmentKey", "IR-SA"),
@@ -64,8 +71,10 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         ("tag", "notificationType~cds-export")
       )
 
+      when(secureMessageFrontendConnector.messageCount(Matchers.eq(queryParams))(any(), any()))
+        .thenReturn(Future.successful(Count(total = 2, unread = 2)))
       when(secureMessageFrontendConnector.conversationsPartial(Matchers.eq(queryParams))(any(), any()))
-        .thenReturn(Future.successful(HttpResponse(200, "html content")))
+        .thenReturn(Future.successful(HttpResponse(200, "some content")))
 
       val controller = new ViewConversations(
         stubMessagesControllerComponents(),
@@ -84,7 +93,9 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         .conversationsPartial(any())(any(), any())
     }
 
-    "return 404 if reponse from secureMessageFrontendConnector is 404" in new TestCase {
+    "return 404 if response from secureMessageFrontendConnector.conversationsPartial is 404" in new TestCase {
+      when(secureMessageFrontendConnector.messageCount(any())(any(), any()))
+        .thenReturn(Future.successful(Count(total = 1, unread = 1)))
       when(secureMessageFrontendConnector.conversationsPartial(any())(any(), any()))
         .thenReturn(Future.successful(HttpResponse(404, "no content")))
 
@@ -100,7 +111,9 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
       status(result) mustBe Status.NOT_FOUND
     }
 
-    "return SERVICE_UNAVAILABLE if reponse from secureMessageFrontendConnector is 503" in new TestCase {
+    "return SERVICE_UNAVAILABLE if response from secureMessageFrontendConnector.conversationsPartial is 503" in new TestCase {
+      when(secureMessageFrontendConnector.messageCount(any())(any(), any()))
+        .thenReturn(Future.successful(Count(total = 1, unread = 1)))
       when(secureMessageFrontendConnector.conversationsPartial(any())(any(), any()))
         .thenReturn(Future.successful(HttpResponse(500, "no content")))
 
@@ -136,7 +149,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         .messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any())
     }
 
-    "return 404 if reponse from secureMessageFrontendConnector is 404" in new TestCase {
+    "return 404 if response from secureMessageFrontendConnector.messagePartial is 404" in new TestCase {
       when(
         secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any()))
         .thenReturn(Future.successful(HttpResponse(404, "no content")))
@@ -153,7 +166,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
       status(result) mustBe Status.NOT_FOUND
     }
 
-    "return SERVICE_UNAVAILABLE if reponse from secureMessageFrontendConnector is 503" in new TestCase {
+    "return SERVICE_UNAVAILABLE if response from secureMessageFrontendConnector.messagePartial is 503" in new TestCase {
       when(
         secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any()))
         .thenReturn(Future.successful(HttpResponse(500, "no content")))
@@ -173,7 +186,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
 
   "reply function" must {
 
-    "return redirect if response from secureMessageFrontend is 200" in new TestCase {
+    "return redirect if response from secureMessageFrontendConnector.messageReply is 200" in new TestCase {
       when(secureMessageFrontendConnector.messageReply(any(), any(), any())(any(), any()))
         .thenReturn(Future.successful(HttpResponse(200, "")))
       val controller = new ViewConversations(
@@ -187,7 +200,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
       status(result) mustBe 303
     }
 
-    "return BadRequest if response from secureMessageFrontend is BAD_GATEWAY" in new TestCase {
+    "return BadRequest if response from secureMessageFrontendConnector.messageReply is BAD_GATEWAY" in new TestCase {
       when(secureMessageFrontendConnector.messageReply(any(), any(), any())(any(), any()))
         .thenReturn(Future.successful(HttpResponse(502, "")))
       when(error_page.apply(any())(any(), any())).thenReturn(Html("error content"))

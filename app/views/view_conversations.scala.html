@@ -21,9 +21,9 @@
 
 @this(mainWithHeaders: views.html.main_with_headers_fullwidth, govukAccordion : GovukAccordion,govukBackLink : GovukBackLink)
 
-@(message: HtmlFormat.Appendable)(implicit request: Request[_], messages: Messages)
+@(messageCount: Count, message: HtmlFormat.Appendable)(implicit request: Request[_], messages: Messages)
 
-@mainWithHeaders(title = "Conversation Inbox") {
+@mainWithHeaders(title = "Conversation Inbox", messageCount = messageCount) {
 
 @message
 
