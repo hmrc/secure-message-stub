@@ -23,7 +23,6 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.{ Logger, LoggerLike }
 import uk.gov.hmrc.http.Authorization
-//import uk.gov.hmrc.http.logging.Authorization
 import javax.inject.Inject
 
 class EISController @Inject()(controllerComponents: MessagesControllerComponents)
