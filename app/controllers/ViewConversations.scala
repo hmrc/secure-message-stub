@@ -30,6 +30,7 @@ import views.html.{ error_page, view_conversation_messages, view_conversations }
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.util.control.NonFatal
 
 class ViewConversations @Inject()(
   controllerComponents: MessagesControllerComponents,
@@ -80,7 +81,10 @@ class ViewConversations @Inject()(
             ServiceUnavailable(body)
         }
         .recover {
-          case _ => InternalServerError
+          case NonFatal(err) => {
+            logger.error(s"[ViewConversations][result] - InternalServerError", err)
+            InternalServerError
+          }
         }
   }
 
@@ -112,8 +116,8 @@ class ViewConversations @Inject()(
           ServiceUnavailable(body)
       }
       .recover {
-        case _ => {
-          logger.error(s"[ViewConversations][result] - InternalServerError")
+        case NonFatal(err) => {
+          logger.error(s"[ViewConversations][result] - InternalServerError", err)
           InternalServerError
         }
       }
@@ -135,8 +139,8 @@ class ViewConversations @Inject()(
           ServiceUnavailable(body)
       }
       .recover {
-        case _ => {
-          logger.error(s"[ViewConversations][viewLetterOrConversation] - InternalServerError")
+        case NonFatal(err) => {
+          logger.error(s"[ViewConversations][result] - InternalServerError", err)
           InternalServerError
         }
       }
