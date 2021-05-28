@@ -27,13 +27,14 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{ create, success_feedback }
 import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
+import config.FrontendAppConfig
 
 class ConversationController @Inject()(
   controllerComponents: MessagesControllerComponents,
   secureMessage: SecureMessageConnector,
   success: success_feedback,
   view: create
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
     extends FrontendController(controllerComponents) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = Action { implicit request =>

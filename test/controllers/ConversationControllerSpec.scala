@@ -32,6 +32,7 @@
 //
 package controllers
 
+import config.FrontendAppConfig
 import connectors.SecureMessageConnector
 import forms.mappings.ConversationForm.ConversationData
 import org.mockito.Matchers.any
@@ -44,6 +45,7 @@ import play.api.test.Helpers._
 import play.api.test.{ FakeRequest, Helpers }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpResponse }
 import views.html.{ create, success_feedback }
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -71,6 +73,7 @@ class ConversationControllerSpec extends PlaySpec with ScalaFutures {
       val success_feedback = mock[success_feedback]
       val create = mock[create]
       implicit val hc: HeaderCarrier = HeaderCarrier()
+      implicit val appConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
       val conversation = ConversationData(
         query = (Some("subject"), Some("message"), Some("query.language-welsh")),

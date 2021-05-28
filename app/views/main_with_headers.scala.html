@@ -20,8 +20,14 @@
 @import play.twirl.api.HtmlFormat
 @import play.api.i18n.Messages.Implicits._
 @import controllers._
+@import controllers.routes.LanguageSwitchController._
+@import config.FrontendAppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+
+@import models.Language
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcLanguageSelect
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.LanguageSelect
 
 @this(
 govukTemplate: govukTemplate,
@@ -34,7 +40,7 @@ hmrcLanguageSelect: HmrcLanguageSelect,
 externalUrls: String
 )
 
-@(title: String)(mainContent: Html)(localContent: Html)(implicit request: Request[_], messages: Messages)
+@(title: String)(mainContent: Html)(localContent: Html)(implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
 
 @headerBlock = {
 @hmrcHeader(Header(
@@ -45,12 +51,11 @@ signOutHref = Some("externalUrls.survey")
 }
 
 @beforeContentBlock = {
-@hmrcLanguageSelect(LanguageSelect(
-if (messages.lang.code == "cy") Cy else En,
-(En, "/help/switch-to-english"),
-(Cy, "/help/switch-to-welsh")
-))
-
+    @hmrcLanguageSelect(LanguageSelect(
+        if (messages.lang.code == "cy") Cy else En,
+        (En, selectLanguage(Language.English).url),
+        (Cy, selectLanguage(Language.Cymraeg).url)
+    ))
 }
 
 
