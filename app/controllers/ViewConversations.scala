@@ -82,7 +82,7 @@ class ViewConversations @Inject()(
         }
         .recover {
           case NonFatal(err) => {
-            logger.error(s"[ViewConversations][result] - InternalServerError", err)
+            logger.error(s"[ViewConversations][message] - InternalServerError", err)
             InternalServerError
           }
         }
@@ -140,7 +140,7 @@ class ViewConversations @Inject()(
       }
       .recover {
         case NonFatal(err) => {
-          logger.error(s"[ViewConversations][result] - InternalServerError", err)
+          logger.error(s"[ViewConversations][viewLetterOrConversation] - InternalServerError", err)
           InternalServerError
         }
       }
