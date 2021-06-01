@@ -16,55 +16,76 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import connectors.SecureMessageFrontendConnector
 import javax.inject.Inject
+import play.api.Logger.logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import play.twirl.api.HtmlFormat
+import play.twirl.api.{ Html, HtmlFormat }
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
+import uk.gov.hmrc.play.partials.HtmlPartial
 import views.html.{ error_page, view_conversation_messages, view_conversations }
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.util.control.NonFatal
 
 class ViewConversations @Inject()(
   controllerComponents: MessagesControllerComponents,
   viewConversations: view_conversations,
   viewConversationMessages: view_conversation_messages,
   errorPage: error_page,
-  secureMessageFrontendConnector: SecureMessageFrontendConnector)(implicit ec: ExecutionContext)
+  secureMessageFrontendConnector: SecureMessageFrontendConnector)(
+  implicit ec: ExecutionContext,
+  appConfig: FrontendAppConfig)
     extends FrontendController(controllerComponents) with I18nSupport {
 
-  def conversations: Action[AnyContent] = Action.async { implicit request =>
+  def conversations: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     {
       val queryParams = queryStringToParams(request.queryString)
-
       for {
-        response     <- secureMessageFrontendConnector.conversationsPartial(queryParams)
+        partial      <- secureMessageFrontendConnector.conversationsPartial(queryParams)
         messageCount <- secureMessageFrontendConnector.messageCount(queryParams)
       } yield
-        (response.status, response.body) match {
-          case (OK, body)     => Ok(viewConversations(messageCount, HtmlFormat.raw(body)))
-          case (NOT_FOUND, _) => NotFound
-          case (_, _)         => ServiceUnavailable
+        partial match {
+          case HtmlPartial.Success(_, content) => Ok(viewConversations(messageCount, content))
+          case HtmlPartial.Failure(Some(NOT_FOUND), body) =>
+            logger.error(s"[ViewConversations][conversations] - status code:NOT_FOUND, body:$body")
+            NotFound(body)
+          case HtmlPartial.Failure(Some(status), body) =>
+            logger.error(s"[ViewConversations][conversations] - status code:$status, body:$body")
+            ServiceUnavailable(body)
+          case HtmlPartial.Failure(None, body) =>
+            logger.error(s"[ViewConversations][conversations] - body:$body")
+            ServiceUnavailable(body)
         }
     }
   }
 
-  def message(client: String, conversationId: String, showReplyForm: Boolean) = Action.async { implicit request =>
-    secureMessageFrontendConnector
-      .messagePartial(client, conversationId, showReplyForm)
-      .map { response =>
-        (response.status, response.body) match {
-          case (OK, body)          => Ok(viewConversationMessages(HtmlFormat.raw(body)))
-          case (BAD_REQUEST, body) => BadRequest(viewConversationMessages(HtmlFormat.raw(body)))
-          case (NOT_FOUND, _)      => NotFound
-          case (_, _)              => ServiceUnavailable
+  def message(client: String, conversationId: String, showReplyForm: Boolean) = Action.async {
+    implicit request: MessagesRequest[AnyContent] =>
+      secureMessageFrontendConnector
+        .messagePartial(client, conversationId, showReplyForm)
+        .map {
+          case HtmlPartial.Success(_, content) => Ok(viewConversationMessages(content))
+          case HtmlPartial.Failure(Some(BAD_REQUEST), body) =>
+            logger.error(s"[ViewConversations][message] - status code:BAD_REQUEST, body:$body")
+            BadRequest(body)
+          case HtmlPartial.Failure(Some(NOT_FOUND), body) =>
+            logger.error(s"[ViewConversations][message] - status code:NOT_FOUND, body:$body")
+            NotFound(body)
+          case HtmlPartial.Failure(_, body) =>
+            logger.error(s"[ViewConversations][message] - body:$body")
+            ServiceUnavailable(body)
         }
-      }
-      .recover {
-        case _ => InternalServerError
-      }
+        .recover {
+          case NonFatal(err) => {
+            logger.error(s"[ViewConversations][message] - InternalServerError", err)
+            InternalServerError
+          }
+        }
   }
 
   def reply(client: String, conversationId: String) = Action.async { implicit request: MessagesRequest[AnyContent] =>
@@ -79,33 +100,49 @@ class ViewConversations @Inject()(
     }
   }
 
-  def result(client: String, conversationId: String) = Action.async { implicit request =>
+  def result(client: String, conversationId: String) = Action.async { implicit request: MessagesRequest[AnyContent] =>
     secureMessageFrontendConnector
       .resultPartial(client, conversationId)
-      .map { response =>
-        (response.status, response.body) match {
-          case (OK, body)     => Ok(viewConversationMessages(HtmlFormat.raw(body)))
-          case (NOT_FOUND, _) => NotFound
-          case (_, _)         => ServiceUnavailable
-        }
+      .map {
+        case HtmlPartial.Success(_, content) => Ok(viewConversationMessages(content))
+        case HtmlPartial.Failure(Some(NOT_FOUND), body) =>
+          logger.error(s"[ViewConversations][result] - status code:NOT_FOUND, body:$body")
+          NotFound(body)
+        case HtmlPartial.Failure(Some(status), body) =>
+          logger.error(s"[ViewConversations][result] - status code:$status, body:$body")
+          ServiceUnavailable(body)
+        case HtmlPartial.Failure(_, body) =>
+          logger.error(s"[ViewConversations][result] - body:$body")
+          ServiceUnavailable(body)
       }
       .recover {
-        case _ => InternalServerError
+        case NonFatal(err) => {
+          logger.error(s"[ViewConversations][result] - InternalServerError", err)
+          InternalServerError
+        }
       }
   }
 
-  def viewLetterOrConversation(id: String) = Action.async { implicit request =>
+  def viewLetterOrConversation(id: String) = Action.async { implicit request: MessagesRequest[AnyContent] =>
     secureMessageFrontendConnector
       .letterOrConversationPartial(id)
-      .map { response =>
-        (response.status, response.body) match {
-          case (200, body) => Ok(viewConversationMessages(HtmlFormat.raw(body)))
-          case (404, _)    => NotFound
-          case (_, _)      => ServiceUnavailable
-        }
+      .map {
+        case HtmlPartial.Success(_, content) => Ok(viewConversationMessages(content))
+        case HtmlPartial.Failure(Some(NOT_FOUND), body) =>
+          logger.error(s"[ViewConversations][viewLetterOrConversation] - status code:NOT_FOUND, body:$body")
+          NotFound(body)
+        case HtmlPartial.Failure(Some(status), body) =>
+          logger.error(s"[ViewConversations][viewLetterOrConversation] - status code:$status, body:$body")
+          ServiceUnavailable(body)
+        case HtmlPartial.Failure(_, body) =>
+          logger.error(s"[ViewConversations][viewLetterOrConversation] - body:$body")
+          ServiceUnavailable(body)
       }
       .recover {
-        case _ => InternalServerError
+        case NonFatal(err) => {
+          logger.error(s"[ViewConversations][viewLetterOrConversation] - InternalServerError", err)
+          InternalServerError
+        }
       }
   }
 }

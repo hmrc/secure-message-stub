@@ -17,10 +17,11 @@
 @import controllers._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import forms.mappings.ConversationForm._
+@import config.FrontendAppConfig
 
 @this(mainWithHeaders: views.html.main_with_headers_fullwidth, govukPanel: GovukPanel)
 
-@(message: String)(implicit request: Request[_], messages: Messages)
+@(message: String)(implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
 
 @mainWithHeaders(title = "error page") {
 <div class="govuk-width-container">
