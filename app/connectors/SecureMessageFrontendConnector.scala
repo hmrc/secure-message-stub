@@ -62,12 +62,14 @@ class SecureMessageFrontendConnector @Inject()(
 
   def messageReply(client: String, conversationId: String, request: MessagesRequest[AnyContent])(
     implicit ec: ExecutionContext,
-    hc: HeaderCarrier): Future[HttpResponse] =
+    hc: HeaderCarrier): Future[HttpResponse] = {
+    implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     httpClient.POSTForm(
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId",
       request.body.asFormUrlEncoded.getOrElse(Map.empty),
       Seq.empty
     )
+  }
 
   def resultPartial(client: String, conversationId: String)(
     implicit ec: ExecutionContext,
