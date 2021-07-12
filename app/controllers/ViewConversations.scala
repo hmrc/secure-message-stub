@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import connectors.SecureMessageFrontendConnector
 import javax.inject.Inject
-import play.api.Logger.logger
+import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.{ Html, HtmlFormat }
@@ -42,6 +42,7 @@ class ViewConversations @Inject()(
   appConfig: FrontendAppConfig)
     extends FrontendController(controllerComponents) with I18nSupport {
 
+  val logger: Logger = Logger(this.getClass())
   def conversations: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
     {
       val queryParams = queryStringToParams(request.queryString)
