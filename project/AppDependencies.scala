@@ -7,7 +7,6 @@ object AppDependencies {
     play.sbt.PlayImport.ws,
 
     "uk.gov.hmrc" %% "logback-json-logger" % "4.6.0",
-    "uk.gov.hmrc" %% "play-health" % "3.16.0-play-27",
     "uk.gov.hmrc" %% "play-frontend-govuk" % "0.80.0-play-28",
     "uk.gov.hmrc" %% "play-frontend-hmrc" % "0.82.0-play-28",
     "uk.gov.hmrc" %% "play-language" % "5.1.0-play-28",
@@ -29,7 +28,8 @@ object AppDependencies {
     "org.pegdown" % "pegdown" % "1.6.0",
     "org.jsoup" % "jsoup" % "1.10.3",
     "com.typesafe.play" %% "play-test" % PlayVersion.current,
-    "org.mockito" % "mockito-all" % "1.10.19"
+    "org.mockito" % "mockito-all" % "1.10.19",
+    "com.vladsch.flexmark" % "flexmark-all" % "0.35.10" 
   ).map(_ % Test)
 
   def apply(): Seq[ModuleID] = compile ++ test

@@ -17,11 +17,12 @@
 package controllers
 
 import akka.stream.Materializer
+import akka.stream.testkit.NoMaterializer
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{ JsValue, Json }
 import play.api.http.Status.{ BAD_REQUEST, INTERNAL_SERVER_ERROR, NO_CONTENT, UNAUTHORIZED }
-import play.api.test.{ FakeRequest, NoMaterializer }
+import play.api.test.FakeRequest
 import play.api.test.Helpers.{ AUTHORIZATION, CONTENT_TYPE, JSON, PUT, defaultAwaitTimeout, status }
 
 class EISControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
