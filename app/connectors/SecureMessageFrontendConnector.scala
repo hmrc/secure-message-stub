@@ -28,7 +28,7 @@ import utils.EnvironmentConfig
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-class SecureMessageFrontendConnector @Inject() (
+class SecureMessageFrontendConnector @Inject()(
   httpClient: HttpClient,
   envConfig: EnvironmentConfig,
   headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter) {
