@@ -18,7 +18,6 @@ package connectors
 
 import com.google.inject.Inject
 import models.Count
-//import play.api.Logger.logger
 import play.api.Logger
 import play.api.mvc.{ AnyContent, MessagesRequest, RequestHeader }
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
