@@ -18,7 +18,7 @@ package connectors
 
 import com.google.inject.Inject
 import models.Count
-import play.api.Logger.logger
+import play.api.Logger
 import play.api.mvc.{ AnyContent, MessagesRequest, RequestHeader }
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse }
@@ -32,7 +32,7 @@ class SecureMessageFrontendConnector @Inject()(
   envConfig: EnvironmentConfig,
   headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter) {
   val secureMessageFrontendBaseUrl = envConfig.baseUrl("secure-message-frontend")
-
+  val logger: Logger = Logger(this.getClass())
   def conversationsPartial(queryParams: Seq[(String, String)] = Seq.empty)(
     implicit ec: ExecutionContext,
     request: RequestHeader): Future[HtmlPartial] = {
