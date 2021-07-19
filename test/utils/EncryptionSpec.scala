@@ -28,8 +28,8 @@ class EncryptionSpec extends PlaySpec {
     }
 
     "throw an exception when attempting to decrypt a ciphered text with an invalid crypto key" in {
-      assertThrows[SecurityException] { // Result type: Assertion
-        encryption.decrypt(cryptoKey = "xxx", "some deciphered text")
+      assertThrows[SecurityException] {
+        encryption.decrypt(cryptoKey = "123", "some deciphered text")
       }
     }
   }
