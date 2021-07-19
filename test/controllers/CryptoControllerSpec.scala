@@ -19,12 +19,12 @@ package controllers
 import config.FrontendAppConfig
 import forms.mappings.CryptoForm.CryptoData
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.{ times, verify, when }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
 import play.api.mvc._
-import play.api.test.{FakeRequest, Helpers}
+import play.api.test.{ FakeRequest, Helpers }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Encryption
 import views.html.crypto

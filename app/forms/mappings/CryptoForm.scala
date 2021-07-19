@@ -17,18 +17,18 @@
 package forms.mappings
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, optional, text}
+import play.api.data.Forms.{ mapping, optional, text }
 
 object CryptoForm {
   def apply(): Form[CryptoData] =
     Form[CryptoData](
       mapping(
-        "crypto-key" -> optional(text),
+        "crypto-key"     -> optional(text),
         "scrambled-text" -> optional(text)
       )(CryptoData.apply)(CryptoData.unapply))
 
   case class CryptoData(
     cryptoKey: Option[String],
     scrambledText: Option[String]
- )
+  )
 }

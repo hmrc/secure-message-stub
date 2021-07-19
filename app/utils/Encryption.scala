@@ -16,7 +16,7 @@
 
 package utils
 
-import uk.gov.hmrc.crypto.{AesCrypto, Crypted, PlainText}
+import uk.gov.hmrc.crypto.{ AesCrypto, Crypted, PlainText }
 
 import scala.util.control.NonFatal
 

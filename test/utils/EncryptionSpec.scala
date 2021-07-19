@@ -23,7 +23,8 @@ class EncryptionSpec extends PlaySpec {
   val encryption = new Encryption()
   "Encryption" must {
     "decrypt a ciphered text into its plain text equivalent when provided with a valid crypto key" in {
-      val decipheredText = encryption.decrypt(cryptoKey = "gvBoGdgzqG1AarzF1LY0zQ==", "v0ES3jg6pHULTvQcrdMMU82VswBaCjxRGe2axukvYSA=")
+      val decipheredText =
+        encryption.decrypt(cryptoKey = "gvBoGdgzqG1AarzF1LY0zQ==", "v0ES3jg6pHULTvQcrdMMU82VswBaCjxRGe2axukvYSA=")
       decipheredText mustBe "some deciphered text"
     }
 
