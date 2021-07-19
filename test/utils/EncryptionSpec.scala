@@ -28,6 +28,12 @@ class EncryptionSpec extends PlaySpec {
       decipheredText mustBe "some deciphered text"
     }
 
+    "encrypt plain text into its ciphered equivalent when provided with a valid crypto key" in {
+      val decipheredText =
+        encryption.encrypt(cryptoKey = "gvBoGdgzqG1AarzF1LY0zQ==", "some deciphered text")
+      decipheredText mustBe "v0ES3jg6pHULTvQcrdMMU82VswBaCjxRGe2axukvYSA="
+    }
+
     "throw an exception when attempting to decrypt a ciphered text with an invalid crypto key" in {
       assertThrows[SecurityException] {
         encryption.decrypt(cryptoKey = "123", "some deciphered text")
