@@ -39,7 +39,7 @@ GET         /secure-messaging/api/:file                                         
 PUT         /secure-messaging/conversation/:client/:conversationId                                  controllers.SwaggerController.createConversation(client: String, conversationId: String)
 
 + nocsrf
-GET         /secure-messaging/conversations                                                         controllers.SwaggerController.getMetadataForConversationsFiltered(enrolmentKey: Option[List[String]], enrolment: Option[List[CustomerEnrolment]], tag: Option[List[Tag]])
+GET         /secure-messaging/messages                                                         controllers.SwaggerController.getMetadataForConversationsFiltered(enrolmentKey: Option[List[String]], enrolment: Option[List[CustomerEnrolment]], tag: Option[List[Tag]])
 
 + nocsrf
 POST        /secure-messaging/conversation/:client/:conversationId/caseworker-message               controllers.SwaggerController.createCaseworkerMessage(client: String, conversationId: String)
