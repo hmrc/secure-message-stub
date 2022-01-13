@@ -16,7 +16,6 @@
 
 package controllers
 
-import javax.inject.Inject
 import models.{ CustomerEnrolment, Tag }
 import play.api.i18n.I18nSupport
 import play.api.libs.json.JsValue
@@ -25,6 +24,7 @@ import uk.gov.hmrc.http.{ HttpClient, HttpReads, HttpResponse }
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.EnvironmentConfig
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class SwaggerController @Inject()(
@@ -59,19 +59,10 @@ class SwaggerController @Inject()(
       )
     }
 
-  def createCustomerMessage(client: String, conversationId: String): Action[AnyContent] =
+  def createCustomerMessage(encodedId: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.POST[Option[JsValue], Result](
-        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId/customer-message",
-        request.body.asJson,
-        Seq.empty
-      )
-    }
-
-  def addCustomerReadTime(client: String, conversationId: String): Action[AnyContent] =
-    Action.async { implicit request =>
-      httpClient.POST[Option[JsValue], Result](
-        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId/read-time",
+        url = s"$secureMessageBaseUrl/secure-messaging/messages/$encodedId/customer-message",
         request.body.asJson,
         Seq.empty
       )
@@ -89,17 +80,22 @@ class SwaggerController @Inject()(
       )
     }
 
-  def getConversation(client: String, conversationId: String): Action[AnyContent] =
+  def getMessageCount(
+    enrolmentKeys: Option[List[String]],
+    customerEnrolments: Option[List[CustomerEnrolment]],
+    tags: Option[List[Tag]]): Action[AnyContent] =
     Action.async { implicit request =>
+      val queryParams = queryStringToParams(request.queryString)
       httpClient.GET(
-        url = s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId"
+        url = s"$secureMessageBaseUrl/secure-messaging/messages/count",
+        queryParams
       )
     }
 
-  def getMessageCount(client: String, conversationId: String): Action[AnyContent] =
+  def getMessage(encodedId: String): Action[AnyContent] =
     Action.async { implicit request =>
       httpClient.GET(
-        url = s"$secureMessageBaseUrl/secure-messaging/count"
+        url = s"$secureMessageBaseUrl/secure-messaging/messages/$encodedId"
       )
     }
 
