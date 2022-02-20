@@ -1,4 +1,4 @@
- 
+
 # secure-message-stub
 
 ## Endpoints
@@ -26,6 +26,26 @@ These can either be running locally (please see the respective project README fi
 To run the stub simply run the following command:
 
 `sbt "run 9202"`
+
+## Run the tests and sbt fmt before raising a PR
+
+Ensure you have service-manager python environment setup:
+
+`source ../servicemanager/bin/activate`
+
+Format:
+
+`sbt fmt`
+
+Then run the tests and coverage report:
+
+`sbt clean coverage test coverageReport`
+
+If your build fails due to poor testing coverage, *DO NOT* lower the test coverage, instead inspect the generated report located here on your local repo: `/target/scala-2.12/scoverage-report/index.html`
+
+Then run the integration tests:
+
+`sbt it:test`
 
 ## Create a CDS message/query:
 
