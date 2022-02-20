@@ -76,6 +76,7 @@ lazy val root = (project in file("."))
       "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
     )
   )
+  .settings(ScoverageSettings())
 
 lazy val testSettings: Seq[Def.Setting[_]] = Seq(
   fork        := true,
