@@ -1,6 +1,4 @@
-->          /govuk-frontend                                                                  govuk.Routes
 ->          /hmrc-frontend                                                                   hmrcfrontend.Routes
-
 
 ### NoDocs ###
 GET         /secure-message-stub/assets/*file                                                controllers.Assets.versioned(path="/public", file: Asset)
