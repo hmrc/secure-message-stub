@@ -8,11 +8,11 @@ GET         /secure-message-stub/language/:lang                                 
 
 # microservice specific routes
 
-GET         /secure-message-stub                                                             controllers.ConversationController.onPageLoad
-POST        /secure-message-stub                                                             controllers.ConversationController.submitQuery
+GET         /secure-message-stub                                                             controllers.ConversationController.onPageLoad()
+POST        /secure-message-stub                                                             controllers.ConversationController.submitQuery()
 
-GET         /secure-message-stub/crypto                                                      controllers.CryptoController.onPageLoad
-POST        /secure-message-stub/crypto                                                      controllers.CryptoController.submitQuery
+GET         /secure-message-stub/crypto                                                      controllers.CryptoController.onPageLoad()
+POST        /secure-message-stub/crypto                                                      controllers.CryptoController.submitQuery()
 
 GET         /secure-message-stub/messages                                                    controllers.ViewConversations.conversations
 GET         /secure-message-stub/conversation/:client/:conversationId                        controllers.ViewConversations.message(client, conversationId, showReplyForm: Boolean ?= false)

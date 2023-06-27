@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,11 @@
  * limitations under the License.
  *@
 
-@import controllers._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
-@import forms.mappings.ConversationForm._
-@import config.FrontendAppConfig
 
 @this(mainWithHeaders: views.html.main_with_headers_fullwidth, govukPanel: GovukPanel)
 
-@(message: String)(implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
+@(message: String)(implicit request: Request[_], messages: Messages)
 
 @mainWithHeaders(title = "error page") {
 <div class="govuk-width-container">

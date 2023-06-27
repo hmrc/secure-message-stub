@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,71 +14,35 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.html.layouts.govukTemplate
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.{Header, HmrcHeader}
-@import play.twirl.api.HtmlFormat
-
-@import controllers._
-@import controllers.routes.LanguageSwitchController._
-@import config.FrontendAppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.implicits._
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 
-@import models.Language
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcLanguageSelect
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.LanguageSelect
+@this(hmrcStandardPage: HmrcStandardPage)
 
-@this(
-govukTemplate: govukTemplate,
-govukBackLink: GovukBackLink,
-hmrcHeader: HmrcHeader,
-hmrcFooter: HmrcFooter,
-head: head,
-scripts: scripts,
-hmrcLanguageSelect: HmrcLanguageSelect,
-externalUrls: String
-)
+@(title: String)(mainContent: Html)(localContent: Html)(implicit request: Request[_], messages: Messages)
 
-@(title: String)(mainContent: Html)(localContent: Html)(implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
-
-@headerBlock = {
-@hmrcHeader(Header(
-serviceName = Some("secure message stub"),
-containerClasses = "govuk-width-container",
-signOutHref = Some("externalUrls.survey")
-))
-}
-
-@beforeContentBlock = {
-    @hmrcLanguageSelect(LanguageSelect(
-        if (messages.lang.code == "cy") Cy else En,
-        (En, selectLanguage(Language.English).url),
-        (Cy, selectLanguage(Language.Cymraeg).url)
-    ))
-}
-
-
-@mainContentDefault = {
+@contentBlock = {
 <div class="govuk-width-container">
     <a href="javascript:history.back()" class="govuk-back-link">@messages("site.back")</a>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                @mainContent
-            </div>
-            <div class="govuk-grid-column-one-third">
-                @localContent
-            </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @mainContent
         </div>
+        <div class="govuk-grid-column-one-third">
+            @localContent
+        </div>
+    </div>
 </div>
 }
 
-@govukTemplate(
-htmlLang = Some(messages.lang.code),
+@hmrcStandardPage(HmrcStandardPageParams(
+serviceURLs = ServiceURLs(
+serviceUrl = None,
+signOutUrl = Some("externalUrls.survey")
+),
+banners = Banners(displayHmrcBanner = true),
+serviceName = Some("secure message stub"),
 pageTitle = Some(title),
-headBlock = Some(head()),
-headerBlock = headerBlock,
-beforeContentBlock = Some(beforeContentBlock),
-footerBlock = hmrcFooter(),
-mainClasses = Some("govuk-main-wrapper--auto-spacing"),
-bodyEndBlock = Some(scripts()))(mainContentDefault)
+isWelshTranslationAvailable = true
+))(contentBlock)

@@ -40,7 +40,7 @@ class CryptoController @Inject()(
     Ok(view(CryptoForm(), "", call, Seq.empty))
   }
 
-  def submitQuery: Action[AnyContent] = Action.async { implicit request =>
+  def submitQuery(): Action[AnyContent] = Action.async { implicit request =>
     val call = routes.CryptoController.onPageLoad()
 
     CryptoForm().bindFromRequest.fold[Future[Result]](

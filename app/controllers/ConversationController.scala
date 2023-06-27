@@ -42,7 +42,7 @@ class ConversationController @Inject()(
     Ok(view(ConversationForm(), call, Seq.empty))
   }
 
-  def submitQuery = Action.async { implicit request =>
+  def submitQuery() = Action.async { implicit request =>
     val call = routes.ConversationController.onPageLoad()
 
     ConversationForm().bindFromRequest.fold[Future[Result]](

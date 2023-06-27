@@ -205,7 +205,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
     "return BadRequest if response from secureMessageFrontendConnector.messageReply is BAD_GATEWAY" in new TestCase {
       when(secureMessageFrontendConnector.messageReply(any(), any(), any())(any(), any()))
         .thenReturn(Future.successful(HttpResponse(502, "")))
-      when(error_page.apply(any())(any(), any(), any())).thenReturn(Html("error content"))
+      when(error_page.apply(any())(any(), any())).thenReturn(Html("error content"))
       val controller = new ViewConversations(
         stubMessagesControllerComponents(),
         viewConversations,
