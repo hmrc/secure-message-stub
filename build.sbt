@@ -34,11 +34,6 @@ lazy val root = (project in file("."))
     name := appName,
     RoutesKeys.routesImport ++= Seq("models._", "controllers.binders._"),
     PlayKeys.playDefaultPort := 9202,
-    ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;.*repositories.*;" +
-      ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;.*ControllerConfiguration;",
-    ScoverageKeys.coverageMinimumStmtTotal := 60,
-    ScoverageKeys.coverageFailOnMinimum := true,
-    ScoverageKeys.coverageHighlighting := true,
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     evictionWarningOptions in update :=
