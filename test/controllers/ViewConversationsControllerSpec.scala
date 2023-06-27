@@ -30,7 +30,7 @@ import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{ contentAsString, status, stubMessagesControllerComponents }
 import play.twirl.api.Html
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpResponse }
+import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.partials.HtmlPartial
 import views.html.{ error_page, view_conversation_messages, view_conversations }
 
@@ -145,7 +145,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         error_page,
         secureMessageFrontendConnector)
 
-      val _ = controller.message("some-client-id", "111", false)(FakeRequest())
+      controller.message("some-client-id", "111", false)(FakeRequest())
 
       verify(secureMessageFrontendConnector, times(1))
         .messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any())
@@ -189,7 +189,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
   "reply function" must {
 
     "return redirect if response from secureMessageFrontendConnector.messageReply is 200" in new TestCase {
-      when(secureMessageFrontendConnector.messageReply(any(), any(), any())(any(), any()))
+      when(secureMessageFrontendConnector.messageReply(any(), any(), any())(any()))
         .thenReturn(Future.successful(HttpResponse(200, "")))
       val controller = new ViewConversations(
         stubMessagesControllerComponents(),
@@ -203,7 +203,7 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
     }
 
     "return BadRequest if response from secureMessageFrontendConnector.messageReply is BAD_GATEWAY" in new TestCase {
-      when(secureMessageFrontendConnector.messageReply(any(), any(), any())(any(), any()))
+      when(secureMessageFrontendConnector.messageReply(any(), any(), any())(any()))
         .thenReturn(Future.successful(HttpResponse(502, "")))
       when(error_page.apply(any())(any(), any())).thenReturn(Html("error content"))
       val controller = new ViewConversations(

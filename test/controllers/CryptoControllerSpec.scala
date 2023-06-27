@@ -23,25 +23,18 @@ import org.mockito.Mockito.{ times, verify, when }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
+import play.api.i18n.Messages
 import play.api.mvc._
-import play.api.test.Helpers._
 import play.api.test.{ FakeRequest, Helpers }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Encryption
 import views.html.crypto
-import play.api.http.Status._
-import play.api.i18n.Messages
 import play.twirl.api.Html
-
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class CryptoControllerSpec extends PlaySpec with ScalaFutures {
 
   "Crypto Controller" must {
     "submit crypto form to crypto utility" in new TestCase {
-      when(encryptionMock.decrypt(any(), any())).thenReturn("deciphered text")
-      when(cryptoViewMock.apply(any(), any[String], any(), any())(any(), any[Messages], any()))
-        .thenReturn(Html("<div>result</div>"))
       val controller = new CryptoController(
         Helpers.stubMessagesControllerComponents(),
         encryptionMock,
@@ -63,6 +56,9 @@ class CryptoControllerSpec extends PlaySpec with ScalaFutures {
         cryptoKey = Some("crypto key"),
         scrambledText = Some("scrambled text")
       )
+      when(encryptionMock.decrypt(any(), any())).thenReturn("deciphered text")
+      when(cryptoViewMock.apply(any(), any())(any(), any[Messages]))
+        .thenReturn(Html("<div>result</div>"))
     }
   }
 }

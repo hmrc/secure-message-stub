@@ -38,22 +38,21 @@ class ConversationController @Inject()(
     extends FrontendController(controllerComponents) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = Action { implicit request =>
-    val call = routes.ConversationController.submitQuery()
-    Ok(view(ConversationForm(), call, Seq.empty))
+    Ok(view(Seq.empty))
   }
 
   def submitQuery() = Action.async { implicit request =>
-    val call = routes.ConversationController.onPageLoad()
-
-    ConversationForm().bindFromRequest.fold[Future[Result]](
-      hasErrors =>
-        Future.successful(
-          BadRequest(
-            view(ConversationForm(), call, hasErrors.errors.map(_.message))
-          )
-      ),
-      form => saveConversation(form)(request)
-    )
+    ConversationForm()
+      .bindFromRequest()
+      .fold[Future[Result]](
+        hasErrors =>
+          Future.successful(
+            BadRequest(
+              view(hasErrors.errors.map(_.message))
+            )
+        ),
+        form => saveConversation(form)(request)
+      )
   }
 
   private[controllers] def saveConversation(

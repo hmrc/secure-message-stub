@@ -17,8 +17,6 @@
 package views
 
 import config.FrontendAppConfig
-import controllers.routes
-import forms.mappings.CryptoForm
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -37,9 +35,7 @@ class CryptoViewSpec extends PlaySpec with GuiceOneAppPerSuite {
     "have all fields" in {
       val app: Application = new GuiceApplicationBuilder().build()
       val template = app.injector.instanceOf[crypto]
-      val call = routes.CryptoController.submitQuery()
-
-      val document = template(CryptoForm(), "deciphered text here2", call, Seq.empty)
+      val document = template("deciphered text here2", Seq.empty)
 
       document.body must include("crypto-key")
       document.body must include("scrambled-text")

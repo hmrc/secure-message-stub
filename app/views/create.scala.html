@@ -21,7 +21,6 @@
 @this(mainWithHeaders: views.html.main_with_headers_fullwidth,
 formCSFR: FormWithCSRF,
 govukButton: GovukButton,
-govukTable : GovukTable,
 alerts: alerts,
 sender: sender,
 customer: customer,
@@ -32,7 +31,7 @@ govukFieldset : GovukFieldset,
 govukErrorSummary : GovukErrorSummary,
 govukInput: GovukInput)
 
-@(form: Form[ConversationData], submitQueryFormAction: Call, errors: Seq[String])(implicit request: Request[_], messages: Messages)
+@(errors: Seq[String])(implicit request: Request[_], messages: Messages)
 
 @mainWithHeaders(title = "title") {
 
