@@ -16,7 +16,6 @@
 
 package controllers
 
-import models.{ CustomerEnrolment, Tag }
 import play.api.i18n.I18nSupport
 import play.api.libs.json.JsValue
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Result }
@@ -68,10 +67,7 @@ class SwaggerController @Inject()(
       )
     }
 
-  def getMetadataForConversationsFiltered(
-    enrolmentKeys: Option[List[String]],
-    customerEnrolments: Option[List[CustomerEnrolment]],
-    tags: Option[List[Tag]]): Action[AnyContent] =
+  def getMetadataForConversationsFiltered(): Action[AnyContent] =
     Action.async { implicit request =>
       val queryParams = queryStringToParams(request.queryString)
       httpClient.GET(
@@ -80,10 +76,7 @@ class SwaggerController @Inject()(
       )
     }
 
-  def getMessageCount(
-    enrolmentKeys: Option[List[String]],
-    customerEnrolments: Option[List[CustomerEnrolment]],
-    tags: Option[List[Tag]]): Action[AnyContent] =
+  def getMessageCount(): Action[AnyContent] =
     Action.async { implicit request =>
       val queryParams = queryStringToParams(request.queryString)
       httpClient.GET(

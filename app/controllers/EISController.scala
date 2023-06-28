@@ -19,7 +19,7 @@ package controllers
 import models.QueryMessageWrapper
 import play.api.libs.json.{ JsError, JsSuccess, JsValue }
 import play.api.mvc.{ Action, MessagesControllerComponents, MessagesRequest }
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.{ Logger, LoggerLike }
 import uk.gov.hmrc.http.Authorization
@@ -52,7 +52,7 @@ class EISController @Inject()(controllerComponents: MessagesControllerComponents
   }
 
   def hasValidBearerToken(req: MessagesRequest[JsValue]): Boolean =
-    HeaderCarrierConverter.fromHeadersAndSession(req.headers).authorization match {
+    HeaderCarrierConverter.fromRequest(req).authorization match {
       case Some(Authorization(BearerToken)) => true
       case Some(_) =>
         log.warn(s"the authorization token received was invalid")

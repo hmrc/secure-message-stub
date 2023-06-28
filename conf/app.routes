@@ -8,11 +8,11 @@ GET         /secure-message-stub/language/:lang                                 
 
 # microservice specific routes
 
-GET         /secure-message-stub                                                             controllers.ConversationController.onPageLoad
-POST        /secure-message-stub                                                             controllers.ConversationController.submitQuery
+GET         /secure-message-stub                                                             controllers.ConversationController.onPageLoad()
+POST        /secure-message-stub                                                             controllers.ConversationController.submitQuery()
 
-GET         /secure-message-stub/crypto                                                      controllers.CryptoController.onPageLoad
-POST        /secure-message-stub/crypto                                                      controllers.CryptoController.submitQuery
+GET         /secure-message-stub/crypto                                                      controllers.CryptoController.onPageLoad()
+POST        /secure-message-stub/crypto                                                      controllers.CryptoController.submitQuery()
 
 GET         /secure-message-stub/messages                                                    controllers.ViewConversations.conversations
 GET         /secure-message-stub/conversation/:client/:conversationId                        controllers.ViewConversations.message(client, conversationId, showReplyForm: Boolean ?= false)
@@ -43,10 +43,10 @@ POST        /secure-messaging/conversation/:client/:conversationId/caseworker-me
 POST        /secure-messaging/messages/:encodedId/customer-message                           controllers.SwaggerController.createCustomerMessage(encodedId: String)
 
 + nocsrf
-GET         /secure-messaging/messages                                                       controllers.SwaggerController.getMetadataForConversationsFiltered(enrolmentKey: Option[List[String]], enrolment: Option[List[CustomerEnrolment]], tag: Option[List[Tag]])
+GET         /secure-messaging/messages                                                       controllers.SwaggerController.getMetadataForConversationsFiltered()
 
 + nocsrf
-GET         /secure-messaging/messages/count                                                 controllers.SwaggerController.getMessageCount(enrolmentKey: Option[List[String]], enrolment: Option[List[CustomerEnrolment]], tag: Option[List[Tag]])
+GET         /secure-messaging/messages/count                                                 controllers.SwaggerController.getMessageCount()
 
 + nocsrf
 GET         /secure-messaging/messages/:encodedId                                            controllers.SwaggerController.getMessage(encodedId: String)

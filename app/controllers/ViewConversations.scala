@@ -22,14 +22,12 @@ import javax.inject.Inject
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import play.twirl.api.{ Html, HtmlFormat }
+import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.play.partials.HtmlPartial
 import views.html.{ error_page, view_conversation_messages, view_conversations }
 
 import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
 import scala.util.control.NonFatal
 
 class ViewConversations @Inject()(

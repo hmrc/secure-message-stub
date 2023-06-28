@@ -16,12 +16,12 @@
 
 package models
 
-import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
-import org.apache.commons.codec.binary.Base64._
-import java.util.UUID
-
+import play.api.libs.json.Reads._
 import play.api.libs.json._
+import org.apache.commons.codec.binary.Base64._
+
+import java.util.UUID
 
 final case class QueryMessageWrapper(queryMessageRequest: QueryMessageRequest)
 object QueryMessageWrapper {
@@ -50,10 +50,10 @@ object RequestCommon {
 
 case class RequestDetail(id: String, conversationId: String, message: Base64String) {
   assert(
-    !conversationId.isEmpty && conversationId.length <= RequestDetail.MaxConversationIdLength,
-    s"conversationId size: ${conversationId.size} is invalid")
+    conversationId.nonEmpty && conversationId.length <= RequestDetail.MaxConversationIdLength,
+    s"conversationId size: ${conversationId.length} is invalid")
   assert(
-    !message.isEmpty && (decodeBase64(message).toString.length <= RequestDetail.MaxMessageLength),
+    message.nonEmpty && (decodeBase64(message).length <= RequestDetail.MaxMessageLength),
     s"message size: ${message.size} is invalid")
 }
 
@@ -61,27 +61,27 @@ object RequestDetail {
   val MaxConversationIdLength = 22
   val MaxMessageLength = 4000
   object UUIDFormatter extends Format[UUID] {
-    def writes(uuid: UUID) = JsString(uuid.toString)
+    def writes(uuid: UUID): JsString = JsString(uuid.toString)
 
     def reads(json: JsValue) = json match {
       case JsString(s) =>
         try {
           JsSuccess(UUID.fromString(s))
         } catch {
-          case e: IllegalArgumentException => JsError("error.expected.uuid")
+          case _: IllegalArgumentException => JsError("error.expected.uuid")
         }
       case _ => JsError("error.expected.JsString")
     }
   }
 
-  implicit val uuidFormat = UUIDFormatter
+  implicit val uuidFormat: UUIDFormatter.type = UUIDFormatter
 
   implicit val requestDetailReads: Reads[RequestDetail] = (
     (JsPath \ "id").read[String] and
       (JsPath \ "conversationId").read[String](verifying[String](a =>
-        !a.isEmpty && a.length <= MaxConversationIdLength)) and
+        a.nonEmpty && a.length <= MaxConversationIdLength)) and
       (JsPath \ "message").read[String](verifying[String](a => {
-        !a.isEmpty && isBase64(a) && (decodeBase64(a).toString.length <= MaxMessageLength)
+        a.nonEmpty && isBase64(a) && (decodeBase64(a).toString.length <= MaxMessageLength)
       }))
   )(RequestDetail.apply _)
 }

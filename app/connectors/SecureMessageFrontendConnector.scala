@@ -22,7 +22,7 @@ import play.api.Logger
 import play.api.mvc.{ AnyContent, MessagesRequest, RequestHeader }
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse }
-import uk.gov.hmrc.play.partials.{ HeaderCarrierForPartialsConverter, HtmlPartial, PartialRetriever }
+import uk.gov.hmrc.play.partials.{ HeaderCarrierForPartialsConverter, HtmlPartial }
 import utils.EnvironmentConfig
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -61,8 +61,7 @@ class SecureMessageFrontendConnector @Inject()(
   }
 
   def messageReply(client: String, conversationId: String, request: MessagesRequest[AnyContent])(
-    implicit ec: ExecutionContext,
-    hc: HeaderCarrier): Future[HttpResponse] = {
+    implicit ec: ExecutionContext): Future[HttpResponse] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     httpClient.POSTForm(
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId",

@@ -16,7 +16,6 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import forms.mappings.CryptoForm
 import forms.mappings.CryptoForm.CryptoData
 import javax.inject.Inject
@@ -24,43 +23,39 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.Encryption
-import views.html.crypto
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.Future
 
 class CryptoController @Inject()(
   controllerComponents: MessagesControllerComponents,
   encryption: Encryption,
-  view: crypto
-)(implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
-    extends FrontendController(controllerComponents) with I18nSupport {
+  view: views.html.crypto
+) extends FrontendController(controllerComponents) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = Action { implicit request =>
-    val call = routes.CryptoController.submitQuery()
-    Ok(view(CryptoForm(), "", call, Seq.empty))
+    Ok(view("", Seq.empty))
   }
 
-  def submitQuery: Action[AnyContent] = Action.async { implicit request =>
-    val call = routes.CryptoController.onPageLoad()
-
-    CryptoForm().bindFromRequest.fold[Future[Result]](
-      hasErrors =>
-        Future.successful(
-          BadRequest(
-            view(CryptoForm(), "", call, hasErrors.errors.map(_.message))
-          )
-      ),
-      form => decrypt(form)(request)
-    )
+  def submitQuery(): Action[AnyContent] = Action.async { implicit request =>
+    CryptoForm()
+      .bindFromRequest()
+      .fold[Future[Result]](
+        hasErrors =>
+          Future.successful(
+            BadRequest(
+              view("", hasErrors.errors.map(_.message))
+            )
+        ),
+        form => decrypt(form)
+      )
   }
 
   private[controllers] def decrypt(
     form: CryptoData
   )(implicit request: Request[_]): Future[Result] = form match {
     case CryptoData(Some(cryptoKey), Some(scrambledText)) => {
-      val call = routes.CryptoController.submitQuery()
       val decipheredText = encryption.decrypt(cryptoKey, scrambledText)
-      Future.successful(Ok(view(CryptoForm(), decipheredText, call, Seq.empty)))
+      Future.successful(Ok(view(decipheredText, Seq.empty)))
     }
     case _ =>
       Future.successful(BadRequest("Input invalid"))

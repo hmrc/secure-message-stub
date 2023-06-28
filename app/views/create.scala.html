@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,10 @@
 @import controllers._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import forms.mappings.ConversationForm._
-@import config.FrontendAppConfig
 
 @this(mainWithHeaders: views.html.main_with_headers_fullwidth,
 formCSFR: FormWithCSRF,
 govukButton: GovukButton,
-govukTable : GovukTable,
 alerts: alerts,
 sender: sender,
 customer: customer,
@@ -33,7 +31,7 @@ govukFieldset : GovukFieldset,
 govukErrorSummary : GovukErrorSummary,
 govukInput: GovukInput)
 
-@(form: Form[ConversationData], submitQueryFormAction: Call, errors: Seq[String])(implicit request: Request[_], messages: Messages, appConfig: FrontendAppConfig)
+@(errors: Seq[String])(implicit request: Request[_], messages: Messages)
 
 @mainWithHeaders(title = "title") {
 
