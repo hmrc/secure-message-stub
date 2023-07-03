@@ -8,7 +8,7 @@ import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 lazy val appName: String = "secure-message-stub"
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, SbtDistributablesPlugin)
+  .enablePlugins(PlayScala, SbtDistributablesPlugin, SbtSassify)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
