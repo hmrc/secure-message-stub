@@ -45,14 +45,22 @@ classes = "govuk-!-width-two-thirds"
             @govukInput(Input(
             id = "alert-parameter1.key",
             name = "alert-parameter1.key",
-            classes = "govuk-!-width-two-thirds"
+            classes = "govuk-!-width-two-thirds",
+            label = Label(
+            classes = "govuk-visually-hidden",
+            content = Text("key1")
+            )
             ))
         </td>
         <td class="govuk-table__cell">
             @govukInput(Input(
             id = "alert-parameter1.value",
             name = "alert-parameter1.value",
-            classes = "govuk-!-width-two-thirds"
+            classes = "govuk-!-width-two-thirds",
+            label = Label(
+            classes = "govuk-visually-hidden",
+            content = Text("value1")
+            )
             ))
         </td>
     </tr>
@@ -61,14 +69,22 @@ classes = "govuk-!-width-two-thirds"
             @govukInput(Input(
             id = "alert-parameter2.key",
             name = "alert-parameter2.key",
-            classes = "govuk-!-width-two-thirds"
+            classes = "govuk-!-width-two-thirds",
+            label = Label(
+            classes = "govuk-visually-hidden",
+            content = Text("key2")
+            )
             ))
         </td>
         <td class="govuk-table__cell">
             @govukInput(Input(
             id = "alert-parameter2.value",
             name = "alert-parameter2.value",
-            classes = "govuk-!-width-two-thirds"
+            classes = "govuk-!-width-two-thirds",
+            label = Label(
+            classes = "govuk-visually-hidden",
+            content = Text("value2")
+            )
             ))
         </td>
     </tr>
