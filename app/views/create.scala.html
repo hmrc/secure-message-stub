@@ -70,6 +70,10 @@ content = Text("Message")
 @govukSelect(Select(
 id = "query.language",
 name = "query.language",
+label = Label(
+classes = "govuk-visually-hidden",
+content = Text("Language: ")
+)
 items = Seq(
 SelectItem(
 value = Some("query.language-english"),
