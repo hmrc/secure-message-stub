@@ -1,6 +1,5 @@
 import play.sbt.routes.RoutesKeys
 import sbt.Def
-import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
@@ -30,7 +29,7 @@ lazy val root = (project in file("."))
     )
   )
   .settings(
-    scalaVersion := "2.13.8",
+    scalaVersion := "2.13.12",
     name := appName,
     RoutesKeys.routesImport ++= Seq("models._", "controllers.binders._"),
     PlayKeys.playDefaultPort := 9202,
