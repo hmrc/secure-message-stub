@@ -20,9 +20,9 @@ import com.google.inject.Inject
 import models.Count
 import play.api.Logger
 import play.api.mvc.{ AnyContent, MessagesRequest, RequestHeader }
-import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse }
 import uk.gov.hmrc.play.partials.{ HeaderCarrierForPartialsConverter, HtmlPartial }
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import utils.EnvironmentConfig
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -31,12 +31,14 @@ class SecureMessageFrontendConnector @Inject()(
   httpClient: HttpClient,
   envConfig: EnvironmentConfig,
   headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter) {
+
   val secureMessageFrontendBaseUrl = envConfig.baseUrl("secure-message-frontend")
   val logger: Logger = Logger(this.getClass())
+
   def conversationsPartial(queryParams: Seq[(String, String)] = Seq.empty)(
     implicit ec: ExecutionContext,
     request: RequestHeader): Future[HtmlPartial] = {
-    implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
+    implicit val hc: HeaderCarrier = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     httpClient.GET[HtmlPartial](
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages",
       queryParams
@@ -63,7 +65,7 @@ class SecureMessageFrontendConnector @Inject()(
   def messageReply(client: String, conversationId: String, request: MessagesRequest[AnyContent])(
     implicit ec: ExecutionContext): Future[HttpResponse] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
-    httpClient.POSTForm(
+    httpClient.POSTForm[HttpResponse](
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId",
       request.body.asFormUrlEncoded.getOrElse(Map.empty),
       Seq.empty

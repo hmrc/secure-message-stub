@@ -42,7 +42,7 @@ import play.api.http.Status.CREATED
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
 import utils.EnvironmentConfig
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.Future
 
 class SecureMessageConnectorSpec extends PlaySpec with ScalaFutures {
 
@@ -77,7 +77,6 @@ class SecureMessageConnectorSpec extends PlaySpec with ScalaFutures {
       val httpClient: HttpClient = mock[HttpClient]
       val envConf: EnvironmentConfig = mock[EnvironmentConfig]
       implicit val hc: HeaderCarrier = new HeaderCarrier
-      implicit val ec = implicitly[ExecutionContext]
       val secureMessage = new SecureMessageConnector(httpClient, envConf)
     }
   }

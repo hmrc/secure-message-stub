@@ -144,6 +144,7 @@ package object models {
                   }
                 }
             }
+        case (p, v) => JsError(s"Unexpected response: Path: $p, Value: $v")
       }
   }
 }

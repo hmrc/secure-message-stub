@@ -16,7 +16,7 @@
 
 package controllers
 
-import akka.util.Timeout
+import org.apache.pekko.util.Timeout
 import config.FrontendAppConfig
 import connectors.SecureMessageFrontendConnector
 import models.Count

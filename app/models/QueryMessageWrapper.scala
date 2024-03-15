@@ -21,6 +21,8 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 import org.apache.commons.codec.binary.Base64._
 
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 final case class QueryMessageWrapper(queryMessageRequest: QueryMessageRequest)
@@ -35,16 +37,14 @@ object QueryMessageRequest {
   implicit val queryMessageRequestReads: Reads[QueryMessageRequest] = Json.reads[QueryMessageRequest]
 }
 
-final case class RequestCommon(
-  originatingSystem: String,
-  receiptDate: org.joda.time.DateTime,
-  acknowledgementReference: String)
+final case class RequestCommon(originatingSystem: String, receiptDate: Instant, acknowledgementReference: String)
 object RequestCommon {
 
   val dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-  implicit val JodaDateReads: Reads[org.joda.time.DateTime] = JodaReads.jodaDateReads(dateFormat)
-  implicit val JodaDateWrites: Writes[org.joda.time.DateTime] = JodaWrites.jodaDateWrites(dateFormat)
-  implicit val JodaDateTimeFormat: Format[org.joda.time.DateTime] = Format(JodaDateReads, JodaDateWrites)
+  implicit val instantReads: Reads[Instant] = Reads.instantReads(DateTimeFormatter.ISO_INSTANT)
+  implicit val instantWrites: Writes[Instant] =
+    Writes.temporalWrites[Instant, DateTimeFormatter](DateTimeFormatter.ISO_INSTANT)
+  implicit val instantFormat: Format[Instant] = Format(instantReads, instantWrites)
   implicit val requestCommonReads: Reads[RequestCommon] = Json.reads[RequestCommon]
 }
 
