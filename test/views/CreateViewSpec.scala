@@ -22,13 +22,14 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.i18n.{ Lang, MessagesApi, MessagesImpl }
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.html.create
 
 class CreateViewSpec extends PlaySpec with GuiceOneAppPerSuite {
   val messagesApi = app.injector.instanceOf[MessagesApi]
-  implicit val messages = MessagesImpl(Lang("en"), messagesApi)
-  implicit val request = FakeRequest("GET", "/")
+  implicit val messages: MessagesImpl = MessagesImpl(Lang("en"), messagesApi)
+  implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/")
   implicit val appConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   "Create a conversation form" must {

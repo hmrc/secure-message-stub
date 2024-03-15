@@ -16,9 +16,11 @@
 
 package models
 
-import org.joda.time.format.DateTimeFormat
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json._
+
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 class QueryMessageWrapperSpec extends PlaySpec {
   "QueryMessageWrapper Reads" must {
@@ -108,8 +110,7 @@ class QueryMessageWrapperSpec extends PlaySpec {
     }
   }
 
-  val dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-  val dt = dtf.parseDateTime("2021-04-01T14:32:48Z")
+  val dt = Instant.parse("2021-04-01T14:32:48Z")
   val queryMessageWrapper =
     QueryMessageWrapper(
       QueryMessageRequest(

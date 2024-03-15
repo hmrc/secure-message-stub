@@ -6,37 +6,39 @@ import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 
 lazy val appName: String = "secure-message-stub"
 
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := "2.13.12"
+
+
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin, SbtSassify)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
-  .configs(IntegrationTest)
+//  .configs(IntegrationTest)
   .settings(inConfig(Test)(testSettings): _*)
-  .settings(majorVersion := 0)
   .settings(ThisBuild / useSuperShell := false)
+//  .settings(
+//    IntegrationTest / testOptions := Seq(Tests.Filter(_ endsWith "ItTestSuite")),
+//    inConfig(IntegrationTest)(
+//      scalafmtCoreSettings ++
+//        Seq(
+//          compile / compileInputs := Def.taskDyn {
+//            val task = test in (resolvedScoped.value.scope in scalafmt.key)
+//            val previousInputs = (compileInputs in compile).value
+//            task.map(_ => previousInputs)
+//          }.value
+//        )
+//    )
+//  )
   .settings(
-    IntegrationTest / testOptions := Seq(Tests.Filter(_ endsWith "ItTestSuite")),
-    inConfig(IntegrationTest)(
-      scalafmtCoreSettings ++
-        Seq(
-          compile / compileInputs := Def.taskDyn {
-            val task = test in (resolvedScoped.value.scope in scalafmt.key)
-            val previousInputs = (compileInputs in compile).value
-            task.map(_ => previousInputs)
-          }.value
-        )
-    )
-  )
-  .settings(
-    scalaVersion := "2.13.8",
     name := appName,
     RoutesKeys.routesImport ++= Seq("models._", "controllers.binders._"),
     PlayKeys.playDefaultPort := 9202,
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    update / evictionWarningOptions :=
-      EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+//    update / evictionWarningOptions :=
+//      EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     // concatenate js
     Concat.groups := Seq(
       "javascripts/securemessagestub-app.js" ->
@@ -64,4 +66,4 @@ lazy val testSettings: Seq[Def.Setting[_]] = Seq(
   )
 )
 
-dependencyOverrides ++= AppDependencies.overrides
+dependencyOverrides ++= AppDependencies()
