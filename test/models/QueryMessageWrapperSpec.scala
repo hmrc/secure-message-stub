@@ -20,7 +20,6 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json._
 
 import java.time.Instant
-import java.time.format.DateTimeFormatter
 
 class QueryMessageWrapperSpec extends PlaySpec {
   "QueryMessageWrapper Reads" must {
