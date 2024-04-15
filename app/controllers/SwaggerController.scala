@@ -26,7 +26,7 @@ import utils.EnvironmentConfig
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class SwaggerController @Inject()(
+class SwaggerController @Inject() (
   httpClient: HttpClient,
   environmentConfig: EnvironmentConfig,
   controllerComponents: MessagesControllerComponents

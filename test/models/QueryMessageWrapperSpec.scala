@@ -24,88 +24,98 @@ import java.time.Instant
 class QueryMessageWrapperSpec extends PlaySpec {
   "QueryMessageWrapper Reads" must {
     "create QueryMessageWrapper if json valid" in {
-      Json.parse(s"""|{
-                     |  "querymessageRequest" : {
-                     |    "requestCommon" : {
-                     |      "originatingSystem" : "dc-secure-message",
-                     |      "receiptDate" : "2021-04-01T14:32:48Z",
-                     |      "acknowledgementReference" : "acknowledgementReference"
-                     |    },
-                     |    "requestDetail" : {
-                     |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
-                     |      "conversationId" : "D-80542-20201120",
-                     |      "message" : "QmxhaCBibGFoIGJsYWg="
-                     |    }
-                     |  }
-                     |}""".stripMargin).as[QueryMessageWrapper] mustBe queryMessageWrapper
+      Json
+        .parse(s"""|{
+                   |  "querymessageRequest" : {
+                   |    "requestCommon" : {
+                   |      "originatingSystem" : "dc-secure-message",
+                   |      "receiptDate" : "2021-04-01T14:32:48Z",
+                   |      "acknowledgementReference" : "acknowledgementReference"
+                   |    },
+                   |    "requestDetail" : {
+                   |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+                   |      "conversationId" : "D-80542-20201120",
+                   |      "message" : "QmxhaCBibGFoIGJsYWg="
+                   |    }
+                   |  }
+                   |}""".stripMargin)
+        .as[QueryMessageWrapper] mustBe queryMessageWrapper
     }
 
     "fail to create QueryMessageWrapper if message is not Base64 encoded" in {
-      Json.parse(s"""|{
-                     |  "querymessageRequest" : {
-                     |    "requestCommon" : {
-                     |      "originatingSystem" : "dc-secure-message",
-                     |      "receiptDate" : "2021-04-01T14:32:48Z",
-                     |      "acknowledgementReference" : "acknowledgementReference"
-                     |    },
-                     |    "requestDetail" : {
-                     |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
-                     |      "conversationId" : "D-80542-20201120",
-                     |      "message" : "QmxhaCBibGFoIGJsYWg=Ő"
-                     |    }
-                     |  }
-                     |}""".stripMargin).validate[QueryMessageWrapper] mustBe a[JsError]
+      Json
+        .parse(s"""|{
+                   |  "querymessageRequest" : {
+                   |    "requestCommon" : {
+                   |      "originatingSystem" : "dc-secure-message",
+                   |      "receiptDate" : "2021-04-01T14:32:48Z",
+                   |      "acknowledgementReference" : "acknowledgementReference"
+                   |    },
+                   |    "requestDetail" : {
+                   |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+                   |      "conversationId" : "D-80542-20201120",
+                   |      "message" : "QmxhaCBibGFoIGJsYWg=Ő"
+                   |    }
+                   |  }
+                   |}""".stripMargin)
+        .validate[QueryMessageWrapper] mustBe a[JsError]
     }
 
     "fail to create QueryMessageWrapper if conversationId length greater than 22" in {
-      Json.parse(s"""|{
-                     |  "querymessageRequest" : {
-                     |    "requestCommon" : {
-                     |      "originatingSystem" : "dc-secure-message",
-                     |      "receiptDate" : "2021-04-01T14:32:48Z",
-                     |      "acknowledgementReference" : "acknowledgementReference"
-                     |    },
-                     |    "requestDetail" : {
-                     |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
-                     |      "conversationId" : "D-80542-20201120123456789",
-                     |      "message" : "QmxhaCBibGFoIGJsYWg="
-                     |    }
-                     |  }
-                     |}""".stripMargin).validate[QueryMessageWrapper] mustBe a[JsError]
+      Json
+        .parse(s"""|{
+                   |  "querymessageRequest" : {
+                   |    "requestCommon" : {
+                   |      "originatingSystem" : "dc-secure-message",
+                   |      "receiptDate" : "2021-04-01T14:32:48Z",
+                   |      "acknowledgementReference" : "acknowledgementReference"
+                   |    },
+                   |    "requestDetail" : {
+                   |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+                   |      "conversationId" : "D-80542-20201120123456789",
+                   |      "message" : "QmxhaCBibGFoIGJsYWg="
+                   |    }
+                   |  }
+                   |}""".stripMargin)
+        .validate[QueryMessageWrapper] mustBe a[JsError]
     }
 
     "fail to create QueryMessageWrapper if conversationId length is 0" in {
-      Json.parse(s"""|{
-                     |  "querymessageRequest" : {
-                     |    "requestCommon" : {
-                     |      "originatingSystem" : "dc-secure-message",
-                     |      "receiptDate" : "2021-04-01T14:32:48Z",
-                     |      "acknowledgementReference" : "acknowledgementReference"
-                     |    },
-                     |    "requestDetail" : {
-                     |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
-                     |      "conversationId" : "",
-                     |      "message" : "QmxhaCBibGFoIGJsYWg="
-                     |    }
-                     |  }
-                     |}""".stripMargin).validate[QueryMessageWrapper] mustBe a[JsError]
+      Json
+        .parse(s"""|{
+                   |  "querymessageRequest" : {
+                   |    "requestCommon" : {
+                   |      "originatingSystem" : "dc-secure-message",
+                   |      "receiptDate" : "2021-04-01T14:32:48Z",
+                   |      "acknowledgementReference" : "acknowledgementReference"
+                   |    },
+                   |    "requestDetail" : {
+                   |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+                   |      "conversationId" : "",
+                   |      "message" : "QmxhaCBibGFoIGJsYWg="
+                   |    }
+                   |  }
+                   |}""".stripMargin)
+        .validate[QueryMessageWrapper] mustBe a[JsError]
     }
 
     "fail to create QueryMessageWrapper if message length is 0" in {
-      Json.parse(s"""|{
-                     |  "querymessageRequest" : {
-                     |    "requestCommon" : {
-                     |      "originatingSystem" : "dc-secure-message",
-                     |      "receiptDate" : "2021-04-01T14:32:48Z",
-                     |      "acknowledgementReference" : "acknowledgementReference"
-                     |    },
-                     |    "requestDetail" : {
-                     |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
-                     |      "conversationId" : "D-80542-20201120",
-                     |      "message" : ""
-                     |    }
-                     |  }
-                     |}""".stripMargin).validate[QueryMessageWrapper] mustBe a[JsError]
+      Json
+        .parse(s"""|{
+                   |  "querymessageRequest" : {
+                   |    "requestCommon" : {
+                   |      "originatingSystem" : "dc-secure-message",
+                   |      "receiptDate" : "2021-04-01T14:32:48Z",
+                   |      "acknowledgementReference" : "acknowledgementReference"
+                   |    },
+                   |    "requestDetail" : {
+                   |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+                   |      "conversationId" : "D-80542-20201120",
+                   |      "message" : ""
+                   |    }
+                   |  }
+                   |}""".stripMargin)
+        .validate[QueryMessageWrapper] mustBe a[JsError]
     }
   }
 
@@ -116,7 +126,9 @@ class QueryMessageWrapperSpec extends PlaySpec {
         RequestCommon(
           originatingSystem = "dc-secure-message",
           receiptDate = dt,
-          acknowledgementReference = "acknowledgementReference"),
+          acknowledgementReference = "acknowledgementReference"
+        ),
         RequestDetail("govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6", "D-80542-20201120", "QmxhaCBibGFoIGJsYWg=")
-      ))
+      )
+    )
 }

@@ -57,7 +57,8 @@ trait Formatters {
     requiredKey: String,
     wholeNumberKey: String,
     nonNumericKey: String,
-    args: Seq[String] = Seq.empty): Formatter[Int] =
+    args: Seq[String] = Seq.empty
+  ): Formatter[Int] =
     new Formatter[Int] {
 
       val decimalRegexp = """^-?(\d*\.\d*)$"""
@@ -82,8 +83,9 @@ trait Formatters {
         baseFormatter.unbind(key, value.toString)
     }
 
-  private[mappings] def enumerableFormatter[A](requiredKey: String, invalidKey: String)(
-    implicit ev: Enumerable[A]): Formatter[A] =
+  private[mappings] def enumerableFormatter[A](requiredKey: String, invalidKey: String)(implicit
+    ev: Enumerable[A]
+  ): Formatter[A] =
     new Formatter[A] {
 
       private val baseFormatter = stringFormatter(requiredKey)

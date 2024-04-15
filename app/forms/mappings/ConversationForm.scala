@@ -44,15 +44,16 @@ object ConversationForm {
           "enrolment-name"  -> optional(text).verifying("Customer Enrolment name is requiered", _.isDefined),
           "enrolment-value" -> optional(text).verifying("Customer Enrolment value is requiered", _.isDefined)
         ),
-        ("alert.template-id") -> optional(text).verifying("Alert template is mandatory", _.isDefined),
-        ("alert-parameter1")  -> tuple("key" -> optional(text), "value" -> optional(text)),
-        ("alert-parameter2")  -> tuple("key" -> optional(text), "value" -> optional(text)),
-        ("tags-parameter1")   -> tuple("key" -> optional(text), "value" -> optional(text)),
-        ("tags-parameter2")   -> tuple("key" -> optional(text), "value" -> optional(text)),
-        ("tags-parameter3")   -> tuple("key" -> optional(text), "value" -> optional(text)),
-        ("tags-parameter4")   -> tuple("key" -> optional(text), "value" -> optional(text)),
-        ("tags-parameter5")   -> tuple("key" -> optional(text), "value" -> optional(text))
-      )(ConversationData.apply)(ConversationData.unapply))
+        "alert.template-id" -> optional(text).verifying("Alert template is mandatory", _.isDefined),
+        "alert-parameter1"  -> tuple("key" -> optional(text), "value" -> optional(text)),
+        "alert-parameter2"  -> tuple("key" -> optional(text), "value" -> optional(text)),
+        "tags-parameter1"   -> tuple("key" -> optional(text), "value" -> optional(text)),
+        "tags-parameter2"   -> tuple("key" -> optional(text), "value" -> optional(text)),
+        "tags-parameter3"   -> tuple("key" -> optional(text), "value" -> optional(text)),
+        "tags-parameter4"   -> tuple("key" -> optional(text), "value" -> optional(text)),
+        "tags-parameter5"   -> tuple("key" -> optional(text), "value" -> optional(text))
+      )(ConversationData.apply)(ConversationData.unapply)
+    )
 
   case class ConversationData(
     query: (Option[String], Option[String], Option[String]),
@@ -67,5 +68,6 @@ object ConversationForm {
     tagsParameter2: (Option[String], Option[String]),
     tagsParameter3: (Option[String], Option[String]),
     tagsParameter4: (Option[String], Option[String]),
-    tagsParameter5: (Option[String], Option[String]))
+    tagsParameter5: (Option[String], Option[String])
+  )
 }

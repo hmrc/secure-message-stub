@@ -27,9 +27,10 @@ import java.util.UUID
 
 final case class QueryMessageWrapper(queryMessageRequest: QueryMessageRequest)
 object QueryMessageWrapper {
-  implicit val queryMessageWrapperReads: Reads[QueryMessageWrapper] = (
-    (JsPath \ "querymessageRequest").read[QueryMessageRequest]
-  ).map(QueryMessageWrapper(_))
+  implicit val queryMessageWrapperReads: Reads[QueryMessageWrapper] =
+    (JsPath \ "querymessageRequest")
+      .read[QueryMessageRequest]
+      .map(QueryMessageWrapper(_))
 }
 
 final case class QueryMessageRequest(requestCommon: RequestCommon, requestDetail: RequestDetail)
@@ -51,10 +52,12 @@ object RequestCommon {
 case class RequestDetail(id: String, conversationId: String, message: Base64String) {
   assert(
     conversationId.nonEmpty && conversationId.length <= RequestDetail.MaxConversationIdLength,
-    s"conversationId size: ${conversationId.length} is invalid")
+    s"conversationId size: ${conversationId.length} is invalid"
+  )
   assert(
     message.nonEmpty && (decodeBase64(message).length <= RequestDetail.MaxMessageLength),
-    s"message size: ${message.size} is invalid")
+    s"message size: ${message.size} is invalid"
+  )
 }
 
 object RequestDetail {
@@ -65,9 +68,9 @@ object RequestDetail {
 
     def reads(json: JsValue) = json match {
       case JsString(s) =>
-        try {
+        try
           JsSuccess(UUID.fromString(s))
-        } catch {
+        catch {
           case _: IllegalArgumentException => JsError("error.expected.uuid")
         }
       case _ => JsError("error.expected.JsString")
@@ -78,10 +81,11 @@ object RequestDetail {
 
   implicit val requestDetailReads: Reads[RequestDetail] = (
     (JsPath \ "id").read[String] and
-      (JsPath \ "conversationId").read[String](verifying[String](a =>
-        a.nonEmpty && a.length <= MaxConversationIdLength)) and
-      (JsPath \ "message").read[String](verifying[String](a => {
+      (JsPath \ "conversationId").read[String](
+        verifying[String](a => a.nonEmpty && a.length <= MaxConversationIdLength)
+      ) and
+      (JsPath \ "message").read[String](verifying[String] { a =>
         a.nonEmpty && isBase64(a) && (decodeBase64(a).toString.length <= MaxMessageLength)
-      }))
+      })
   )(RequestDetail.apply _)
 }

@@ -26,9 +26,8 @@ object Alert {
 
 final case class CustomerEnrolment(key: String, name: String, value: String)
 object CustomerEnrolment {
-  implicit val enrolmentReads: Reads[CustomerEnrolment] = {
+  implicit val enrolmentReads: Reads[CustomerEnrolment] =
     Json.reads[CustomerEnrolment]
-  }
 
   def parse(enrolmentString: String): CustomerEnrolment = {
     val enrolment = enrolmentString.split('~')
@@ -38,9 +37,8 @@ object CustomerEnrolment {
 
 final case class Tag(key: String, value: String)
 object Tag {
-  implicit val tagReads: Reads[Tag] = {
+  implicit val tagReads: Reads[Tag] =
     Json.reads[Tag]
-  }
 
   def parse(tagString: String): Tag = {
     val tag = tagString.split('~')
@@ -90,7 +88,8 @@ final case class ConversationRequest(
   tags: Map[String, String],
   subject: String,
   message: String,
-  language: Option[String])
+  language: Option[String]
+)
 object ConversationRequest {
   implicit val conversionRResultReads: Reads[ConversationRequest] = Json.reads[ConversationRequest]
   implicit val conversionRResultWrites: Writes[ConversationRequest] = Json.writes[ConversationRequest]

@@ -54,7 +54,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversations,
         viewConversationMessages,
         error_page,
-        secureMessageFrontendConnector)
+        secureMessageFrontendConnector
+      )
 
       controller.conversations()(FakeRequest())
 
@@ -83,13 +84,15 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversations,
         viewConversationMessages,
         error_page,
-        secureMessageFrontendConnector)
+        secureMessageFrontendConnector
+      )
 
       controller.conversations()(
         FakeRequest(
           "GET",
           "/secure-message-stub/messages?enrolmentKey=HMRC-CUS-ORG&enrolmentKey=IR-SA&enrolment=HMRC-CUS-ORG~EORINumber~GB1234567890&tag=notificationType~cds-export"
-        ))
+        )
+      )
 
       verify(secureMessageFrontendConnector, times(1))
         .conversationsPartial(any())(any(), any())
@@ -106,7 +109,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversations,
         viewConversationMessages,
         error_page,
-        secureMessageFrontendConnector)
+        secureMessageFrontendConnector
+      )
 
       val result = controller.conversations()(FakeRequest())
 
@@ -124,7 +128,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversations,
         viewConversationMessages,
         error_page,
-        secureMessageFrontendConnector)
+        secureMessageFrontendConnector
+      )
 
       val result = controller.conversations(FakeRequest())
 
@@ -135,7 +140,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
   "message function" must {
     "call secure message frontend connector" in new TestCase {
       when(
-        secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any()))
+        secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any())
+      )
         .thenReturn(Future.successful(HtmlPartial.Success(None, Html("html content"))))
 
       val controller = new ViewConversations(
@@ -143,7 +149,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversations,
         viewConversationMessages,
         error_page,
-        secureMessageFrontendConnector)
+        secureMessageFrontendConnector
+      )
 
       controller.message("some-client-id", "111", false)(FakeRequest())
 
@@ -153,7 +160,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
 
     "return 404 if response from secureMessageFrontendConnector.messagePartial is 404" in new TestCase {
       when(
-        secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any()))
+        secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any())
+      )
         .thenReturn(Future.successful(HtmlPartial.Failure(Some(404), "no content")))
 
       val controller = new ViewConversations(
@@ -161,7 +169,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversations,
         viewConversationMessages,
         error_page,
-        secureMessageFrontendConnector)
+        secureMessageFrontendConnector
+      )
 
       val result = controller.message("some-client-id", "111", false)(FakeRequest())
 
@@ -170,7 +179,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
 
     "return SERVICE_UNAVAILABLE if response from secureMessageFrontendConnector.messagePartial is 503" in new TestCase {
       when(
-        secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any()))
+        secureMessageFrontendConnector.messagePartial(eqTo("some-client-id"), eqTo("111"), eqTo(false))(any(), any())
+      )
         .thenReturn(Future.successful(HtmlPartial.Failure(Some(503), "no content")))
 
       val controller = new ViewConversations(
@@ -178,7 +188,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversations,
         viewConversationMessages,
         error_page,
-        secureMessageFrontendConnector)
+        secureMessageFrontendConnector
+      )
 
       val result = controller.message("some-client-id", "111", false)(FakeRequest())
 
@@ -196,7 +207,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversations,
         viewConversationMessages,
         error_page,
-        secureMessageFrontendConnector)
+        secureMessageFrontendConnector
+      )
 
       val result = controller.reply("client", "conversationId")(FakeRequest())
       status(result) mustBe 303
@@ -211,7 +223,8 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         viewConversations,
         viewConversationMessages,
         error_page,
-        secureMessageFrontendConnector)
+        secureMessageFrontendConnector
+      )
 
       val result = controller.reply("client", "conversationId")(FakeRequest())
       status(result) mustBe Status.BAD_GATEWAY

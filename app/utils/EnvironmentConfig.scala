@@ -19,7 +19,7 @@ package utils
 import com.google.inject.Inject
 import play.api.Configuration
 
-class EnvironmentConfig @Inject()(configuration: Configuration) {
+class EnvironmentConfig @Inject() (configuration: Configuration) {
 
   protected lazy val rootServices = "microservice.services"
 

@@ -70,7 +70,7 @@ class SecureMessageConnectorSpec extends PlaySpec with ScalaFutures {
             None
           )
         )
-        .futureValue mustBe (httpResponse)
+        .futureValue mustBe httpResponse
     }
 
     class TestCase {

@@ -66,7 +66,8 @@ class ConversationControllerSpec extends PlaySpec with ScalaFutures {
           Some("conversationId"),
           Some("identificationKey"),
           Some("identificationValue"),
-          Some("displayName")),
+          Some("displayName")
+        ),
         senderParameter1 = (Some("senderkey1"), Some("sendervalue1")),
         senderParameter2 = (Some("senderkey1"), Some("sendervalue1")),
         customer = (

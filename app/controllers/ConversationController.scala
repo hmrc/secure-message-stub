@@ -29,7 +29,7 @@ import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
 import config.FrontendAppConfig
 
-class ConversationController @Inject()(
+class ConversationController @Inject() (
   controllerComponents: MessagesControllerComponents,
   secureMessage: SecureMessageConnector,
   success: success_feedback,
@@ -50,7 +50,7 @@ class ConversationController @Inject()(
             BadRequest(
               view(hasErrors.errors.map(_.message))
             )
-        ),
+          ),
         form => saveConversation(form)(request)
       )
   }
@@ -59,27 +59,26 @@ class ConversationController @Inject()(
     form: ConversationData
   )(implicit request: Request[_]) = form match {
     case ConversationData(
-        (Some(subject), Some(message), language),
-        (Some(senderName), Some(conversationId), Some(identifierName), Some(identifierValue), Some(displayName)),
-        (senderParameter1),
-        (senderParameter2),
-        (
-          name,
-          email,
-          Some(enrolmentKey),
-          Some(enrolmentName),
-          Some(enrolmentValue)
-        ),
-        Some(alertTemplate),
-        (alertParameter1),
-        alertParameter2,
-        tagsParameter1,
-        tagsParameter2,
-        tagsParameter3,
-        tagsParameter4,
-        tagsParameter5
-        ) => {
-
+          (Some(subject), Some(message), language),
+          (Some(senderName), Some(conversationId), Some(identifierName), Some(identifierValue), Some(displayName)),
+          senderParameter1,
+          senderParameter2,
+          (
+            name,
+            email,
+            Some(enrolmentKey),
+            Some(enrolmentName),
+            Some(enrolmentValue)
+          ),
+          Some(alertTemplate),
+          alertParameter1,
+          alertParameter2,
+          tagsParameter1,
+          tagsParameter2,
+          tagsParameter3,
+          tagsParameter4,
+          tagsParameter5
+        ) =>
       val lang = languageSelection(language.getOrElse(QueryLanguage.ENGLISH))
 
       val senderParameters = keyValuePair(senderParameter1) ++ keyValuePair(
@@ -118,10 +117,9 @@ class ConversationController @Inject()(
           case CREATED => Ok(success("Query creation complete"))
           case _       => BadRequest(success("Query creation unsuccessfull"))
         })
-        .recover {
-          case _ => NotFound(success("Something went wrong"))
+        .recover { case _ =>
+          NotFound(success("Something went wrong"))
         }
-    }
     case _ =>
       Future.successful(BadRequest("Input invalid"))
   }
