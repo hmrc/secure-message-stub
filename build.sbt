@@ -2,7 +2,6 @@ import play.sbt.routes.RoutesKeys
 import sbt.Def
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
-import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 
 lazy val appName: String = "secure-message-stub"
 
@@ -49,3 +48,7 @@ lazy val testSettings: Seq[Def.Setting[_]] = Seq(
 )
 
 dependencyOverrides ++= AppDependencies()
+
+Test / test := (Test / test)
+  .dependsOn(scalafmtCheckAll)
+  .value

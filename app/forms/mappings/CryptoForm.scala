@@ -25,7 +25,8 @@ object CryptoForm {
       mapping(
         "crypto-key"     -> optional(text),
         "scrambled-text" -> optional(text)
-      )(CryptoData.apply)(CryptoData.unapply))
+      )(CryptoData.apply)(CryptoData.unapply)
+    )
 
   case class CryptoData(
     cryptoKey: Option[String],

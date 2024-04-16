@@ -31,23 +31,33 @@ class EISControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
   "EISController QueryMessageWrapper" must {
     "return NO_CONTENT if the call is valid and accepted" in {
       val eisController = app.injector.instanceOf[EISController]
-      status(eisController.queryResponse(requestBuilder(Seq(auth, contentType), validQueryMessageWrapper))) mustBe NO_CONTENT
+      status(
+        eisController.queryResponse(requestBuilder(Seq(auth, contentType), validQueryMessageWrapper))
+      ) mustBe NO_CONTENT
     }
     "return UNAUTHORIZED if there is not a not a AUTHORIZATION header" in {
       val eisController = app.injector.instanceOf[EISController]
-      status(eisController.queryResponse(requestBuilder(Seq(contentType), validQueryMessageWrapper))) mustBe UNAUTHORIZED
+      status(
+        eisController.queryResponse(requestBuilder(Seq(contentType), validQueryMessageWrapper))
+      ) mustBe UNAUTHORIZED
     }
     "return UNAUTHORIZED if the Bearer token is invalid" in {
       val eisController = app.injector.instanceOf[EISController]
-      status(eisController.queryResponse(requestBuilder(Seq(badAuth, contentType), validQueryMessageWrapper))) mustBe UNAUTHORIZED
+      status(
+        eisController.queryResponse(requestBuilder(Seq(badAuth, contentType), validQueryMessageWrapper))
+      ) mustBe UNAUTHORIZED
     }
     "return BAD_REQUEST if the QueryMessageWrapper is not valid" in {
       val eisController = app.injector.instanceOf[EISController]
-      status(eisController.queryResponse(requestBuilder(Seq(auth, contentType), inValidQueryMessageWrapper))) mustBe BAD_REQUEST
+      status(
+        eisController.queryResponse(requestBuilder(Seq(auth, contentType), inValidQueryMessageWrapper))
+      ) mustBe BAD_REQUEST
     }
     "return INTERNAL_SERVER_ERROR if the QueryMessageWrapper is not valid" in {
       val eisController = app.injector.instanceOf[EISController]
-      status(eisController.queryResponse(requestBuilder(Seq(auth, contentType), errCausingQueryMessageWrapper))) mustBe INTERNAL_SERVER_ERROR
+      status(
+        eisController.queryResponse(requestBuilder(Seq(auth, contentType), errCausingQueryMessageWrapper))
+      ) mustBe INTERNAL_SERVER_ERROR
     }
   }
 
@@ -75,20 +85,21 @@ class EISControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
     Json.parse("""{"requestDetail": { "id": "cdc3f605-cb77-4025-a48d-b733cd88c3e6",
                  |"conversationId":  "D-80542-20201120"}}""".stripMargin)
 
-  private val errCausingQueryMessageWrapper = Json.parse(s"""|{
-                                                             |  "querymessageRequest" : {
-                                                             |    "requestCommon" : {
-                                                             |      "originatingSystem" : "dc-secure-message",
-                                                             |      "receiptDate" : "2021-04-01T14:32:48Z",
-                                                             |      "acknowledgementReference" : "acknowledgementReference"
-                                                             |    },
-                                                             |    "requestDetail" : {
-                                                             |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
-                                                             |      "conversationId" : "D-80542-20201120err",
-                                                             |      "message" : "QmxhaCBibGFoIGJsYWg="
-                                                             |    }
-                                                             |  }
-                                                             |}""".stripMargin)
+  private val errCausingQueryMessageWrapper =
+    Json.parse(s"""|{
+                   |  "querymessageRequest" : {
+                   |    "requestCommon" : {
+                   |      "originatingSystem" : "dc-secure-message",
+                   |      "receiptDate" : "2021-04-01T14:32:48Z",
+                   |      "acknowledgementReference" : "acknowledgementReference"
+                   |    },
+                   |    "requestDetail" : {
+                   |      "id" : "govuk-tax-cdc3f605-cb77-4025-a48d-b733cd88c3e6",
+                   |      "conversationId" : "D-80542-20201120err",
+                   |      "message" : "QmxhaCBibGFoIGJsYWg="
+                   |    }
+                   |  }
+                   |}""".stripMargin)
 
   val contentType: (String, String) = (CONTENT_TYPE, JSON)
   val auth = (AUTHORIZATION, "Bearer AbCdEf123456")

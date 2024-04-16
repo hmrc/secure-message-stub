@@ -30,36 +30,32 @@ import views.html.{ error_page, view_conversation_messages, view_conversations }
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
-class ViewConversations @Inject()(
+class ViewConversations @Inject() (
   controllerComponents: MessagesControllerComponents,
   viewConversations: view_conversations,
   viewConversationMessages: view_conversation_messages,
   errorPage: error_page,
-  secureMessageFrontendConnector: SecureMessageFrontendConnector)(
-  implicit ec: ExecutionContext,
-  appConfig: FrontendAppConfig)
+  secureMessageFrontendConnector: SecureMessageFrontendConnector
+)(implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
     extends FrontendController(controllerComponents) with I18nSupport {
 
   val logger: Logger = Logger(this.getClass())
   def conversations: Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    {
-      val queryParams = queryStringToParams(request.queryString)
-      for {
-        partial      <- secureMessageFrontendConnector.conversationsPartial(queryParams)
-        messageCount <- secureMessageFrontendConnector.messageCount(queryParams)
-      } yield
-        partial match {
-          case HtmlPartial.Success(_, content) => Ok(viewConversations(messageCount, content))
-          case HtmlPartial.Failure(Some(NOT_FOUND), body) =>
-            logger.error(s"[ViewConversations][conversations] - status code:NOT_FOUND, body:$body")
-            NotFound(body)
-          case HtmlPartial.Failure(Some(status), body) =>
-            logger.error(s"[ViewConversations][conversations] - status code:$status, body:$body")
-            ServiceUnavailable(body)
-          case HtmlPartial.Failure(None, body) =>
-            logger.error(s"[ViewConversations][conversations] - body:$body")
-            ServiceUnavailable(body)
-        }
+    val queryParams = queryStringToParams(request.queryString)
+    for {
+      partial      <- secureMessageFrontendConnector.conversationsPartial(queryParams)
+      messageCount <- secureMessageFrontendConnector.messageCount(queryParams)
+    } yield partial match {
+      case HtmlPartial.Success(_, content) => Ok(viewConversations(messageCount, content))
+      case HtmlPartial.Failure(Some(NOT_FOUND), body) =>
+        logger.error(s"[ViewConversations][conversations] - status code:NOT_FOUND, body:$body")
+        NotFound(body)
+      case HtmlPartial.Failure(Some(status), body) =>
+        logger.error(s"[ViewConversations][conversations] - status code:$status, body:$body")
+        ServiceUnavailable(body)
+      case HtmlPartial.Failure(None, body) =>
+        logger.error(s"[ViewConversations][conversations] - body:$body")
+        ServiceUnavailable(body)
     }
   }
 
@@ -79,11 +75,9 @@ class ViewConversations @Inject()(
             logger.error(s"[ViewConversations][message] - body:$body")
             ServiceUnavailable(body)
         }
-        .recover {
-          case NonFatal(err) => {
-            logger.error(s"[ViewConversations][message] - InternalServerError", err)
-            InternalServerError
-          }
+        .recover { case NonFatal(err) =>
+          logger.error(s"[ViewConversations][message] - InternalServerError", err)
+          InternalServerError
         }
   }
 
@@ -114,11 +108,9 @@ class ViewConversations @Inject()(
           logger.error(s"[ViewConversations][result] - body:$body")
           ServiceUnavailable(body)
       }
-      .recover {
-        case NonFatal(err) => {
-          logger.error(s"[ViewConversations][result] - InternalServerError", err)
-          InternalServerError
-        }
+      .recover { case NonFatal(err) =>
+        logger.error(s"[ViewConversations][result] - InternalServerError", err)
+        InternalServerError
       }
   }
 
@@ -137,11 +129,9 @@ class ViewConversations @Inject()(
           logger.error(s"[ViewConversations][viewLetterOrConversation] - body:$body")
           ServiceUnavailable(body)
       }
-      .recover {
-        case NonFatal(err) => {
-          logger.error(s"[ViewConversations][viewLetterOrConversation] - InternalServerError", err)
-          InternalServerError
-        }
+      .recover { case NonFatal(err) =>
+        logger.error(s"[ViewConversations][viewLetterOrConversation] - InternalServerError", err)
+        InternalServerError
       }
   }
 }

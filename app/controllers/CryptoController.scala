@@ -26,7 +26,7 @@ import utils.Encryption
 
 import scala.concurrent.Future
 
-class CryptoController @Inject()(
+class CryptoController @Inject() (
   controllerComponents: MessagesControllerComponents,
   encryption: Encryption,
   view: views.html.crypto
@@ -45,7 +45,7 @@ class CryptoController @Inject()(
             BadRequest(
               view("", hasErrors.errors.map(_.message))
             )
-        ),
+          ),
         form => decrypt(form)
       )
   }
@@ -53,10 +53,9 @@ class CryptoController @Inject()(
   private[controllers] def decrypt(
     form: CryptoData
   )(implicit request: Request[_]): Future[Result] = form match {
-    case CryptoData(Some(cryptoKey), Some(scrambledText)) => {
+    case CryptoData(Some(cryptoKey), Some(scrambledText)) =>
       val decipheredText = encryption.decrypt(cryptoKey, scrambledText)
       Future.successful(Ok(view(decipheredText, Seq.empty)))
-    }
     case _ =>
       Future.successful(BadRequest("Input invalid"))
   }

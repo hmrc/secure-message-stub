@@ -25,11 +25,11 @@ import models.Language
 import uk.gov.hmrc.play.language.{ LanguageController, LanguageUtils }
 
 @Singleton
-class LanguageSwitchController @Inject()(
+class LanguageSwitchController @Inject() (
   appConfig: FrontendAppConfig,
   languageUtils: LanguageUtils,
-  cc: ControllerComponents)
-    extends LanguageController(languageUtils, cc) {
+  cc: ControllerComponents
+) extends LanguageController(languageUtils, cc) {
   import appConfig._
 
   override def fallbackURL: String =

@@ -27,17 +27,18 @@ import utils.EnvironmentConfig
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-class SecureMessageFrontendConnector @Inject()(
+class SecureMessageFrontendConnector @Inject() (
   httpClient: HttpClient,
   envConfig: EnvironmentConfig,
-  headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter) {
+  headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter
+) {
 
   val secureMessageFrontendBaseUrl = envConfig.baseUrl("secure-message-frontend")
   val logger: Logger = Logger(this.getClass())
 
-  def conversationsPartial(queryParams: Seq[(String, String)] = Seq.empty)(
-    implicit ec: ExecutionContext,
-    request: RequestHeader): Future[HtmlPartial] = {
+  def conversationsPartial(
+    queryParams: Seq[(String, String)] = Seq.empty
+  )(implicit ec: ExecutionContext, request: RequestHeader): Future[HtmlPartial] = {
     implicit val hc: HeaderCarrier = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     httpClient.GET[HtmlPartial](
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages",
@@ -45,9 +46,10 @@ class SecureMessageFrontendConnector @Inject()(
     )
   }
 
-  def messagePartial(client: String, conversationId: String, showReplyForm: Boolean)(
-    implicit ec: ExecutionContext,
-    request: RequestHeader): Future[HtmlPartial] = {
+  def messagePartial(client: String, conversationId: String, showReplyForm: Boolean)(implicit
+    ec: ExecutionContext,
+    request: RequestHeader
+  ): Future[HtmlPartial] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     httpClient.GET[HtmlPartial](
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId?showReplyForm=$showReplyForm"
@@ -55,15 +57,17 @@ class SecureMessageFrontendConnector @Inject()(
   }
 
   def letterOrConversationPartial(
-    id: String)(implicit ec: ExecutionContext, request: RequestHeader): Future[HtmlPartial] = {
+    id: String
+  )(implicit ec: ExecutionContext, request: RequestHeader): Future[HtmlPartial] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     httpClient.GET[HtmlPartial](
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages/$id"
     )
   }
 
-  def messageReply(client: String, conversationId: String, request: MessagesRequest[AnyContent])(
-    implicit ec: ExecutionContext): Future[HttpResponse] = {
+  def messageReply(client: String, conversationId: String, request: MessagesRequest[AnyContent])(implicit
+    ec: ExecutionContext
+  ): Future[HttpResponse] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     httpClient.POSTForm[HttpResponse](
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId",
@@ -72,9 +76,10 @@ class SecureMessageFrontendConnector @Inject()(
     )
   }
 
-  def resultPartial(client: String, conversationId: String)(
-    implicit ec: ExecutionContext,
-    request: RequestHeader): Future[HtmlPartial] = {
+  def resultPartial(client: String, conversationId: String)(implicit
+    ec: ExecutionContext,
+    request: RequestHeader
+  ): Future[HtmlPartial] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
     httpClient.GET[HtmlPartial](
       s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId/result"
@@ -82,16 +87,17 @@ class SecureMessageFrontendConnector @Inject()(
   }
 
   def messageCount(
-    queryParams: Seq[(String, String)] = Seq.empty)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Count] =
+    queryParams: Seq[(String, String)] = Seq.empty
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Count] =
     httpClient
       .GET[Count](
         s"$secureMessageFrontendBaseUrl/secure-message-frontend/messages/count",
         queryParams
       )
-      .recoverWith {
-        case exc: UpstreamErrorResponse =>
-          logger.error(
-            s"Received a ${exc.statusCode} response secure-messaging-frontend whilst retrieving message count: ${exc.message}")
-          Future.failed(exc)
+      .recoverWith { case exc: UpstreamErrorResponse =>
+        logger.error(
+          s"Received a ${exc.statusCode} response secure-messaging-frontend whilst retrieving message count: ${exc.message}"
+        )
+        Future.failed(exc)
       }
 }

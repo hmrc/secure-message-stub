@@ -21,8 +21,9 @@ import play.api.mvc.QueryStringBindable
 
 package object binders {
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter", "org.wartremover.warts.Nothing"))
-  implicit def queryStringBindableCustomerEnrolment(
-    implicit stringBinder: QueryStringBindable[String]): QueryStringBindable[CustomerEnrolment] =
+  implicit def queryStringBindableCustomerEnrolment(implicit
+    stringBinder: QueryStringBindable[String]
+  ): QueryStringBindable[CustomerEnrolment] =
     new QueryStringBindable[CustomerEnrolment] {
 
       override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, CustomerEnrolment]] =

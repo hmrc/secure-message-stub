@@ -25,30 +25,28 @@ import play.api.{ Logger, LoggerLike }
 import uk.gov.hmrc.http.Authorization
 import javax.inject.Inject
 
-class EISController @Inject()(controllerComponents: MessagesControllerComponents)
+class EISController @Inject() (controllerComponents: MessagesControllerComponents)
     extends FrontendController(controllerComponents) {
   private val log: LoggerLike = Logger(this.getClass)
   private val BearerToken = "Bearer AbCdEf123456"
 
   def queryResponse: Action[JsValue] = Action(parse.json) { request: MessagesRequest[JsValue] =>
-    {
-      import QueryMessageWrapper._
+    import QueryMessageWrapper._
 
-      if (!hasValidBearerToken(request))
-        Unauthorized
-      else
-        request.body.validate[QueryMessageWrapper] match {
-          case JsError(errors) =>
-            log.warn(s"error parsing QueryMessageWrapper $errors")
-            BadRequest
-          case JsSuccess(value, _) if value.queryMessageRequest.requestDetail.conversationId.endsWith("err") =>
-            log.warn(s"error processing the QueryMessageWrapper")
-            InternalServerError
-          case JsSuccess(value, _) =>
-            log.warn(s"EIS processed QueryMessageWrapper $value")
-            NoContent
-        }
-    }
+    if (!hasValidBearerToken(request))
+      Unauthorized
+    else
+      request.body.validate[QueryMessageWrapper] match {
+        case JsError(errors) =>
+          log.warn(s"error parsing QueryMessageWrapper $errors")
+          BadRequest
+        case JsSuccess(value, _) if value.queryMessageRequest.requestDetail.conversationId.endsWith("err") =>
+          log.warn(s"error processing the QueryMessageWrapper")
+          InternalServerError
+        case JsSuccess(value, _) =>
+          log.warn(s"EIS processed QueryMessageWrapper $value")
+          NoContent
+      }
   }
 
   def hasValidBearerToken(req: MessagesRequest[JsValue]): Boolean =
