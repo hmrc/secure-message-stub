@@ -20,8 +20,7 @@ import org.apache.pekko.util.Timeout
 import config.FrontendAppConfig
 import connectors.SecureMessageFrontendConnector
 import models.Count
-import org.mockito.Matchers
-import org.mockito.Matchers.{ any, eq => eqTo }
+import org.mockito.ArgumentMatchers.{ eq => eqTo, _ }
 import org.mockito.Mockito.{ reset, times, verify, when }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
@@ -74,9 +73,9 @@ class ViewConversationsControllerSpec extends PlaySpec with ScalaFutures {
         ("tag", "notificationType~cds-export")
       )
 
-      when(secureMessageFrontendConnector.messageCount(Matchers.eq(queryParams))(any(), any()))
+      when(secureMessageFrontendConnector.messageCount(eqTo(queryParams))(any(), any()))
         .thenReturn(Future.successful(Count(total = 2, unread = 2)))
-      when(secureMessageFrontendConnector.conversationsPartial(Matchers.eq(queryParams))(any(), any()))
+      when(secureMessageFrontendConnector.conversationsPartial(eqTo(queryParams))(any(), any()))
         .thenReturn(Future.successful(HtmlPartial.Success(None, Html("some content"))))
 
       val controller = new ViewConversations(

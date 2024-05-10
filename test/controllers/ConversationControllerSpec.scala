@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import connectors.SecureMessageConnector
 import forms.mappings.ConversationForm.ConversationData
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{ times, verify, when }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
