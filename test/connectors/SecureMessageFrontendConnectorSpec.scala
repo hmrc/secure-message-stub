@@ -17,7 +17,7 @@
 package connectors
 
 import models.Count
-import org.mockito.Matchers.{ any, anyString }
+import org.mockito.ArgumentMatchers.{ any, anyString }
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
