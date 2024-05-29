@@ -73,14 +73,6 @@ http://localhost:9202/secure-message-stub/messages?enrolment=HMRC-CUS-ORG~EORINu
 
 Click on submit and you should be presented with your inbox. If it's empty, load your local mongo `secure-message` database with some records as described [here](https://github.com/hmrc/secure-message/blob/master/README.md). Alternatively you can use the `Create a CDS message/query` endpoint as previously mentioned.
 
-## Swagger-UI endpoint for secure-message
-
-Ensure that `secure-message` is running locally on port `9051` (as mentioned above, either by using `service-manager` or by running the service locally as described [here](https://github.com/hmrc/secure-message/blob/master/README.md)
-
-You can then find the swagger-UI interface here:
-
-http://localhost:9202/secure-messaging/docs/swagger-ui/index.html?url=/secure-messaging/api/schema.json
-
 ## EIS endpoint for conversation reply to pega
 To test sending a QueryResponse to EIS:
     PUT /prsup/PRRestService/DMS/Service/QueryResponse
