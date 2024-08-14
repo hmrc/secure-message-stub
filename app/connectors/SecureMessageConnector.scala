@@ -19,13 +19,17 @@ package connectors
 import com.google.inject.Inject
 import models.ConversationRequest
 import models.ConversationRequest.conversionRResultWrites
+import play.api.libs.json.Json
+import play.api.libs.ws.writeableOf_JsValue
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpResponse }
 import utils.EnvironmentConfig
 
+import java.net.URI
 import scala.concurrent.{ ExecutionContext, Future }
 
-class SecureMessageConnector @Inject() (httpClient: HttpClient, envConfig: EnvironmentConfig) {
+class SecureMessageConnector @Inject() (httpClient: HttpClientV2, envConfig: EnvironmentConfig) {
   val secureMessageBaseUrl = envConfig.baseUrl("secure-message")
 
   def create(
@@ -33,8 +37,8 @@ class SecureMessageConnector @Inject() (httpClient: HttpClient, envConfig: Envir
     conversationId: String,
     conversation: ConversationRequest
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[HttpResponse] =
-    httpClient.PUT[ConversationRequest, HttpResponse](
-      s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId",
-      conversation
-    )
+    httpClient
+      .put(URI(s"$secureMessageBaseUrl/secure-messaging/conversation/$client/$conversationId").toURL)
+      .withBody(Json.toJson(conversation))
+      .execute[HttpResponse]
 }

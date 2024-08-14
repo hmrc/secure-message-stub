@@ -19,16 +19,20 @@ package connectors
 import com.google.inject.Inject
 import models.Count
 import play.api.Logger
+import play.api.libs.json.Json
+import play.api.libs.ws.writeableOf_JsValue
 import play.api.mvc.{ AnyContent, MessagesRequest, RequestHeader }
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpResponse, UpstreamErrorResponse }
 import uk.gov.hmrc.play.partials.{ HeaderCarrierForPartialsConverter, HtmlPartial }
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
 import utils.EnvironmentConfig
 
+import java.net.URI
 import scala.concurrent.{ ExecutionContext, Future }
 
 class SecureMessageFrontendConnector @Inject() (
-  httpClient: HttpClient,
+  httpClient: HttpClientV2,
   envConfig: EnvironmentConfig,
   headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter
 ) {
@@ -40,10 +44,17 @@ class SecureMessageFrontendConnector @Inject() (
     queryParams: Seq[(String, String)] = Seq.empty
   )(implicit ec: ExecutionContext, request: RequestHeader): Future[HtmlPartial] = {
     implicit val hc: HeaderCarrier = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
-    httpClient.GET[HtmlPartial](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages",
-      queryParams
-    )
+    httpClient
+      .get(
+        URI(
+          s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages${makeQueryString(queryParams)}"
+        ).toURL
+      )
+      .execute[HtmlPartial]
+  }
+  private def makeQueryString(queryParams: Seq[(String, String)]) = {
+    val paramPairs = queryParams.map { case (k, v) => s"$k=$v" }
+    if (paramPairs.isEmpty) "" else paramPairs.mkString("?", "&", "")
   }
 
   def messagePartial(client: String, conversationId: String, showReplyForm: Boolean)(implicit
@@ -51,29 +62,36 @@ class SecureMessageFrontendConnector @Inject() (
     request: RequestHeader
   ): Future[HtmlPartial] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
-    httpClient.GET[HtmlPartial](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId?showReplyForm=$showReplyForm"
-    )
+    httpClient
+      .get(
+        URI(
+          s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId?showReplyForm=$showReplyForm"
+        ).toURL
+      )
+      .execute[HtmlPartial]
   }
 
   def letterOrConversationPartial(
     id: String
   )(implicit ec: ExecutionContext, request: RequestHeader): Future[HtmlPartial] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
-    httpClient.GET[HtmlPartial](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages/$id"
-    )
+    httpClient
+      .get(URI(s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/messages/$id").toURL)
+      .execute[HtmlPartial]
   }
 
   def messageReply(client: String, conversationId: String, request: MessagesRequest[AnyContent])(implicit
     ec: ExecutionContext
   ): Future[HttpResponse] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
-    httpClient.POSTForm[HttpResponse](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId",
-      request.body.asFormUrlEncoded.getOrElse(Map.empty),
-      Seq.empty
-    )
+    httpClient
+      .post(
+        URI(
+          s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId"
+        ).toURL
+      )
+      .withBody(Json.toJson(request.body.asFormUrlEncoded.getOrElse(Map.empty)))
+      .execute[HttpResponse]
   }
 
   def resultPartial(client: String, conversationId: String)(implicit
@@ -81,19 +99,25 @@ class SecureMessageFrontendConnector @Inject() (
     request: RequestHeader
   ): Future[HtmlPartial] = {
     implicit val hc = headerCarrierForPartialsConverter.fromRequestWithEncryptedCookie(request)
-    httpClient.GET[HtmlPartial](
-      s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId/result"
-    )
+    httpClient
+      .get(
+        URI(
+          s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId/result"
+        ).toURL
+      )
+      .execute[HtmlPartial]
   }
 
   def messageCount(
     queryParams: Seq[(String, String)] = Seq.empty
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Count] =
     httpClient
-      .GET[Count](
-        s"$secureMessageFrontendBaseUrl/secure-message-frontend/messages/count",
-        queryParams
+      .get(
+        URI(
+          s"$secureMessageFrontendBaseUrl/secure-message-frontend/messages/count${makeQueryString(queryParams)}"
+        ).toURL
       )
+      .execute[Count]
       .recoverWith { case exc: UpstreamErrorResponse =>
         logger.error(
           s"Received a ${exc.statusCode} response secure-messaging-frontend whilst retrieving message count: ${exc.message}"

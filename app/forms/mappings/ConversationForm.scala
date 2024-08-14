@@ -52,7 +52,7 @@ object ConversationForm {
         "tags-parameter3"   -> tuple("key" -> optional(text), "value" -> optional(text)),
         "tags-parameter4"   -> tuple("key" -> optional(text), "value" -> optional(text)),
         "tags-parameter5"   -> tuple("key" -> optional(text), "value" -> optional(text))
-      )(ConversationData.apply)(ConversationData.unapply)
+      )(ConversationData.apply)(c => Some(Tuple.fromProductTyped[ConversationData](c)))
     )
 
   case class ConversationData(

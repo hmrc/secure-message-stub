@@ -87,5 +87,5 @@ object RequestDetail {
       (JsPath \ "message").read[String](verifying[String] { a =>
         a.nonEmpty && isBase64(a) && (decodeBase64(a).toString.length <= MaxMessageLength)
       })
-  )(RequestDetail.apply _)
+  )(RequestDetail.apply)
 }

@@ -63,7 +63,7 @@ class EISControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
 
   def requestBuilder(hdrs: Seq[(String, String)], body: JsValue): FakeRequest[JsValue] =
     FakeRequest(PUT, "/prsup/PRRestService/DMS/Service/QueryMessageRequest")
-      .withHeaders(hdrs: _*)
+      .withHeaders(hdrs *)
       .withBody(body)
 
   private val validQueryMessageWrapper = Json.parse(s"""|{

@@ -73,7 +73,7 @@ object UserAnswers {
       (__ \ "_id").read[String] and
         (__ \ "data").read[JsObject] and
         (__ \ "lastUpdated").read(MongoDateTimeFormats.localDateTimeRead)
-    )(UserAnswers.apply _)
+    )(UserAnswers.apply)
   }
 
   implicit lazy val writes: OWrites[UserAnswers] = {
@@ -84,6 +84,6 @@ object UserAnswers {
       (__ \ "_id").write[String] and
         (__ \ "data").write[JsObject] and
         (__ \ "lastUpdated").write(MongoDateTimeFormats.localDateTimeWrite)
-    )(unlift(UserAnswers.unapply))
+    )(c => Tuple.fromProductTyped[UserAnswers](c))
   }
 }
