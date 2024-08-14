@@ -25,7 +25,7 @@ object CryptoForm {
       mapping(
         "crypto-key"     -> optional(text),
         "scrambled-text" -> optional(text)
-      )(CryptoData.apply)(CryptoData.unapply)
+      )(CryptoData.apply)(c => Some(Tuple.fromProductTyped[CryptoData](c)))
     )
 
   case class CryptoData(

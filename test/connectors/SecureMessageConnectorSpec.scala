@@ -17,29 +17,32 @@
 package connectors
 
 import models.{ Alert, ConversationRequest, Identifier, Sender, System }
-import org.mockito.ArgumentMatchers.{ any, anyString }
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
-import org.scalatestplus.play._
+import org.scalatestplus.play.*
+import play.api.Configuration
 import play.api.http.Status.CREATED
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, HttpResponse }
+import uk.gov.hmrc.http.client.{ HttpClientV2, RequestBuilder }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpReads, HttpResponse }
 import utils.EnvironmentConfig
+
+import java.net.URL
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 class SecureMessageConnectorSpec extends PlaySpec with ScalaFutures {
 
   "Secure message connector" must {
     "return HttpResonse" in new TestCase {
       val httpResponse = HttpResponse(CREATED, "body")
-      when(
-        httpClient.PUT[ConversationRequest, HttpResponse](
-          anyString(),
-          any(),
-          any()
-        )(any(), any(), any(), any())
-      ).thenReturn(Future.successful(httpResponse))
+
+      when(httpClient.put(any[URL])(any[HeaderCarrier])).thenReturn(requestBuilder)
+      when(requestBuilder.withBody(any)(using any, any, any)).thenReturn(requestBuilder)
+      when(requestBuilder.execute[HttpResponse](using any[HttpReads[HttpResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(httpResponse))
+
       secureMessage
         .create(
           "cdcm",
@@ -58,8 +61,15 @@ class SecureMessageConnectorSpec extends PlaySpec with ScalaFutures {
     }
 
     class TestCase {
-      val httpClient: HttpClient = mock[HttpClient]
-      val envConf: EnvironmentConfig = mock[EnvironmentConfig]
+      val httpClient: HttpClientV2 = mock[HttpClientV2]
+      val requestBuilder = mock[RequestBuilder]
+      val config = Configuration.from(
+        Map(
+          "microservice.services.secure-message.host"  -> "localhost",
+          " microservice.services.secure-message.port" -> "9051"
+        )
+      )
+      val envConf: EnvironmentConfig = EnvironmentConfig(config)
       implicit val hc: HeaderCarrier = new HeaderCarrier
       val secureMessage = new SecureMessageConnector(httpClient, envConf)
     }

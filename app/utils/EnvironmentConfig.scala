@@ -28,7 +28,7 @@ class EnvironmentConfig @Inject() (configuration: Configuration) {
       .getOptional[String](s"$rootServices.protocol")
       .getOrElse("http")
 
-  def baseUrl(serviceName: String) = {
+  def baseUrl(serviceName: String): String = {
     val protocol = getConfString(s"$serviceName.protocol", defaultProtocol)
     val host = getConfString(s"$serviceName.host", throwConfigNotFoundError(s"$serviceName.host"))
     val port = getConfInt(s"$serviceName.port", throwConfigNotFoundError(s"$serviceName.port"))

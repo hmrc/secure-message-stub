@@ -30,7 +30,7 @@ class EISController @Inject() (controllerComponents: MessagesControllerComponent
   private val log: LoggerLike = Logger(this.getClass)
   private val BearerToken = "Bearer AbCdEf123456"
 
-  def queryResponse: Action[JsValue] = Action(parse.json) { request: MessagesRequest[JsValue] =>
+  def queryResponse: Action[JsValue] = Action(parse.json) { (request: MessagesRequest[JsValue]) =>
     import QueryMessageWrapper._
 
     if (!hasValidBearerToken(request))

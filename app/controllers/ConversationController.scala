@@ -57,7 +57,7 @@ class ConversationController @Inject() (
 
   private[controllers] def saveConversation(
     form: ConversationData
-  )(implicit request: Request[_]) = form match {
+  )(implicit request: Request[?]) = form match {
     case ConversationData(
           (Some(subject), Some(message), language),
           (Some(senderName), Some(conversationId), Some(identifierName), Some(identifierValue), Some(displayName)),

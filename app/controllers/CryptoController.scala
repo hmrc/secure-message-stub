@@ -52,7 +52,7 @@ class CryptoController @Inject() (
 
   private[controllers] def decrypt(
     form: CryptoData
-  )(implicit request: Request[_]): Future[Result] = form match {
+  )(implicit request: Request[?]): Future[Result] = form match {
     case CryptoData(Some(cryptoKey), Some(scrambledText)) =>
       val decipheredText = encryption.decrypt(cryptoKey, scrambledText)
       Future.successful(Ok(view(decipheredText, Seq.empty)))

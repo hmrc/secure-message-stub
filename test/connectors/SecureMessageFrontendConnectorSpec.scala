@@ -17,33 +17,30 @@
 package connectors
 
 import models.Count
-import org.mockito.ArgumentMatchers.{ any, anyString }
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
+import play.api.Configuration
 import play.api.mvc.RequestHeader
 import play.twirl.api.Html
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient }
+import uk.gov.hmrc.http.client.{ HttpClientV2, RequestBuilder }
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpReads }
 import uk.gov.hmrc.play.partials.{ HeaderCarrierForPartialsConverter, HtmlPartial }
 import uk.gov.hmrc.play.partials.HtmlPartial.Success
 import utils.EnvironmentConfig
 
+import java.net.URL
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
 
   "Secure message frontend connector" must {
     "return conversationsPartial" in new TestCase {
       val htmlPartial = HtmlPartial.Success(None, Html("body"))
-      when(
-        httpClient.GET[HtmlPartial](
-          anyString(),
-          any[Seq[(String, String)]](),
-          any[Seq[(String, String)]]()
-        )(any(), any(), any())
-      ).thenReturn(Future.successful(htmlPartial))
+      when(requestBuilder.execute[HtmlPartial]).thenReturn(Future.successful(htmlPartial))
 
       val response: HtmlPartial = secureMessageFrontend.conversationsPartial().futureValue
 
@@ -52,13 +49,7 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
 
     "return conversationsPartial with query parameters passed" in new TestCase {
       val htmlPartial = HtmlPartial.Success(None, Html("body"))
-      when(
-        httpClient.GET[HtmlPartial](
-          anyString(),
-          any[Seq[(String, String)]](),
-          any[Seq[(String, String)]]()
-        )(any(), any(), any())
-      ).thenReturn(Future.successful(htmlPartial))
+      when(requestBuilder.execute[HtmlPartial]).thenReturn(Future.successful(htmlPartial))
 
       val queryParams: Seq[(String, String)] = List(("key1", "value1"), ("key1", "value2"))
       val response = secureMessageFrontend.conversationsPartial(queryParams).futureValue
@@ -68,13 +59,7 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
 
     "return messagePartial" in new TestCase {
       val htmlPartial = HtmlPartial.Success(None, Html("messagebody"))
-      when(
-        httpClient.GET[HtmlPartial](
-          anyString(),
-          any[Seq[(String, String)]](),
-          any[Seq[(String, String)]]()
-        )(any(), any(), any())
-      ).thenReturn(Future.successful(htmlPartial))
+      when(requestBuilder.execute[HtmlPartial]).thenReturn(Future.successful(htmlPartial))
 
       val response = secureMessageFrontend.messagePartial("some-client-id", "111", false).futureValue
 
@@ -83,13 +68,7 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
 
     "return letterOrConversationPartial when the message type for a message is conversation" in new TestCase {
       val htmlPartial = HtmlPartial.Success(None, Html("body"))
-      when(
-        httpClient.GET[HtmlPartial](
-          anyString(),
-          any[Seq[(String, String)]](),
-          any[Seq[(String, String)]]()
-        )(any(), any(), any())
-      ).thenReturn(Future.successful(htmlPartial))
+      when(requestBuilder.execute[HtmlPartial]).thenReturn(Future.successful(htmlPartial))
 
       val response = secureMessageFrontend.letterOrConversationPartial("some-client-id").futureValue
 
@@ -99,13 +78,9 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
     "return messageCount" in new TestCase {
       implicit val hc: HeaderCarrier = new HeaderCarrier
       val count = Count(5, 2)
-      when(
-        httpClient.GET[Count](
-          anyString(),
-          any[Seq[(String, String)]](),
-          any[Seq[(String, String)]]()
-        )(any(), any(), any())
-      ).thenReturn(Future.successful(count))
+
+      when(requestBuilder.execute[Count](using any[HttpReads[Count]], any[ExecutionContext]))
+        .thenReturn(Future.successful(count))
 
       val response = secureMessageFrontend.messageCount().futureValue
 
@@ -115,13 +90,9 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
     "return messageCount with query parameters passed" in new TestCase {
       implicit val hc: HeaderCarrier = new HeaderCarrier
       val count = Count(2, 1)
-      when(
-        httpClient.GET[Count](
-          anyString(),
-          any[Seq[(String, String)]](),
-          any[Seq[(String, String)]]()
-        )(any(), any(), any())
-      ).thenReturn(Future.successful(count))
+
+      when(requestBuilder.execute[Count](using any[HttpReads[Count]], any[ExecutionContext]))
+        .thenReturn(Future.successful(count))
 
       val queryParams: Seq[(String, String)] = List(("key1", "value1"), ("key1", "value2"))
       val response = secureMessageFrontend.messageCount(queryParams).futureValue
@@ -130,11 +101,20 @@ class SecureMessageFrontendConnectorSpec extends PlaySpec with ScalaFutures {
     }
 
     class TestCase {
-      val httpClient: HttpClient = mock[HttpClient]
-      val envConf: EnvironmentConfig = mock[EnvironmentConfig]
+      val httpClient: HttpClientV2 = mock[HttpClientV2]
+      val requestBuilder = mock[RequestBuilder]
+      val config = Configuration.from(
+        Map(
+          "microservice.services.secure-message-frontend.host"  -> "localhost",
+          " microservice.services.secure-message-frontend.port" -> "9055"
+        )
+      )
+      val envConf: EnvironmentConfig = EnvironmentConfig(config)
       val header = mock[HeaderCarrierForPartialsConverter]
       implicit val rh: RequestHeader = mock[RequestHeader]
       val secureMessageFrontend = new SecureMessageFrontendConnector(httpClient, envConf, header)
+
+      when(httpClient.get(any[URL])(any[HeaderCarrier])).thenReturn(requestBuilder)
     }
   }
 }
