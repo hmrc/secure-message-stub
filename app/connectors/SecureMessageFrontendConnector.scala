@@ -28,7 +28,7 @@ import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import utils.EnvironmentConfig
 
-import java.net.URI
+import java.net.{ URI, URLEncoder }
 import scala.concurrent.{ ExecutionContext, Future }
 
 class SecureMessageFrontendConnector @Inject() (
@@ -53,7 +53,8 @@ class SecureMessageFrontendConnector @Inject() (
       .execute[HtmlPartial]
   }
   private def makeQueryString(queryParams: Seq[(String, String)]) = {
-    val paramPairs = queryParams.map { case (k, v) => s"$k=$v" }
+    def urlEncode(u: String): String = URLEncoder.encode(u, "UTF-8")
+    val paramPairs = queryParams.map { case (k, v) => s"$k=${urlEncode(v)}" }
     if (paramPairs.isEmpty) "" else paramPairs.mkString("?", "&", "")
   }
 
