@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import models.Count
 import play.api.Logger
 import play.api.libs.json.Json
-import play.api.libs.ws.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.mvc.{ AnyContent, MessagesRequest, RequestHeader }
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpResponse, UpstreamErrorResponse }
 import uk.gov.hmrc.play.partials.{ HeaderCarrierForPartialsConverter, HtmlPartial }
@@ -90,7 +90,7 @@ class SecureMessageFrontendConnector @Inject() (
           s"$secureMessageFrontendBaseUrl/secure-message-frontend/secure-message-stub/conversation/$client/$conversationId"
         ).toURL
       )
-      .withBody(Json.toJson(request.body.asFormUrlEncoded.getOrElse(Map.empty)))
+      .withBody(request.body.asFormUrlEncoded.getOrElse(Map.empty))
       .execute[HttpResponse]
   }
 
