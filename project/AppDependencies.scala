@@ -3,8 +3,8 @@ import sbt._
 object AppDependencies {
   import play.core.PlayVersion
 
-  private val bootstrapVersion = "9.2.0"
-  private val frontendPlayVersion = "10.0.0"
+  private val bootstrapVersion = "9.12.0"
+  private val frontendPlayVersion = "10.13.0"
   
   val compile = Seq(
     play.sbt.PlayImport.ws,
