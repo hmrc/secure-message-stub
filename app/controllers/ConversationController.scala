@@ -20,14 +20,17 @@ import connectors.SecureMessageConnector
 import forms.mappings.ConversationForm
 import forms.mappings.ConversationForm.ConversationData
 import models.QueryLanguage.{ ENGLISH, WELSH }
-import models.{ Alert, ConversationRequest, Customer, Enrolment, Identifier, QueryLanguage, Recipient, Sender, System }
+import models.{ Alert, ConversationRequest, Customer, Enrolment, Identifier, QueryLanguage, Recipient, SendMessageRequest, Sender, System }
 import play.api.i18n.I18nSupport
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{ create, success_feedback }
+
 import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
 import config.FrontendAppConfig
+import play.api.Logging
+import play.api.libs.json.JsValue
 
 class ConversationController @Inject() (
   controllerComponents: MessagesControllerComponents,
@@ -35,7 +38,7 @@ class ConversationController @Inject() (
   success: success_feedback,
   view: create
 )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
-    extends FrontendController(controllerComponents) with I18nSupport {
+    extends FrontendController(controllerComponents) with I18nSupport with Logging {
 
   def onPageLoad(): Action[AnyContent] = Action { implicit request =>
     Ok(view(Seq.empty))
@@ -134,5 +137,15 @@ class ConversationController @Inject() (
   ): Map[String, String] = t match {
     case (Some(k), Some(v)) => Map(k -> v)
     case _                  => Map.empty
+  }
+
+  def sendSecureMessage(): Action[JsValue] = Action.async(parse.json) { implicit request =>
+    withJsonBody[SendMessageRequest] { r =>
+      logger.warn(s"Send Message Request received with number of rows as ${r.contentRows} ")
+      secureMessage
+        .createSecureMessage(r)
+        .map(res => Ok(s"Status returned from secure-message: ${res.status} with body ${res.body}"))
+        .recover(ex => InternalServerError(s"Error returned from secure-message ${ex.getMessage}"))
+    }
   }
 }

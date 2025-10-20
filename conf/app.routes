@@ -8,6 +8,7 @@ GET         /secure-message-stub/language/:lang                                 
 
 GET         /secure-message-stub                                                             controllers.ConversationController.onPageLoad()
 POST        /secure-message-stub                                                             controllers.ConversationController.submitQuery()
+POST        /secure-message-stub/v4/message                                                  controllers.ConversationController.sendSecureMessage()
 
 GET         /secure-message-stub/crypto                                                      controllers.CryptoController.onPageLoad()
 POST        /secure-message-stub/crypto                                                      controllers.CryptoController.submitQuery()
