@@ -19,7 +19,7 @@
 
 @this(hmrcStandardPage: HmrcStandardPage)
 
-@(title: String)(mainContent: Html)(localContent: Html)(implicit request: Request[_], messages: Messages)
+@(title: String)(mainContent: Html)(localContent: Html)(implicit request: Request[?], messages: Messages)
 
 @contentBlock = {
 <div class="govuk-width-container">

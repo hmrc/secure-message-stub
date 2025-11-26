@@ -23,7 +23,7 @@
  govukErrorSummary : GovukErrorSummary,
  govukInput: GovukInput)
 
-@(decipheredText: String, errors: Seq[String])(implicit request: Request[_], messages: Messages)
+@(decipheredText: String, errors: Seq[String])(implicit request: Request[?], messages: Messages)
 
 @mainWithHeaders(title = "title") {
 

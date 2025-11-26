@@ -3,8 +3,8 @@ import sbt._
 object AppDependencies {
   import play.core.PlayVersion
 
-  private val bootstrapVersion = "9.19.0"
-  private val frontendPlayVersion = "12.20.0"
+  private val bootstrapVersion = "10.4.0"
+  private val frontendPlayVersion = "12.21.0"
   
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
@@ -16,7 +16,6 @@ object AppDependencies {
 
   val test: Seq[ModuleID] = Seq(
     "uk.gov.hmrc"            %% "bootstrap-test-play-30"  % bootstrapVersion,
-    "org.scalatestplus.play" %% "scalatestplus-play"      % "7.0.2",
     "org.jsoup"              %  "jsoup"                   % "1.21.2",
     "org.playframework"      %% "play-test"               % PlayVersion.current,
   ).map(_ % Test)

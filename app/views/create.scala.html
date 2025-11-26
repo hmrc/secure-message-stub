@@ -29,7 +29,7 @@ govukFieldset : GovukFieldset,
 govukErrorSummary : GovukErrorSummary,
 govukInput: GovukInput)
 
-@(errors: Seq[String])(implicit request: Request[_], messages: Messages)
+@(errors: Seq[String])(implicit request: Request[?], messages: Messages)
 
 @mainWithHeaders(title = "title") {
 
