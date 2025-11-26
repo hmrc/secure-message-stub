@@ -88,7 +88,7 @@ package object models {
       }
     }
 
-    private def removeIndexNode(node: IdxPathNode, valueToRemoveFrom: JsArray): JsResult[JsValue] = {
+    private def removeIndexNode(node: IdxPathNode, valueToRemoveFrom: JsValue): JsResult[JsValue] = {
       val index: Int = node.idx
 
       valueToRemoveFrom match {

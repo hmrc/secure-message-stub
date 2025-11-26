@@ -16,7 +16,7 @@
 
 @this(mainWithHeaders: views.html.main_with_headers_fullwidth)
 
-@(message: String)(implicit request: Request[_], messages: Messages)
+@(message: String)(implicit request: Request[?], messages: Messages)
 
 @mainWithHeaders(title = "error page") {
 <div class="govuk-width-container">

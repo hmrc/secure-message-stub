@@ -19,7 +19,7 @@
 
 @this(hmrcStandardPage: HmrcStandardPage)
 
-@(title: String, messageCount: Count = Count(total = 0, unread = 0))(mainContent: Html)(implicit request: Request[_], messages: Messages)
+@(title: String, messageCount: Count = Count(total = 0, unread = 0))(mainContent: Html)(implicit request: Request[?], messages: Messages)
 
 @navigationBlock = {
  <div class="govuk-width-container ">
