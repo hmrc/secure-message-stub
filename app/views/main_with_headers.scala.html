@@ -16,6 +16,8 @@
 
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.servicenavigation._
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 
 @this(hmrcStandardPage: HmrcStandardPage)
 
@@ -41,7 +43,7 @@ serviceUrl = None,
 signOutUrl = Some("externalUrls.survey")
 ),
 banners = Banners(displayHmrcBanner = true),
-serviceName = Some("secure message stub"),
 pageTitle = Some(title),
-isWelshTranslationAvailable = true
+isWelshTranslationAvailable = true,
+serviceNavigation = Some(ServiceNavigation(serviceName = Some("Secure Message Stub")).withLanguageToggle())
 ))(contentBlock)
