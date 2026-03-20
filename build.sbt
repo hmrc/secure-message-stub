@@ -5,7 +5,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 lazy val appName: String = "secure-message-stub"
 
 ThisBuild / majorVersion := 1
-ThisBuild / scalaVersion := "3.4.2"
+ThisBuild / scalaVersion := "3.6.3"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin, SbtSassify)
